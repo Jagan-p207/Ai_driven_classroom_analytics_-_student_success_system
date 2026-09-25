@@ -1,0 +1,1301 @@
+id,student_id,activity_type,timestamp,delay_days,completion_status,score_or_views
+1,STU1001,Assignment 1 - Setup & Hello World,2026-02-07 11:42:00,-1,Completed,34
+2,STU1001,Assignment 2 - Memory Management,2026-02-19 12:12:00,1,Late,32
+3,STU1001,Lab 1 - Linked List Implementation,2026-02-28 21:38:00,0,Completed,19
+4,STU1001,Assignment 3 - Trees & Recursion,2026-03-10 18:43:00,0,Completed,26
+5,STU1001,Lab 2 - Binary Search Trees,2026-03-22 12:33:00,0,Completed,31
+6,STU1001,Assignment 4 - Graph Algorithms,2026-04-05 14:34:00,0,Completed,23
+7,STU1001,Lab 3 - Shortest Path Solver,2026-04-14 22:31:00,-1,Completed,25
+8,STU1001,Assignment 5 - Dynamic Programming,2026-04-25 19:13:00,-1,Completed,33
+9,STU1001,Lab 4 - Concurrency & Threads,2026-05-03 20:31:00,-1,Completed,32
+10,STU1001,Project Final Submission,2026-05-12 15:16:00,0,Completed,14
+11,STU1002,Assignment 1 - Setup & Hello World,2026-02-08 20:34:00,0,Completed,29
+12,STU1002,Assignment 2 - Memory Management,2026-02-18 14:56:00,0,Completed,21
+13,STU1002,Lab 1 - Linked List Implementation,2026-02-27 19:19:00,-1,Completed,33
+14,STU1002,Assignment 3 - Trees & Recursion,2026-03-10 11:47:00,0,Completed,22
+15,STU1002,Lab 2 - Binary Search Trees,2026-03-22 12:32:00,0,Completed,33
+16,STU1002,Assignment 4 - Graph Algorithms,2026-04-05 20:54:00,0,Completed,21
+17,STU1002,Lab 3 - Shortest Path Solver,2026-04-15 16:18:00,0,Completed,33
+18,STU1002,Assignment 5 - Dynamic Programming,2026-04-25 21:15:00,-1,Completed,31
+19,STU1002,Lab 4 - Concurrency & Threads,2026-05-04 18:34:00,0,Completed,21
+20,STU1002,Project Final Submission,2026-05-12 22:31:00,0,Completed,32
+21,STU1003,Assignment 1 - Setup & Hello World,2026-02-08 12:52:00,0,Completed,18
+22,STU1003,Assignment 2 - Memory Management,2026-02-18 23:57:00,0,Completed,16
+23,STU1003,Lab 1 - Linked List Implementation,2026-03-02 18:15:00,2,Late,15
+24,STU1003,Assignment 3 - Trees & Recursion,2026-03-13 20:37:00,3,Late,15
+25,STU1003,Lab 2 - Binary Search Trees,2026-03-23 15:11:00,1,Late,13
+26,STU1003,Assignment 4 - Graph Algorithms,2026-04-06 14:21:00,1,Late,10
+27,STU1003,Lab 3 - Shortest Path Solver,2026-04-18 15:59:00,3,Late,8
+28,STU1003,Assignment 5 - Dynamic Programming,2026-04-28 13:24:00,2,Late,12
+29,STU1003,Lab 4 - Concurrency & Threads,2026-05-05 12:14:00,1,Late,7
+30,STU1003,Project Final Submission,2026-05-13 23:16:00,1,Late,9
+31,STU1004,Assignment 1 - Setup & Hello World,2026-02-07 22:44:00,-1,Completed,28
+32,STU1004,Assignment 2 - Memory Management,2026-02-18 18:12:00,0,Completed,35
+33,STU1004,Lab 1 - Linked List Implementation,2026-02-27 15:59:00,-1,Completed,33
+34,STU1004,Assignment 3 - Trees & Recursion,2026-03-11 12:48:00,1,Late,31
+35,STU1004,Lab 2 - Binary Search Trees,2026-03-22 12:20:00,0,Completed,24
+36,STU1004,Assignment 4 - Graph Algorithms,2026-04-05 23:54:00,0,Completed,17
+37,STU1004,Lab 3 - Shortest Path Solver,2026-04-15 22:20:00,0,Completed,31
+38,STU1004,Assignment 5 - Dynamic Programming,2026-04-26 17:12:00,0,Completed,35
+39,STU1004,Lab 4 - Concurrency & Threads,2026-05-04 15:53:00,0,Completed,25
+40,STU1004,Project Final Submission,2026-05-12 13:38:00,0,Completed,35
+41,STU1005,Assignment 1 - Setup & Hello World,2026-02-08 14:58:00,0,Completed,31
+42,STU1005,Assignment 2 - Memory Management,2026-02-18 22:38:00,0,Completed,35
+43,STU1005,Lab 1 - Linked List Implementation,2026-02-28 18:25:00,0,Completed,19
+44,STU1005,Assignment 3 - Trees & Recursion,2026-03-09 22:40:00,-1,Completed,21
+45,STU1005,Lab 2 - Binary Search Trees,2026-03-22 15:53:00,0,Completed,18
+46,STU1005,Assignment 4 - Graph Algorithms,2026-04-04 17:39:00,-1,Completed,30
+47,STU1005,Lab 3 - Shortest Path Solver,2026-04-15 22:34:00,0,Completed,21
+48,STU1005,Assignment 5 - Dynamic Programming,2026-04-25 18:36:00,-1,Completed,28
+49,STU1005,Lab 4 - Concurrency & Threads,2026-05-05 23:22:00,1,Late,17
+50,STU1005,Project Final Submission,2026-05-12 12:26:00,0,Completed,31
+51,STU1006,Assignment 1 - Setup & Hello World,2026-02-08 20:40:00,0,Completed,13
+52,STU1006,Assignment 2 - Memory Management,2026-02-18 18:16:00,0,Completed,23
+53,STU1006,Lab 1 - Linked List Implementation,2026-02-27 23:43:00,-1,Completed,34
+54,STU1006,Assignment 3 - Trees & Recursion,2026-03-09 14:15:00,-1,Completed,15
+55,STU1006,Lab 2 - Binary Search Trees,2026-03-21 14:38:00,-1,Completed,17
+56,STU1006,Assignment 4 - Graph Algorithms,2026-04-05 12:37:00,0,Completed,28
+57,STU1006,Lab 3 - Shortest Path Solver,2026-04-15 13:38:00,0,Completed,14
+58,STU1006,Assignment 5 - Dynamic Programming,2026-04-26 10:36:00,0,Completed,23
+59,STU1006,Lab 4 - Concurrency & Threads,2026-05-03 16:42:00,-1,Completed,13
+60,STU1006,Project Final Submission,2026-05-11 13:34:00,-1,Completed,23
+61,STU1007,Assignment 1 - Setup & Hello World,2026-02-08 15:24:00,0,Completed,14
+62,STU1007,Assignment 2 - Memory Management,2026-02-18 15:16:00,0,Completed,12
+63,STU1007,Lab 1 - Linked List Implementation,2026-02-28 20:31:00,0,Completed,34
+64,STU1007,Assignment 3 - Trees & Recursion,2026-03-10 12:12:00,0,Completed,16
+65,STU1007,Lab 2 - Binary Search Trees,2026-03-22 23:40:00,0,Completed,21
+66,STU1007,Assignment 4 - Graph Algorithms,2026-04-04 23:18:00,-1,Completed,34
+67,STU1007,Lab 3 - Shortest Path Solver,2026-04-16 17:38:00,1,Late,34
+68,STU1007,Assignment 5 - Dynamic Programming,2026-04-26 10:15:00,0,Completed,31
+69,STU1007,Lab 4 - Concurrency & Threads,2026-05-03 14:23:00,-1,Completed,12
+70,STU1007,Project Final Submission,2026-05-12 18:56:00,0,Completed,16
+71,STU1008,Assignment 1 - Setup & Hello World,2026-02-07 18:37:00,-1,Completed,31
+72,STU1008,Assignment 2 - Memory Management,2026-02-19 22:28:00,1,Late,15
+73,STU1008,Lab 1 - Linked List Implementation,2026-02-27 14:17:00,-1,Completed,19
+74,STU1008,Assignment 3 - Trees & Recursion,2026-03-10 13:36:00,0,Completed,13
+75,STU1008,Lab 2 - Binary Search Trees,2026-03-21 22:49:00,-1,Completed,32
+76,STU1008,Assignment 4 - Graph Algorithms,2026-04-05 11:17:00,0,Completed,26
+77,STU1008,Lab 3 - Shortest Path Solver,2026-04-15 19:44:00,0,Completed,27
+78,STU1008,Assignment 5 - Dynamic Programming,2026-04-26 20:42:00,0,Completed,12
+79,STU1008,Lab 4 - Concurrency & Threads,2026-05-04 13:55:00,0,Completed,30
+80,STU1008,Project Final Submission,2026-05-12 14:37:00,0,Completed,16
+81,STU1009,Assignment 1 - Setup & Hello World,2026-02-08 19:32:00,0,Completed,5
+82,STU1009,Assignment 2 - Memory Management,2026-02-19 19:36:00,1,Late,8
+83,STU1009,Lab 1 - Linked List Implementation,2026-02-28 20:52:00,0,Completed,7
+84,STU1009,Assignment 3 - Trees & Recursion,2026-03-15 18:33:00,5,Late,6
+85,STU1009,Lab 2 - Binary Search Trees,2026-03-23 18:44:00,1,Late,6
+86,STU1009,Assignment 4 - Graph Algorithms,2026-04-07 22:42:00,2,Late,13
+87,STU1009,Lab 3 - Shortest Path Solver,2026-04-17 10:34:00,2,Late,13
+88,STU1009,Assignment 5 - Dynamic Programming,2026-04-26 17:12:00,0,Completed,18
+89,STU1009,Lab 4 - Concurrency & Threads,2026-05-04 16:33:00,0,Completed,15
+90,STU1009,Project Final Submission,2026-05-13 21:11:00,1,Late,9
+91,STU1010,Assignment 1 - Setup & Hello World,2026-02-08 22:14:00,0,Completed,23
+92,STU1010,Assignment 2 - Memory Management,2026-02-17 13:56:00,-1,Completed,23
+93,STU1010,Lab 1 - Linked List Implementation,2026-02-27 20:16:00,-1,Completed,33
+94,STU1010,Assignment 3 - Trees & Recursion,2026-03-10 21:58:00,0,Completed,30
+95,STU1010,Lab 2 - Binary Search Trees,2026-03-23 12:12:00,1,Late,22
+96,STU1010,Assignment 4 - Graph Algorithms,2026-04-04 18:31:00,-1,Completed,23
+97,STU1010,Lab 3 - Shortest Path Solver,2026-04-14 12:59:00,-1,Completed,32
+98,STU1010,Assignment 5 - Dynamic Programming,2026-04-25 17:54:00,-1,Completed,33
+99,STU1010,Lab 4 - Concurrency & Threads,2026-05-04 20:21:00,0,Completed,27
+100,STU1010,Project Final Submission,2026-05-12 11:55:00,0,Completed,16
+101,STU1011,Assignment 1 - Setup & Hello World,2026-02-07 10:28:00,-1,Completed,26
+102,STU1011,Assignment 2 - Memory Management,2026-02-17 10:22:00,-1,Completed,18
+103,STU1011,Lab 1 - Linked List Implementation,2026-02-28 15:29:00,0,Completed,13
+104,STU1011,Assignment 3 - Trees & Recursion,2026-03-10 16:44:00,0,Completed,28
+105,STU1011,Lab 2 - Binary Search Trees,2026-03-21 14:12:00,-1,Completed,27
+106,STU1011,Assignment 4 - Graph Algorithms,2026-04-05 13:28:00,0,Completed,32
+107,STU1011,Lab 3 - Shortest Path Solver,2026-04-14 23:59:00,-1,Completed,23
+108,STU1011,Assignment 5 - Dynamic Programming,2026-04-25 23:51:00,-1,Completed,13
+109,STU1011,Lab 4 - Concurrency & Threads,2026-05-04 14:17:00,0,Completed,22
+110,STU1011,Project Final Submission,2026-05-12 16:35:00,0,Completed,23
+111,STU1012,Assignment 1 - Setup & Hello World,2026-02-09 17:34:00,1,Late,16
+112,STU1012,Assignment 2 - Memory Management,2026-02-21 12:41:00,3,Late,10
+113,STU1012,Lab 1 - Linked List Implementation,2026-03-01 17:33:00,1,Late,16
+114,STU1012,Assignment 3 - Trees & Recursion,2026-03-12 18:27:00,2,Late,17
+115,STU1012,Lab 2 - Binary Search Trees,2026-03-23 11:56:00,1,Late,17
+116,STU1012,Assignment 4 - Graph Algorithms,2026-04-08 11:37:00,3,Late,11
+117,STU1012,Lab 3 - Shortest Path Solver,2026-04-18 23:21:00,3,Late,14
+118,STU1012,Assignment 5 - Dynamic Programming,2026-04-26 14:30:00,0,Completed,13
+119,STU1012,Lab 4 - Concurrency & Threads,2026-05-07 11:30:00,3,Late,6
+120,STU1012,Project Final Submission,2026-05-15 14:29:00,3,Late,15
+121,STU1013,Assignment 1 - Setup & Hello World,2026-02-10 19:55:00,2,Late,12
+122,STU1013,Assignment 2 - Memory Management,2026-02-18 12:54:00,0,Completed,11
+123,STU1013,Lab 1 - Linked List Implementation,2026-03-03 15:38:00,3,Late,12
+124,STU1013,Assignment 3 - Trees & Recursion,2026-03-13 21:32:00,3,Late,5
+125,STU1013,Lab 2 - Binary Search Trees,2026-03-23 16:27:00,1,Late,14
+126,STU1013,Assignment 4 - Graph Algorithms,2026-04-10 22:13:00,5,Late,15
+127,STU1013,Lab 3 - Shortest Path Solver,2026-04-15 20:50:00,0,Completed,6
+128,STU1013,Assignment 5 - Dynamic Programming,2026-04-26 15:42:00,0,Completed,11
+129,STU1013,Lab 4 - Concurrency & Threads,2026-05-05 21:53:00,1,Late,17
+130,STU1013,Project Final Submission,2026-05-13 10:19:00,1,Late,7
+131,STU1014,Assignment 1 - Setup & Hello World,2026-02-08 20:38:00,0,Completed,31
+132,STU1014,Assignment 2 - Memory Management,2026-02-17 12:14:00,-1,Completed,13
+133,STU1014,Lab 1 - Linked List Implementation,2026-03-01 22:51:00,1,Late,19
+134,STU1014,Assignment 3 - Trees & Recursion,2026-03-09 15:34:00,-1,Completed,23
+135,STU1014,Lab 2 - Binary Search Trees,2026-03-21 10:48:00,-1,Completed,30
+136,STU1014,Assignment 4 - Graph Algorithms,2026-04-04 20:38:00,-1,Completed,16
+137,STU1014,Lab 3 - Shortest Path Solver,2026-04-15 15:38:00,0,Completed,23
+138,STU1014,Assignment 5 - Dynamic Programming,2026-04-26 19:18:00,0,Completed,14
+139,STU1014,Lab 4 - Concurrency & Threads,2026-05-04 15:35:00,0,Completed,28
+140,STU1014,Project Final Submission,2026-05-12 20:27:00,0,Completed,22
+141,STU1015,Assignment 1 - Setup & Hello World,2026-02-07 11:11:00,-1,Completed,19
+142,STU1015,Assignment 2 - Memory Management,2026-02-18 12:41:00,0,Completed,35
+143,STU1015,Lab 1 - Linked List Implementation,2026-02-28 16:45:00,0,Completed,28
+144,STU1015,Assignment 3 - Trees & Recursion,2026-03-10 14:59:00,0,Completed,15
+145,STU1015,Lab 2 - Binary Search Trees,2026-03-21 21:38:00,-1,Completed,20
+146,STU1015,Assignment 4 - Graph Algorithms,2026-04-05 19:28:00,0,Completed,18
+147,STU1015,Lab 3 - Shortest Path Solver,2026-04-15 17:22:00,0,Completed,34
+148,STU1015,Assignment 5 - Dynamic Programming,2026-04-26 12:14:00,0,Completed,15
+149,STU1015,Lab 4 - Concurrency & Threads,2026-05-04 12:55:00,0,Completed,26
+150,STU1015,Project Final Submission,2026-05-11 11:53:00,-1,Completed,26
+151,STU1016,Assignment 1 - Setup & Hello World,2026-02-10 15:52:00,2,Late,18
+152,STU1016,Assignment 2 - Memory Management,2026-02-18 21:14:00,0,Completed,10
+153,STU1016,Lab 1 - Linked List Implementation,2026-03-03 18:28:00,3,Late,13
+154,STU1016,Assignment 3 - Trees & Recursion,2026-03-12 23:20:00,2,Late,9
+155,STU1016,Lab 2 - Binary Search Trees,2026-03-22 21:54:00,0,Completed,16
+156,STU1016,Assignment 4 - Graph Algorithms,2026-04-10 12:33:00,5,Late,15
+157,STU1016,Lab 3 - Shortest Path Solver,2026-04-16 13:17:00,1,Late,13
+158,STU1016,Assignment 5 - Dynamic Programming,2026-04-26 22:18:00,0,Completed,8
+159,STU1016,Lab 4 - Concurrency & Threads,2026-05-06 22:41:00,2,Late,8
+160,STU1016,Project Final Submission,2026-05-13 15:45:00,1,Late,5
+161,STU1017,Assignment 1 - Setup & Hello World,2026-02-11 15:39:00,3,Late,14
+162,STU1017,Assignment 2 - Memory Management,2026-02-21 18:18:00,3,Late,17
+163,STU1017,Lab 1 - Linked List Implementation,2026-03-05 11:14:00,5,Late,14
+164,STU1017,Assignment 3 - Trees & Recursion,2026-03-11 16:55:00,1,Late,9
+165,STU1017,Lab 2 - Binary Search Trees,2026-03-23 17:43:00,1,Late,16
+166,STU1017,Assignment 4 - Graph Algorithms,2026-04-07 22:36:00,2,Late,11
+167,STU1017,Lab 3 - Shortest Path Solver,2026-04-15 19:14:00,0,Completed,18
+168,STU1017,Assignment 5 - Dynamic Programming,2026-04-27 15:51:00,1,Late,7
+169,STU1017,Lab 4 - Concurrency & Threads,2026-05-05 17:39:00,1,Late,6
+170,STU1017,Project Final Submission,2026-05-12 18:32:00,0,Completed,15
+171,STU1018,Assignment 1 - Setup & Hello World,2026-02-12 23:59:00,4,Late,3
+172,STU1018,Assignment 2 - Memory Management,2026-03-04 22:18:00,14,Missing,3
+173,STU1018,Lab 1 - Linked List Implementation,2026-03-14 18:13:00,14,Missing,7
+174,STU1018,Assignment 3 - Trees & Recursion,2026-03-11 18:19:00,1,Late,2
+175,STU1018,Lab 2 - Binary Search Trees,2026-03-23 12:20:00,1,Late,5
+176,STU1018,Assignment 4 - Graph Algorithms,2026-04-10 21:24:00,5,Late,6
+177,STU1018,Lab 3 - Shortest Path Solver,2026-04-29 18:28:00,14,Missing,6
+178,STU1018,Assignment 5 - Dynamic Programming,2026-04-30 14:22:00,4,Late,2
+179,STU1018,Lab 4 - Concurrency & Threads,2026-05-18 12:50:00,14,Late,5
+180,STU1018,Project Final Submission,2026-05-17 19:44:00,5,Late,5
+181,STU1019,Assignment 1 - Setup & Hello World,2026-02-08 18:51:00,0,Completed,14
+182,STU1019,Assignment 2 - Memory Management,2026-02-17 19:47:00,-1,Completed,17
+183,STU1019,Lab 1 - Linked List Implementation,2026-02-28 12:52:00,0,Completed,16
+184,STU1019,Assignment 3 - Trees & Recursion,2026-03-09 21:48:00,-1,Completed,31
+185,STU1019,Lab 2 - Binary Search Trees,2026-03-22 23:46:00,0,Completed,22
+186,STU1019,Assignment 4 - Graph Algorithms,2026-04-04 23:11:00,-1,Completed,13
+187,STU1019,Lab 3 - Shortest Path Solver,2026-04-15 10:51:00,0,Completed,14
+188,STU1019,Assignment 5 - Dynamic Programming,2026-04-26 14:51:00,0,Completed,30
+189,STU1019,Lab 4 - Concurrency & Threads,2026-05-03 22:46:00,-1,Completed,18
+190,STU1019,Project Final Submission,2026-05-12 19:50:00,0,Completed,25
+191,STU1020,Assignment 1 - Setup & Hello World,2026-02-08 17:50:00,0,Completed,12
+192,STU1020,Assignment 2 - Memory Management,2026-02-17 14:51:00,-1,Completed,29
+193,STU1020,Lab 1 - Linked List Implementation,2026-02-28 17:25:00,0,Completed,21
+194,STU1020,Assignment 3 - Trees & Recursion,2026-03-09 16:29:00,-1,Completed,33
+195,STU1020,Lab 2 - Binary Search Trees,2026-03-22 11:54:00,0,Completed,26
+196,STU1020,Assignment 4 - Graph Algorithms,2026-04-05 12:38:00,0,Completed,13
+197,STU1020,Lab 3 - Shortest Path Solver,2026-04-14 17:39:00,-1,Completed,25
+198,STU1020,Assignment 5 - Dynamic Programming,2026-04-26 15:48:00,0,Completed,18
+199,STU1020,Lab 4 - Concurrency & Threads,2026-05-04 15:55:00,0,Completed,16
+200,STU1020,Project Final Submission,2026-05-12 21:32:00,0,Completed,22
+201,STU1021,Assignment 1 - Setup & Hello World,2026-02-08 12:58:00,0,Completed,24
+202,STU1021,Assignment 2 - Memory Management,2026-02-19 18:45:00,1,Late,23
+203,STU1021,Lab 1 - Linked List Implementation,2026-02-28 15:25:00,0,Completed,15
+204,STU1021,Assignment 3 - Trees & Recursion,2026-03-09 11:27:00,-1,Completed,26
+205,STU1021,Lab 2 - Binary Search Trees,2026-03-22 13:19:00,0,Completed,26
+206,STU1021,Assignment 4 - Graph Algorithms,2026-04-05 10:28:00,0,Completed,15
+207,STU1021,Lab 3 - Shortest Path Solver,2026-04-15 23:49:00,0,Completed,24
+208,STU1021,Assignment 5 - Dynamic Programming,2026-04-26 13:20:00,0,Completed,25
+209,STU1021,Lab 4 - Concurrency & Threads,2026-05-04 19:56:00,0,Completed,22
+210,STU1021,Project Final Submission,2026-05-12 13:58:00,0,Completed,22
+211,STU1022,Assignment 1 - Setup & Hello World,2026-02-09 17:42:00,1,Late,7
+212,STU1022,Assignment 2 - Memory Management,2026-02-19 17:29:00,1,Late,12
+213,STU1022,Lab 1 - Linked List Implementation,2026-03-01 10:15:00,1,Late,12
+214,STU1022,Assignment 3 - Trees & Recursion,2026-03-11 18:39:00,1,Late,11
+215,STU1022,Lab 2 - Binary Search Trees,2026-03-22 13:47:00,0,Completed,8
+216,STU1022,Assignment 4 - Graph Algorithms,2026-04-07 10:13:00,2,Late,10
+217,STU1022,Lab 3 - Shortest Path Solver,2026-04-16 17:48:00,1,Late,9
+218,STU1022,Assignment 5 - Dynamic Programming,2026-04-27 20:53:00,1,Late,18
+219,STU1022,Lab 4 - Concurrency & Threads,2026-05-04 14:44:00,0,Completed,12
+220,STU1022,Project Final Submission,2026-05-12 23:16:00,0,Completed,5
+221,STU1023,Assignment 1 - Setup & Hello World,2026-02-08 12:26:00,0,Completed,25
+222,STU1023,Assignment 2 - Memory Management,2026-02-17 15:58:00,-1,Completed,35
+223,STU1023,Lab 1 - Linked List Implementation,2026-02-27 15:12:00,-1,Completed,24
+224,STU1023,Assignment 3 - Trees & Recursion,2026-03-10 10:46:00,0,Completed,24
+225,STU1023,Lab 2 - Binary Search Trees,2026-03-21 13:33:00,-1,Completed,29
+226,STU1023,Assignment 4 - Graph Algorithms,2026-04-04 14:14:00,-1,Completed,29
+227,STU1023,Lab 3 - Shortest Path Solver,2026-04-14 18:38:00,-1,Completed,24
+228,STU1023,Assignment 5 - Dynamic Programming,2026-04-26 14:49:00,0,Completed,29
+229,STU1023,Lab 4 - Concurrency & Threads,2026-05-04 19:17:00,0,Completed,33
+230,STU1023,Project Final Submission,2026-05-11 11:35:00,-1,Completed,16
+231,STU1024,Assignment 1 - Setup & Hello World,2026-02-08 22:31:00,0,Completed,23
+232,STU1024,Assignment 2 - Memory Management,2026-02-19 15:58:00,1,Late,29
+233,STU1024,Lab 1 - Linked List Implementation,2026-02-27 13:48:00,-1,Completed,16
+234,STU1024,Assignment 3 - Trees & Recursion,2026-03-09 16:42:00,-1,Completed,28
+235,STU1024,Lab 2 - Binary Search Trees,2026-03-21 10:12:00,-1,Completed,13
+236,STU1024,Assignment 4 - Graph Algorithms,2026-04-05 21:31:00,0,Completed,16
+237,STU1024,Lab 3 - Shortest Path Solver,2026-04-15 18:39:00,0,Completed,27
+238,STU1024,Assignment 5 - Dynamic Programming,2026-04-25 19:42:00,-1,Completed,16
+239,STU1024,Lab 4 - Concurrency & Threads,2026-05-04 15:49:00,0,Completed,16
+240,STU1024,Project Final Submission,2026-05-11 12:35:00,-1,Completed,22
+241,STU1025,Assignment 1 - Setup & Hello World,2026-02-08 21:29:00,0,Completed,31
+242,STU1025,Assignment 2 - Memory Management,2026-02-18 15:42:00,0,Completed,30
+243,STU1025,Lab 1 - Linked List Implementation,2026-02-27 18:41:00,-1,Completed,28
+244,STU1025,Assignment 3 - Trees & Recursion,2026-03-10 19:29:00,0,Completed,34
+245,STU1025,Lab 2 - Binary Search Trees,2026-03-21 23:11:00,-1,Completed,27
+246,STU1025,Assignment 4 - Graph Algorithms,2026-04-05 15:53:00,0,Completed,23
+247,STU1025,Lab 3 - Shortest Path Solver,2026-04-14 16:47:00,-1,Completed,15
+248,STU1025,Assignment 5 - Dynamic Programming,2026-04-26 22:56:00,0,Completed,21
+249,STU1025,Lab 4 - Concurrency & Threads,2026-05-03 20:11:00,-1,Completed,34
+250,STU1025,Project Final Submission,2026-05-12 17:26:00,0,Completed,31
+251,STU1026,Assignment 1 - Setup & Hello World,2026-02-07 22:59:00,-1,Completed,32
+252,STU1026,Assignment 2 - Memory Management,2026-02-18 19:24:00,0,Completed,30
+253,STU1026,Lab 1 - Linked List Implementation,2026-02-27 10:47:00,-1,Completed,35
+254,STU1026,Assignment 3 - Trees & Recursion,2026-03-10 12:43:00,0,Completed,27
+255,STU1026,Lab 2 - Binary Search Trees,2026-03-21 21:49:00,-1,Completed,32
+256,STU1026,Assignment 4 - Graph Algorithms,2026-04-04 12:53:00,-1,Completed,24
+257,STU1026,Lab 3 - Shortest Path Solver,2026-04-15 10:46:00,0,Completed,19
+258,STU1026,Assignment 5 - Dynamic Programming,2026-04-25 11:22:00,-1,Completed,34
+259,STU1026,Lab 4 - Concurrency & Threads,2026-05-03 17:30:00,-1,Completed,12
+260,STU1026,Project Final Submission,2026-05-12 12:36:00,0,Completed,25
+261,STU1027,Assignment 1 - Setup & Hello World,2026-02-13 13:36:00,5,Late,16
+262,STU1027,Assignment 2 - Memory Management,2026-02-19 22:49:00,1,Late,13
+263,STU1027,Lab 1 - Linked List Implementation,2026-03-03 23:57:00,3,Late,12
+264,STU1027,Assignment 3 - Trees & Recursion,2026-03-11 10:55:00,1,Late,16
+265,STU1027,Lab 2 - Binary Search Trees,2026-03-23 18:23:00,1,Late,7
+266,STU1027,Assignment 4 - Graph Algorithms,2026-04-07 15:52:00,2,Late,13
+267,STU1027,Lab 3 - Shortest Path Solver,2026-04-17 18:34:00,2,Late,12
+268,STU1027,Assignment 5 - Dynamic Programming,2026-05-01 12:39:00,5,Late,10
+269,STU1027,Lab 4 - Concurrency & Threads,2026-05-05 15:44:00,1,Late,13
+270,STU1027,Project Final Submission,2026-05-14 20:59:00,2,Late,10
+271,STU1028,Assignment 1 - Setup & Hello World,2026-02-07 20:51:00,-1,Completed,35
+272,STU1028,Assignment 2 - Memory Management,2026-02-17 14:49:00,-1,Completed,34
+273,STU1028,Lab 1 - Linked List Implementation,2026-02-27 13:25:00,-1,Completed,27
+274,STU1028,Assignment 3 - Trees & Recursion,2026-03-11 18:29:00,1,Late,20
+275,STU1028,Lab 2 - Binary Search Trees,2026-03-22 14:59:00,0,Completed,19
+276,STU1028,Assignment 4 - Graph Algorithms,2026-04-05 21:23:00,0,Completed,21
+277,STU1028,Lab 3 - Shortest Path Solver,2026-04-15 21:41:00,0,Completed,34
+278,STU1028,Assignment 5 - Dynamic Programming,2026-04-25 17:32:00,-1,Completed,22
+279,STU1028,Lab 4 - Concurrency & Threads,2026-05-03 22:56:00,-1,Completed,29
+280,STU1028,Project Final Submission,2026-05-11 14:17:00,-1,Completed,20
+281,STU1029,Assignment 1 - Setup & Hello World,2026-02-09 20:44:00,1,Late,14
+282,STU1029,Assignment 2 - Memory Management,2026-02-20 16:32:00,2,Late,11
+283,STU1029,Lab 1 - Linked List Implementation,2026-03-01 22:19:00,1,Late,17
+284,STU1029,Assignment 3 - Trees & Recursion,2026-03-10 10:28:00,0,Completed,9
+285,STU1029,Lab 2 - Binary Search Trees,2026-03-22 11:32:00,0,Completed,16
+286,STU1029,Assignment 4 - Graph Algorithms,2026-04-05 20:26:00,0,Completed,12
+287,STU1029,Lab 3 - Shortest Path Solver,2026-04-16 17:23:00,1,Late,16
+288,STU1029,Assignment 5 - Dynamic Programming,2026-04-29 23:44:00,3,Late,8
+289,STU1029,Lab 4 - Concurrency & Threads,2026-05-06 18:54:00,2,Late,9
+290,STU1029,Project Final Submission,2026-05-15 12:16:00,3,Late,9
+291,STU1030,Assignment 1 - Setup & Hello World,2026-02-08 21:47:00,0,Completed,31
+292,STU1030,Assignment 2 - Memory Management,2026-02-17 13:13:00,-1,Completed,19
+293,STU1030,Lab 1 - Linked List Implementation,2026-02-27 18:24:00,-1,Completed,33
+294,STU1030,Assignment 3 - Trees & Recursion,2026-03-10 13:13:00,0,Completed,32
+295,STU1030,Lab 2 - Binary Search Trees,2026-03-22 16:31:00,0,Completed,15
+296,STU1030,Assignment 4 - Graph Algorithms,2026-04-04 17:16:00,-1,Completed,34
+297,STU1030,Lab 3 - Shortest Path Solver,2026-04-15 22:18:00,0,Completed,33
+298,STU1030,Assignment 5 - Dynamic Programming,2026-04-26 18:20:00,0,Completed,12
+299,STU1030,Lab 4 - Concurrency & Threads,2026-05-04 20:40:00,0,Completed,25
+300,STU1030,Project Final Submission,2026-05-12 20:22:00,0,Completed,27
+301,STU1031,Assignment 1 - Setup & Hello World,2026-02-08 15:28:00,0,Completed,21
+302,STU1031,Assignment 2 - Memory Management,2026-02-18 10:59:00,0,Completed,32
+303,STU1031,Lab 1 - Linked List Implementation,2026-02-27 20:46:00,-1,Completed,14
+304,STU1031,Assignment 3 - Trees & Recursion,2026-03-09 18:57:00,-1,Completed,19
+305,STU1031,Lab 2 - Binary Search Trees,2026-03-21 23:12:00,-1,Completed,35
+306,STU1031,Assignment 4 - Graph Algorithms,2026-04-04 16:21:00,-1,Completed,17
+307,STU1031,Lab 3 - Shortest Path Solver,2026-04-15 23:35:00,0,Completed,13
+308,STU1031,Assignment 5 - Dynamic Programming,2026-04-26 12:57:00,0,Completed,27
+309,STU1031,Lab 4 - Concurrency & Threads,2026-05-03 10:10:00,-1,Completed,21
+310,STU1031,Project Final Submission,2026-05-12 19:48:00,0,Completed,21
+311,STU1032,Assignment 1 - Setup & Hello World,2026-02-07 15:28:00,-1,Completed,15
+312,STU1032,Assignment 2 - Memory Management,2026-02-17 20:44:00,-1,Completed,26
+313,STU1032,Lab 1 - Linked List Implementation,2026-02-27 17:18:00,-1,Completed,28
+314,STU1032,Assignment 3 - Trees & Recursion,2026-03-09 17:27:00,-1,Completed,28
+315,STU1032,Lab 2 - Binary Search Trees,2026-03-21 22:17:00,-1,Completed,18
+316,STU1032,Assignment 4 - Graph Algorithms,2026-04-05 12:56:00,0,Completed,22
+317,STU1032,Lab 3 - Shortest Path Solver,2026-04-15 20:26:00,0,Completed,26
+318,STU1032,Assignment 5 - Dynamic Programming,2026-04-27 12:10:00,1,Late,34
+319,STU1032,Lab 4 - Concurrency & Threads,2026-05-03 15:28:00,-1,Completed,35
+320,STU1032,Project Final Submission,2026-05-11 20:58:00,-1,Completed,30
+321,STU1033,Assignment 1 - Setup & Hello World,2026-02-08 12:49:00,0,Completed,8
+322,STU1033,Assignment 2 - Memory Management,2026-02-20 20:35:00,2,Late,18
+323,STU1033,Lab 1 - Linked List Implementation,2026-02-28 16:42:00,0,Completed,18
+324,STU1033,Assignment 3 - Trees & Recursion,2026-03-13 11:35:00,3,Late,10
+325,STU1033,Lab 2 - Binary Search Trees,2026-03-23 11:21:00,1,Late,15
+326,STU1033,Assignment 4 - Graph Algorithms,2026-04-06 17:30:00,1,Late,7
+327,STU1033,Lab 3 - Shortest Path Solver,2026-04-16 10:26:00,1,Late,8
+328,STU1033,Assignment 5 - Dynamic Programming,2026-04-26 13:38:00,0,Completed,11
+329,STU1033,Lab 4 - Concurrency & Threads,2026-05-04 14:31:00,0,Completed,17
+330,STU1033,Project Final Submission,2026-05-13 19:56:00,1,Late,9
+331,STU1034,Assignment 1 - Setup & Hello World,2026-02-15 14:51:00,7,Late,1
+332,STU1034,Assignment 2 - Memory Management,2026-02-20 21:25:00,2,Late,6
+333,STU1034,Lab 1 - Linked List Implementation,2026-03-02 20:17:00,2,Late,1
+334,STU1034,Assignment 3 - Trees & Recursion,2026-03-24 14:20:00,14,Missing,8
+335,STU1034,Lab 2 - Binary Search Trees,2026-03-23 20:42:00,1,Late,7
+336,STU1034,Assignment 4 - Graph Algorithms,2026-04-18 21:17:00,13,Late,5
+337,STU1034,Lab 3 - Shortest Path Solver,2026-04-29 15:49:00,14,Late,5
+338,STU1034,Assignment 5 - Dynamic Programming,2026-05-02 13:18:00,6,Late,4
+339,STU1034,Lab 4 - Concurrency & Threads,2026-05-08 12:39:00,4,Late,8
+340,STU1034,Project Final Submission,2026-05-17 16:54:00,5,Late,6
+341,STU1035,Assignment 1 - Setup & Hello World,2026-02-08 17:58:00,0,Completed,29
+342,STU1035,Assignment 2 - Memory Management,2026-02-18 22:52:00,0,Completed,29
+343,STU1035,Lab 1 - Linked List Implementation,2026-02-28 22:25:00,0,Completed,18
+344,STU1035,Assignment 3 - Trees & Recursion,2026-03-10 22:48:00,0,Completed,33
+345,STU1035,Lab 2 - Binary Search Trees,2026-03-22 18:38:00,0,Completed,14
+346,STU1035,Assignment 4 - Graph Algorithms,2026-04-04 21:33:00,-1,Completed,28
+347,STU1035,Lab 3 - Shortest Path Solver,2026-04-14 19:17:00,-1,Completed,14
+348,STU1035,Assignment 5 - Dynamic Programming,2026-04-26 23:45:00,0,Completed,13
+349,STU1035,Lab 4 - Concurrency & Threads,2026-05-03 13:46:00,-1,Completed,28
+350,STU1035,Project Final Submission,2026-05-11 12:20:00,-1,Completed,29
+351,STU1036,Assignment 1 - Setup & Hello World,2026-02-10 23:43:00,2,Late,10
+352,STU1036,Assignment 2 - Memory Management,2026-02-19 11:53:00,1,Late,12
+353,STU1036,Lab 1 - Linked List Implementation,2026-03-03 21:47:00,3,Late,8
+354,STU1036,Assignment 3 - Trees & Recursion,2026-03-12 11:42:00,2,Late,12
+355,STU1036,Lab 2 - Binary Search Trees,2026-03-22 22:13:00,0,Completed,12
+356,STU1036,Assignment 4 - Graph Algorithms,2026-04-08 12:42:00,3,Late,12
+357,STU1036,Lab 3 - Shortest Path Solver,2026-04-16 17:46:00,1,Late,11
+358,STU1036,Assignment 5 - Dynamic Programming,2026-04-27 18:39:00,1,Late,5
+359,STU1036,Lab 4 - Concurrency & Threads,2026-05-05 22:29:00,1,Late,15
+360,STU1036,Project Final Submission,2026-05-12 10:35:00,0,Completed,16
+361,STU1037,Assignment 1 - Setup & Hello World,2026-02-08 23:10:00,0,Completed,20
+362,STU1037,Assignment 2 - Memory Management,2026-02-17 13:47:00,-1,Completed,35
+363,STU1037,Lab 1 - Linked List Implementation,2026-02-28 10:37:00,0,Completed,14
+364,STU1037,Assignment 3 - Trees & Recursion,2026-03-09 21:14:00,-1,Completed,23
+365,STU1037,Lab 2 - Binary Search Trees,2026-03-22 10:14:00,0,Completed,29
+366,STU1037,Assignment 4 - Graph Algorithms,2026-04-05 10:28:00,0,Completed,27
+367,STU1037,Lab 3 - Shortest Path Solver,2026-04-14 12:59:00,-1,Completed,25
+368,STU1037,Assignment 5 - Dynamic Programming,2026-04-25 22:51:00,-1,Completed,16
+369,STU1037,Lab 4 - Concurrency & Threads,2026-05-03 20:36:00,-1,Completed,35
+370,STU1037,Project Final Submission,2026-05-11 16:38:00,-1,Completed,23
+371,STU1038,Assignment 1 - Setup & Hello World,2026-02-08 16:15:00,0,Completed,24
+372,STU1038,Assignment 2 - Memory Management,2026-02-18 20:44:00,0,Completed,33
+373,STU1038,Lab 1 - Linked List Implementation,2026-02-27 20:32:00,-1,Completed,16
+374,STU1038,Assignment 3 - Trees & Recursion,2026-03-09 12:44:00,-1,Completed,15
+375,STU1038,Lab 2 - Binary Search Trees,2026-03-21 18:18:00,-1,Completed,24
+376,STU1038,Assignment 4 - Graph Algorithms,2026-04-05 13:10:00,0,Completed,35
+377,STU1038,Lab 3 - Shortest Path Solver,2026-04-14 14:39:00,-1,Completed,12
+378,STU1038,Assignment 5 - Dynamic Programming,2026-04-27 21:44:00,1,Late,33
+379,STU1038,Lab 4 - Concurrency & Threads,2026-05-04 18:34:00,0,Completed,25
+380,STU1038,Project Final Submission,2026-05-11 13:39:00,-1,Completed,19
+381,STU1039,Assignment 1 - Setup & Hello World,2026-02-09 12:27:00,1,Late,10
+382,STU1039,Assignment 2 - Memory Management,2026-02-21 21:58:00,3,Late,8
+383,STU1039,Lab 1 - Linked List Implementation,2026-03-01 10:52:00,1,Late,6
+384,STU1039,Assignment 3 - Trees & Recursion,2026-03-10 19:59:00,0,Completed,11
+385,STU1039,Lab 2 - Binary Search Trees,2026-03-23 13:23:00,1,Late,5
+386,STU1039,Assignment 4 - Graph Algorithms,2026-04-08 11:48:00,3,Late,6
+387,STU1039,Lab 3 - Shortest Path Solver,2026-04-17 17:48:00,2,Late,5
+388,STU1039,Assignment 5 - Dynamic Programming,2026-04-28 21:13:00,2,Late,15
+389,STU1039,Lab 4 - Concurrency & Threads,2026-05-07 21:12:00,3,Late,8
+390,STU1039,Project Final Submission,2026-05-15 17:24:00,3,Late,11
+391,STU1040,Assignment 1 - Setup & Hello World,2026-02-08 13:58:00,0,Completed,29
+392,STU1040,Assignment 2 - Memory Management,2026-02-17 12:42:00,-1,Completed,13
+393,STU1040,Lab 1 - Linked List Implementation,2026-02-28 13:56:00,0,Completed,21
+394,STU1040,Assignment 3 - Trees & Recursion,2026-03-10 15:46:00,0,Completed,30
+395,STU1040,Lab 2 - Binary Search Trees,2026-03-22 22:53:00,0,Completed,31
+396,STU1040,Assignment 4 - Graph Algorithms,2026-04-05 13:29:00,0,Completed,22
+397,STU1040,Lab 3 - Shortest Path Solver,2026-04-14 20:43:00,-1,Completed,16
+398,STU1040,Assignment 5 - Dynamic Programming,2026-04-26 16:29:00,0,Completed,19
+399,STU1040,Lab 4 - Concurrency & Threads,2026-05-04 10:45:00,0,Completed,20
+400,STU1040,Project Final Submission,2026-05-11 21:21:00,-1,Completed,30
+401,STU1041,Assignment 1 - Setup & Hello World,2026-02-09 20:37:00,1,Late,15
+402,STU1041,Assignment 2 - Memory Management,2026-02-18 17:13:00,0,Completed,13
+403,STU1041,Lab 1 - Linked List Implementation,2026-03-01 20:52:00,1,Late,10
+404,STU1041,Assignment 3 - Trees & Recursion,2026-03-10 22:43:00,0,Completed,11
+405,STU1041,Lab 2 - Binary Search Trees,2026-03-23 21:36:00,1,Late,10
+406,STU1041,Assignment 4 - Graph Algorithms,2026-04-06 12:29:00,1,Late,11
+407,STU1041,Lab 3 - Shortest Path Solver,2026-04-17 12:58:00,2,Late,11
+408,STU1041,Assignment 5 - Dynamic Programming,2026-04-28 17:25:00,2,Late,13
+409,STU1041,Lab 4 - Concurrency & Threads,2026-05-07 13:29:00,3,Late,18
+410,STU1041,Project Final Submission,2026-05-12 21:19:00,0,Completed,18
+411,STU1042,Assignment 1 - Setup & Hello World,2026-02-07 10:45:00,-1,Completed,26
+412,STU1042,Assignment 2 - Memory Management,2026-02-18 16:45:00,0,Completed,25
+413,STU1042,Lab 1 - Linked List Implementation,2026-02-27 12:34:00,-1,Completed,28
+414,STU1042,Assignment 3 - Trees & Recursion,2026-03-11 14:23:00,1,Late,19
+415,STU1042,Lab 2 - Binary Search Trees,2026-03-22 20:15:00,0,Completed,22
+416,STU1042,Assignment 4 - Graph Algorithms,2026-04-05 23:33:00,0,Completed,26
+417,STU1042,Lab 3 - Shortest Path Solver,2026-04-16 18:56:00,1,Late,14
+418,STU1042,Assignment 5 - Dynamic Programming,2026-04-25 10:27:00,-1,Completed,18
+419,STU1042,Lab 4 - Concurrency & Threads,2026-05-03 20:48:00,-1,Completed,24
+420,STU1042,Project Final Submission,2026-05-12 10:14:00,0,Completed,31
+421,STU1043,Assignment 1 - Setup & Hello World,2026-02-09 22:58:00,1,Late,8
+422,STU1043,Assignment 2 - Memory Management,2026-02-21 21:52:00,3,Late,14
+423,STU1043,Lab 1 - Linked List Implementation,2026-02-28 13:40:00,0,Completed,13
+424,STU1043,Assignment 3 - Trees & Recursion,2026-03-11 23:31:00,1,Late,8
+425,STU1043,Lab 2 - Binary Search Trees,2026-03-23 10:23:00,1,Late,9
+426,STU1043,Assignment 4 - Graph Algorithms,2026-04-07 21:17:00,2,Late,8
+427,STU1043,Lab 3 - Shortest Path Solver,2026-04-16 22:40:00,1,Late,16
+428,STU1043,Assignment 5 - Dynamic Programming,2026-04-27 21:48:00,1,Late,8
+429,STU1043,Lab 4 - Concurrency & Threads,2026-05-07 13:35:00,3,Late,16
+430,STU1043,Project Final Submission,2026-05-12 18:30:00,0,Completed,8
+431,STU1044,Assignment 1 - Setup & Hello World,2026-02-11 14:34:00,3,Late,17
+432,STU1044,Assignment 2 - Memory Management,2026-02-19 18:51:00,1,Late,12
+433,STU1044,Lab 1 - Linked List Implementation,2026-03-02 14:26:00,2,Late,10
+434,STU1044,Assignment 3 - Trees & Recursion,2026-03-12 18:41:00,2,Late,10
+435,STU1044,Lab 2 - Binary Search Trees,2026-03-22 11:56:00,0,Completed,12
+436,STU1044,Assignment 4 - Graph Algorithms,2026-04-06 22:30:00,1,Late,12
+437,STU1044,Lab 3 - Shortest Path Solver,2026-04-18 15:30:00,3,Late,8
+438,STU1044,Assignment 5 - Dynamic Programming,2026-04-27 10:46:00,1,Late,11
+439,STU1044,Lab 4 - Concurrency & Threads,2026-05-09 13:57:00,5,Late,18
+440,STU1044,Project Final Submission,2026-05-13 10:26:00,1,Late,7
+441,STU1045,Assignment 1 - Setup & Hello World,2026-02-07 19:47:00,-1,Completed,29
+442,STU1045,Assignment 2 - Memory Management,2026-02-17 16:28:00,-1,Completed,35
+443,STU1045,Lab 1 - Linked List Implementation,2026-03-01 13:31:00,1,Late,16
+444,STU1045,Assignment 3 - Trees & Recursion,2026-03-09 16:46:00,-1,Completed,19
+445,STU1045,Lab 2 - Binary Search Trees,2026-03-22 17:45:00,0,Completed,19
+446,STU1045,Assignment 4 - Graph Algorithms,2026-04-05 20:31:00,0,Completed,32
+447,STU1045,Lab 3 - Shortest Path Solver,2026-04-14 22:41:00,-1,Completed,20
+448,STU1045,Assignment 5 - Dynamic Programming,2026-04-25 20:57:00,-1,Completed,35
+449,STU1045,Lab 4 - Concurrency & Threads,2026-05-04 17:20:00,0,Completed,27
+450,STU1045,Project Final Submission,2026-05-11 22:32:00,-1,Completed,35
+451,STU1046,Assignment 1 - Setup & Hello World,2026-02-20 12:56:00,12,Late,3
+452,STU1046,Assignment 2 - Memory Management,2026-02-22 12:44:00,4,Late,8
+453,STU1046,Lab 1 - Linked List Implementation,2026-03-04 18:12:00,4,Late,1
+454,STU1046,Assignment 3 - Trees & Recursion,2026-03-23 23:52:00,13,Late,2
+455,STU1046,Lab 2 - Binary Search Trees,2026-03-27 22:10:00,5,Late,1
+456,STU1046,Assignment 4 - Graph Algorithms,2026-04-10 12:50:00,5,Late,7
+457,STU1046,Lab 3 - Shortest Path Solver,2026-04-21 11:55:00,6,Late,4
+458,STU1046,Assignment 5 - Dynamic Programming,2026-05-02 10:23:00,6,Late,3
+459,STU1046,Lab 4 - Concurrency & Threads,2026-05-13 15:13:00,9,Late,8
+460,STU1046,Project Final Submission,2026-05-27 20:41:00,15,Late,8
+461,STU1047,Assignment 1 - Setup & Hello World,2026-02-07 10:44:00,-1,Completed,12
+462,STU1047,Assignment 2 - Memory Management,2026-02-18 16:10:00,0,Completed,29
+463,STU1047,Lab 1 - Linked List Implementation,2026-02-28 18:56:00,0,Completed,12
+464,STU1047,Assignment 3 - Trees & Recursion,2026-03-09 18:28:00,-1,Completed,20
+465,STU1047,Lab 2 - Binary Search Trees,2026-03-21 18:54:00,-1,Completed,12
+466,STU1047,Assignment 4 - Graph Algorithms,2026-04-05 16:21:00,0,Completed,33
+467,STU1047,Lab 3 - Shortest Path Solver,2026-04-15 11:43:00,0,Completed,15
+468,STU1047,Assignment 5 - Dynamic Programming,2026-04-26 13:22:00,0,Completed,16
+469,STU1047,Lab 4 - Concurrency & Threads,2026-05-04 18:26:00,0,Completed,31
+470,STU1047,Project Final Submission,2026-05-11 14:35:00,-1,Completed,23
+471,STU1048,Assignment 1 - Setup & Hello World,2026-02-10 15:35:00,2,Late,6
+472,STU1048,Assignment 2 - Memory Management,2026-02-19 19:25:00,1,Late,12
+473,STU1048,Lab 1 - Linked List Implementation,2026-03-01 13:29:00,1,Late,16
+474,STU1048,Assignment 3 - Trees & Recursion,2026-03-11 23:15:00,1,Late,15
+475,STU1048,Lab 2 - Binary Search Trees,2026-03-22 23:51:00,0,Completed,15
+476,STU1048,Assignment 4 - Graph Algorithms,2026-04-05 10:15:00,0,Completed,17
+477,STU1048,Lab 3 - Shortest Path Solver,2026-04-20 16:34:00,5,Late,11
+478,STU1048,Assignment 5 - Dynamic Programming,2026-04-27 17:13:00,1,Late,13
+479,STU1048,Lab 4 - Concurrency & Threads,2026-05-05 10:54:00,1,Late,15
+480,STU1048,Project Final Submission,2026-05-12 11:41:00,0,Completed,7
+481,STU1049,Assignment 1 - Setup & Hello World,2026-02-08 16:51:00,0,Completed,18
+482,STU1049,Assignment 2 - Memory Management,2026-02-20 15:46:00,2,Late,17
+483,STU1049,Lab 1 - Linked List Implementation,2026-03-01 11:43:00,1,Late,18
+484,STU1049,Assignment 3 - Trees & Recursion,2026-03-11 13:23:00,1,Late,5
+485,STU1049,Lab 2 - Binary Search Trees,2026-03-22 21:46:00,0,Completed,18
+486,STU1049,Assignment 4 - Graph Algorithms,2026-04-07 14:12:00,2,Late,12
+487,STU1049,Lab 3 - Shortest Path Solver,2026-04-15 20:27:00,0,Completed,6
+488,STU1049,Assignment 5 - Dynamic Programming,2026-04-26 19:52:00,0,Completed,13
+489,STU1049,Lab 4 - Concurrency & Threads,2026-05-05 12:30:00,1,Late,5
+490,STU1049,Project Final Submission,2026-05-13 13:47:00,1,Late,5
+491,STU1050,Assignment 1 - Setup & Hello World,2026-02-07 22:55:00,-1,Completed,16
+492,STU1050,Assignment 2 - Memory Management,2026-02-18 11:29:00,0,Completed,24
+493,STU1050,Lab 1 - Linked List Implementation,2026-02-28 19:25:00,0,Completed,17
+494,STU1050,Assignment 3 - Trees & Recursion,2026-03-10 23:34:00,0,Completed,30
+495,STU1050,Lab 2 - Binary Search Trees,2026-03-22 18:31:00,0,Completed,33
+496,STU1050,Assignment 4 - Graph Algorithms,2026-04-04 22:57:00,-1,Completed,24
+497,STU1050,Lab 3 - Shortest Path Solver,2026-04-14 22:54:00,-1,Completed,16
+498,STU1050,Assignment 5 - Dynamic Programming,2026-04-27 11:42:00,1,Late,35
+499,STU1050,Lab 4 - Concurrency & Threads,2026-05-04 15:13:00,0,Completed,35
+500,STU1050,Project Final Submission,2026-05-12 16:24:00,0,Completed,15
+501,STU1051,Assignment 1 - Setup & Hello World,2026-02-07 15:48:00,-1,Completed,14
+502,STU1051,Assignment 2 - Memory Management,2026-02-18 19:35:00,0,Completed,31
+503,STU1051,Lab 1 - Linked List Implementation,2026-02-27 10:50:00,-1,Completed,22
+504,STU1051,Assignment 3 - Trees & Recursion,2026-03-10 22:38:00,0,Completed,20
+505,STU1051,Lab 2 - Binary Search Trees,2026-03-22 13:32:00,0,Completed,27
+506,STU1051,Assignment 4 - Graph Algorithms,2026-04-06 16:37:00,1,Late,29
+507,STU1051,Lab 3 - Shortest Path Solver,2026-04-15 20:47:00,0,Completed,17
+508,STU1051,Assignment 5 - Dynamic Programming,2026-04-26 16:15:00,0,Completed,33
+509,STU1051,Lab 4 - Concurrency & Threads,2026-05-04 14:25:00,0,Completed,31
+510,STU1051,Project Final Submission,2026-05-12 11:15:00,0,Completed,34
+511,STU1052,Assignment 1 - Setup & Hello World,2026-02-08 12:34:00,0,Completed,5
+512,STU1052,Assignment 2 - Memory Management,2026-02-22 21:34:00,4,Late,3
+513,STU1052,Lab 1 - Linked List Implementation,2026-03-02 15:16:00,2,Late,6
+514,STU1052,Assignment 3 - Trees & Recursion,2026-03-15 10:29:00,5,Late,2
+515,STU1052,Lab 2 - Binary Search Trees,2026-03-27 15:58:00,5,Late,8
+516,STU1052,Assignment 4 - Graph Algorithms,2026-04-13 11:18:00,8,Late,5
+517,STU1052,Lab 3 - Shortest Path Solver,2026-04-21 12:37:00,6,Late,2
+518,STU1052,Assignment 5 - Dynamic Programming,2026-04-30 18:45:00,4,Late,8
+519,STU1052,Lab 4 - Concurrency & Threads,2026-05-13 11:11:00,9,Late,7
+520,STU1052,Project Final Submission,2026-05-27 15:45:00,15,Late,2
+521,STU1053,Assignment 1 - Setup & Hello World,2026-02-08 19:48:00,0,Completed,14
+522,STU1053,Assignment 2 - Memory Management,2026-02-17 23:34:00,-1,Completed,22
+523,STU1053,Lab 1 - Linked List Implementation,2026-02-28 14:36:00,0,Completed,12
+524,STU1053,Assignment 3 - Trees & Recursion,2026-03-10 22:15:00,0,Completed,24
+525,STU1053,Lab 2 - Binary Search Trees,2026-03-21 18:25:00,-1,Completed,35
+526,STU1053,Assignment 4 - Graph Algorithms,2026-04-04 18:20:00,-1,Completed,30
+527,STU1053,Lab 3 - Shortest Path Solver,2026-04-15 16:20:00,0,Completed,33
+528,STU1053,Assignment 5 - Dynamic Programming,2026-04-26 14:29:00,0,Completed,16
+529,STU1053,Lab 4 - Concurrency & Threads,2026-05-05 17:19:00,1,Late,20
+530,STU1053,Project Final Submission,2026-05-12 12:37:00,0,Completed,14
+531,STU1054,Assignment 1 - Setup & Hello World,2026-02-08 16:29:00,0,Completed,20
+532,STU1054,Assignment 2 - Memory Management,2026-02-18 22:14:00,0,Completed,27
+533,STU1054,Lab 1 - Linked List Implementation,2026-02-27 14:25:00,-1,Completed,23
+534,STU1054,Assignment 3 - Trees & Recursion,2026-03-09 20:41:00,-1,Completed,35
+535,STU1054,Lab 2 - Binary Search Trees,2026-03-22 19:22:00,0,Completed,31
+536,STU1054,Assignment 4 - Graph Algorithms,2026-04-05 11:18:00,0,Completed,26
+537,STU1054,Lab 3 - Shortest Path Solver,2026-04-15 10:35:00,0,Completed,21
+538,STU1054,Assignment 5 - Dynamic Programming,2026-04-26 23:49:00,0,Completed,22
+539,STU1054,Lab 4 - Concurrency & Threads,2026-05-03 22:31:00,-1,Completed,24
+540,STU1054,Project Final Submission,2026-05-12 15:37:00,0,Completed,26
+541,STU1055,Assignment 1 - Setup & Hello World,2026-02-08 23:51:00,0,Completed,18
+542,STU1055,Assignment 2 - Memory Management,2026-02-19 12:29:00,1,Late,14
+543,STU1055,Lab 1 - Linked List Implementation,2026-03-02 19:54:00,2,Late,10
+544,STU1055,Assignment 3 - Trees & Recursion,2026-03-12 17:30:00,2,Late,8
+545,STU1055,Lab 2 - Binary Search Trees,2026-03-27 16:30:00,5,Late,7
+546,STU1055,Assignment 4 - Graph Algorithms,2026-04-06 21:54:00,1,Late,9
+547,STU1055,Lab 3 - Shortest Path Solver,2026-04-16 17:46:00,1,Late,15
+548,STU1055,Assignment 5 - Dynamic Programming,2026-04-27 13:30:00,1,Late,17
+549,STU1055,Lab 4 - Concurrency & Threads,2026-05-05 14:35:00,1,Late,11
+550,STU1055,Project Final Submission,2026-05-15 11:46:00,3,Late,10
+551,STU1056,Assignment 1 - Setup & Hello World,2026-02-08 19:44:00,0,Completed,18
+552,STU1056,Assignment 2 - Memory Management,2026-02-18 20:59:00,0,Completed,17
+553,STU1056,Lab 1 - Linked List Implementation,2026-02-27 10:56:00,-1,Completed,29
+554,STU1056,Assignment 3 - Trees & Recursion,2026-03-10 21:23:00,0,Completed,26
+555,STU1056,Lab 2 - Binary Search Trees,2026-03-21 22:28:00,-1,Completed,26
+556,STU1056,Assignment 4 - Graph Algorithms,2026-04-05 11:36:00,0,Completed,34
+557,STU1056,Lab 3 - Shortest Path Solver,2026-04-14 17:18:00,-1,Completed,33
+558,STU1056,Assignment 5 - Dynamic Programming,2026-04-25 14:25:00,-1,Completed,32
+559,STU1056,Lab 4 - Concurrency & Threads,2026-05-04 20:19:00,0,Completed,20
+560,STU1056,Project Final Submission,2026-05-12 16:34:00,0,Completed,34
+561,STU1057,Assignment 1 - Setup & Hello World,2026-02-08 17:48:00,0,Completed,6
+562,STU1057,Assignment 2 - Memory Management,2026-02-19 19:35:00,1,Late,12
+563,STU1057,Lab 1 - Linked List Implementation,2026-03-03 18:54:00,3,Late,13
+564,STU1057,Assignment 3 - Trees & Recursion,2026-03-11 18:12:00,1,Late,11
+565,STU1057,Lab 2 - Binary Search Trees,2026-03-22 15:54:00,0,Completed,17
+566,STU1057,Assignment 4 - Graph Algorithms,2026-04-06 18:48:00,1,Late,17
+567,STU1057,Lab 3 - Shortest Path Solver,2026-04-16 11:16:00,1,Late,15
+568,STU1057,Assignment 5 - Dynamic Programming,2026-04-29 13:52:00,3,Late,17
+569,STU1057,Lab 4 - Concurrency & Threads,2026-05-06 15:20:00,2,Late,15
+570,STU1057,Project Final Submission,2026-05-13 19:12:00,1,Late,15
+571,STU1058,Assignment 1 - Setup & Hello World,2026-02-09 20:53:00,1,Late,30
+572,STU1058,Assignment 2 - Memory Management,2026-02-18 16:58:00,0,Completed,32
+573,STU1058,Lab 1 - Linked List Implementation,2026-02-27 22:37:00,-1,Completed,22
+574,STU1058,Assignment 3 - Trees & Recursion,2026-03-09 10:16:00,-1,Completed,15
+575,STU1058,Lab 2 - Binary Search Trees,2026-03-22 13:42:00,0,Completed,20
+576,STU1058,Assignment 4 - Graph Algorithms,2026-04-04 18:45:00,-1,Completed,35
+577,STU1058,Lab 3 - Shortest Path Solver,2026-04-15 21:46:00,0,Completed,30
+578,STU1058,Assignment 5 - Dynamic Programming,2026-04-26 17:33:00,0,Completed,19
+579,STU1058,Lab 4 - Concurrency & Threads,2026-05-03 17:59:00,-1,Completed,24
+580,STU1058,Project Final Submission,2026-05-12 19:54:00,0,Completed,33
+581,STU1059,Assignment 1 - Setup & Hello World,2026-02-08 12:32:00,0,Completed,28
+582,STU1059,Assignment 2 - Memory Management,2026-02-18 17:16:00,0,Completed,12
+583,STU1059,Lab 1 - Linked List Implementation,2026-02-28 16:15:00,0,Completed,21
+584,STU1059,Assignment 3 - Trees & Recursion,2026-03-10 23:56:00,0,Completed,15
+585,STU1059,Lab 2 - Binary Search Trees,2026-03-22 15:29:00,0,Completed,16
+586,STU1059,Assignment 4 - Graph Algorithms,2026-04-05 17:23:00,0,Completed,22
+587,STU1059,Lab 3 - Shortest Path Solver,2026-04-15 17:32:00,0,Completed,28
+588,STU1059,Assignment 5 - Dynamic Programming,2026-04-25 11:38:00,-1,Completed,27
+589,STU1059,Lab 4 - Concurrency & Threads,2026-05-03 21:38:00,-1,Completed,35
+590,STU1059,Project Final Submission,2026-05-12 11:29:00,0,Completed,22
+591,STU1060,Assignment 1 - Setup & Hello World,2026-02-12 22:55:00,4,Late,1
+592,STU1060,Assignment 2 - Memory Management,2026-02-18 10:31:00,0,Completed,2
+593,STU1060,Lab 1 - Linked List Implementation,2026-03-12 20:20:00,12,Late,2
+594,STU1060,Assignment 3 - Trees & Recursion,2026-03-11 18:21:00,1,Late,4
+595,STU1060,Lab 2 - Binary Search Trees,2026-03-30 15:45:00,8,Late,3
+596,STU1060,Assignment 4 - Graph Algorithms,2026-04-13 17:24:00,8,Late,7
+597,STU1060,Lab 3 - Shortest Path Solver,2026-04-29 20:21:00,14,Missing,7
+598,STU1060,Assignment 5 - Dynamic Programming,2026-05-02 20:52:00,6,Late,3
+599,STU1060,Lab 4 - Concurrency & Threads,2026-05-06 16:11:00,2,Late,7
+600,STU1060,Project Final Submission,2026-05-22 17:47:00,10,Late,4
+601,STU1061,Assignment 1 - Setup & Hello World,2026-02-11 16:10:00,3,Late,11
+602,STU1061,Assignment 2 - Memory Management,2026-02-23 13:23:00,5,Late,16
+603,STU1061,Lab 1 - Linked List Implementation,2026-03-01 22:55:00,1,Late,9
+604,STU1061,Assignment 3 - Trees & Recursion,2026-03-11 22:14:00,1,Late,17
+605,STU1061,Lab 2 - Binary Search Trees,2026-03-25 11:44:00,3,Late,14
+606,STU1061,Assignment 4 - Graph Algorithms,2026-04-05 15:30:00,0,Completed,7
+607,STU1061,Lab 3 - Shortest Path Solver,2026-04-17 17:17:00,2,Late,8
+608,STU1061,Assignment 5 - Dynamic Programming,2026-04-27 20:41:00,1,Late,9
+609,STU1061,Lab 4 - Concurrency & Threads,2026-05-04 20:30:00,0,Completed,13
+610,STU1061,Project Final Submission,2026-05-13 16:49:00,1,Late,14
+611,STU1062,Assignment 1 - Setup & Hello World,2026-02-12 19:17:00,4,Late,7
+612,STU1062,Assignment 2 - Memory Management,2026-02-25 15:39:00,7,Late,6
+613,STU1062,Lab 1 - Linked List Implementation,2026-03-14 23:53:00,14,Missing,3
+614,STU1062,Assignment 3 - Trees & Recursion,2026-03-15 19:47:00,5,Late,5
+615,STU1062,Lab 2 - Binary Search Trees,2026-04-04 20:18:00,13,Late,2
+616,STU1062,Assignment 4 - Graph Algorithms,2026-04-06 11:25:00,1,Late,6
+617,STU1062,Lab 3 - Shortest Path Solver,2026-04-24 11:21:00,9,Late,5
+618,STU1062,Assignment 5 - Dynamic Programming,2026-04-28 21:19:00,2,Late,6
+619,STU1062,Lab 4 - Concurrency & Threads,2026-05-18 16:48:00,14,Missing,7
+620,STU1062,Project Final Submission,2026-05-27 19:34:00,15,Late,3
+621,STU1063,Assignment 1 - Setup & Hello World,2026-02-08 12:41:00,0,Completed,25
+622,STU1063,Assignment 2 - Memory Management,2026-02-18 18:54:00,0,Completed,32
+623,STU1063,Lab 1 - Linked List Implementation,2026-02-28 12:45:00,0,Completed,32
+624,STU1063,Assignment 3 - Trees & Recursion,2026-03-11 17:28:00,1,Late,17
+625,STU1063,Lab 2 - Binary Search Trees,2026-03-22 12:30:00,0,Completed,16
+626,STU1063,Assignment 4 - Graph Algorithms,2026-04-05 19:13:00,0,Completed,26
+627,STU1063,Lab 3 - Shortest Path Solver,2026-04-15 10:41:00,0,Completed,23
+628,STU1063,Assignment 5 - Dynamic Programming,2026-04-25 13:34:00,-1,Completed,16
+629,STU1063,Lab 4 - Concurrency & Threads,2026-05-04 18:51:00,0,Completed,29
+630,STU1063,Project Final Submission,2026-05-11 16:53:00,-1,Completed,27
+631,STU1064,Assignment 1 - Setup & Hello World,2026-02-08 16:55:00,0,Completed,27
+632,STU1064,Assignment 2 - Memory Management,2026-02-18 17:20:00,0,Completed,26
+633,STU1064,Lab 1 - Linked List Implementation,2026-02-28 19:11:00,0,Completed,14
+634,STU1064,Assignment 3 - Trees & Recursion,2026-03-09 14:12:00,-1,Completed,19
+635,STU1064,Lab 2 - Binary Search Trees,2026-03-21 13:44:00,-1,Completed,20
+636,STU1064,Assignment 4 - Graph Algorithms,2026-04-05 12:59:00,0,Completed,21
+637,STU1064,Lab 3 - Shortest Path Solver,2026-04-16 19:57:00,1,Late,26
+638,STU1064,Assignment 5 - Dynamic Programming,2026-04-25 18:42:00,-1,Completed,27
+639,STU1064,Lab 4 - Concurrency & Threads,2026-05-04 19:17:00,0,Completed,15
+640,STU1064,Project Final Submission,2026-05-12 22:44:00,0,Completed,20
+641,STU1065,Assignment 1 - Setup & Hello World,2026-02-08 18:58:00,0,Completed,23
+642,STU1065,Assignment 2 - Memory Management,2026-02-17 22:56:00,-1,Completed,13
+643,STU1065,Lab 1 - Linked List Implementation,2026-02-28 18:23:00,0,Completed,26
+644,STU1065,Assignment 3 - Trees & Recursion,2026-03-09 11:57:00,-1,Completed,25
+645,STU1065,Lab 2 - Binary Search Trees,2026-03-23 22:25:00,1,Late,32
+646,STU1065,Assignment 4 - Graph Algorithms,2026-04-04 23:12:00,-1,Completed,21
+647,STU1065,Lab 3 - Shortest Path Solver,2026-04-14 14:32:00,-1,Completed,26
+648,STU1065,Assignment 5 - Dynamic Programming,2026-04-25 17:17:00,-1,Completed,14
+649,STU1065,Lab 4 - Concurrency & Threads,2026-05-03 13:57:00,-1,Completed,19
+650,STU1065,Project Final Submission,2026-05-12 21:32:00,0,Completed,30
+651,STU1066,Assignment 1 - Setup & Hello World,2026-02-08 21:49:00,0,Completed,18
+652,STU1066,Assignment 2 - Memory Management,2026-02-18 16:20:00,0,Completed,15
+653,STU1066,Lab 1 - Linked List Implementation,2026-03-01 12:23:00,1,Late,14
+654,STU1066,Assignment 3 - Trees & Recursion,2026-03-10 13:13:00,0,Completed,18
+655,STU1066,Lab 2 - Binary Search Trees,2026-03-22 15:44:00,0,Completed,14
+656,STU1066,Assignment 4 - Graph Algorithms,2026-04-08 19:44:00,3,Late,9
+657,STU1066,Lab 3 - Shortest Path Solver,2026-04-17 15:55:00,2,Late,7
+658,STU1066,Assignment 5 - Dynamic Programming,2026-04-29 14:46:00,3,Late,9
+659,STU1066,Lab 4 - Concurrency & Threads,2026-05-07 23:42:00,3,Late,9
+660,STU1066,Project Final Submission,2026-05-14 23:16:00,2,Late,15
+661,STU1067,Assignment 1 - Setup & Hello World,2026-02-08 22:36:00,0,Completed,3
+662,STU1067,Assignment 2 - Memory Management,2026-03-02 14:51:00,12,Late,1
+663,STU1067,Lab 1 - Linked List Implementation,2026-03-12 21:18:00,12,Late,3
+664,STU1067,Assignment 3 - Trees & Recursion,2026-03-23 12:55:00,13,Late,4
+665,STU1067,Lab 2 - Binary Search Trees,2026-03-30 23:25:00,8,Late,6
+666,STU1067,Assignment 4 - Graph Algorithms,2026-04-08 17:19:00,3,Late,7
+667,STU1067,Lab 3 - Shortest Path Solver,2026-04-29 20:36:00,14,Late,5
+668,STU1067,Assignment 5 - Dynamic Programming,2026-05-10 17:14:00,14,Late,7
+669,STU1067,Lab 4 - Concurrency & Threads,2026-05-18 16:42:00,14,Missing,2
+670,STU1067,Project Final Submission,2026-05-17 21:33:00,5,Late,5
+671,STU1068,Assignment 1 - Setup & Hello World,2026-02-08 17:30:00,0,Completed,12
+672,STU1068,Assignment 2 - Memory Management,2026-02-18 10:59:00,0,Completed,14
+673,STU1068,Lab 1 - Linked List Implementation,2026-03-02 21:15:00,2,Late,18
+674,STU1068,Assignment 3 - Trees & Recursion,2026-03-10 17:50:00,0,Completed,16
+675,STU1068,Lab 2 - Binary Search Trees,2026-03-22 21:32:00,0,Completed,15
+676,STU1068,Assignment 4 - Graph Algorithms,2026-04-10 11:44:00,5,Late,18
+677,STU1068,Lab 3 - Shortest Path Solver,2026-04-15 13:37:00,0,Completed,11
+678,STU1068,Assignment 5 - Dynamic Programming,2026-04-29 13:41:00,3,Late,18
+679,STU1068,Lab 4 - Concurrency & Threads,2026-05-05 15:28:00,1,Late,9
+680,STU1068,Project Final Submission,2026-05-15 18:46:00,3,Late,10
+681,STU1069,Assignment 1 - Setup & Hello World,2026-02-08 19:41:00,0,Completed,16
+682,STU1069,Assignment 2 - Memory Management,2026-02-18 20:58:00,0,Completed,22
+683,STU1069,Lab 1 - Linked List Implementation,2026-02-28 10:16:00,0,Completed,13
+684,STU1069,Assignment 3 - Trees & Recursion,2026-03-09 22:39:00,-1,Completed,32
+685,STU1069,Lab 2 - Binary Search Trees,2026-03-21 11:20:00,-1,Completed,12
+686,STU1069,Assignment 4 - Graph Algorithms,2026-04-04 17:10:00,-1,Completed,26
+687,STU1069,Lab 3 - Shortest Path Solver,2026-04-15 13:54:00,0,Completed,25
+688,STU1069,Assignment 5 - Dynamic Programming,2026-04-26 20:29:00,0,Completed,16
+689,STU1069,Lab 4 - Concurrency & Threads,2026-05-04 23:27:00,0,Completed,17
+690,STU1069,Project Final Submission,2026-05-12 20:33:00,0,Completed,14
+691,STU1070,Assignment 1 - Setup & Hello World,2026-02-07 11:33:00,-1,Completed,20
+692,STU1070,Assignment 2 - Memory Management,2026-02-18 20:20:00,0,Completed,33
+693,STU1070,Lab 1 - Linked List Implementation,2026-03-01 16:50:00,1,Late,13
+694,STU1070,Assignment 3 - Trees & Recursion,2026-03-09 21:54:00,-1,Completed,21
+695,STU1070,Lab 2 - Binary Search Trees,2026-03-22 16:51:00,0,Completed,19
+696,STU1070,Assignment 4 - Graph Algorithms,2026-04-04 21:16:00,-1,Completed,14
+697,STU1070,Lab 3 - Shortest Path Solver,2026-04-15 13:40:00,0,Completed,12
+698,STU1070,Assignment 5 - Dynamic Programming,2026-04-26 12:47:00,0,Completed,14
+699,STU1070,Lab 4 - Concurrency & Threads,2026-05-03 18:53:00,-1,Completed,19
+700,STU1070,Project Final Submission,2026-05-12 10:10:00,0,Completed,26
+701,STU1071,Assignment 1 - Setup & Hello World,2026-02-07 15:17:00,-1,Completed,34
+702,STU1071,Assignment 2 - Memory Management,2026-02-18 21:18:00,0,Completed,25
+703,STU1071,Lab 1 - Linked List Implementation,2026-02-28 11:24:00,0,Completed,27
+704,STU1071,Assignment 3 - Trees & Recursion,2026-03-09 11:56:00,-1,Completed,24
+705,STU1071,Lab 2 - Binary Search Trees,2026-03-22 11:30:00,0,Completed,15
+706,STU1071,Assignment 4 - Graph Algorithms,2026-04-05 14:18:00,0,Completed,23
+707,STU1071,Lab 3 - Shortest Path Solver,2026-04-14 22:58:00,-1,Completed,24
+708,STU1071,Assignment 5 - Dynamic Programming,2026-04-25 20:53:00,-1,Completed,16
+709,STU1071,Lab 4 - Concurrency & Threads,2026-05-04 11:43:00,0,Completed,16
+710,STU1071,Project Final Submission,2026-05-13 10:49:00,1,Late,30
+711,STU1072,Assignment 1 - Setup & Hello World,2026-02-07 12:38:00,-1,Completed,32
+712,STU1072,Assignment 2 - Memory Management,2026-02-17 21:23:00,-1,Completed,23
+713,STU1072,Lab 1 - Linked List Implementation,2026-02-27 21:19:00,-1,Completed,32
+714,STU1072,Assignment 3 - Trees & Recursion,2026-03-10 19:53:00,0,Completed,25
+715,STU1072,Lab 2 - Binary Search Trees,2026-03-21 23:23:00,-1,Completed,26
+716,STU1072,Assignment 4 - Graph Algorithms,2026-04-04 11:18:00,-1,Completed,14
+717,STU1072,Lab 3 - Shortest Path Solver,2026-04-15 19:56:00,0,Completed,15
+718,STU1072,Assignment 5 - Dynamic Programming,2026-04-26 15:37:00,0,Completed,24
+719,STU1072,Lab 4 - Concurrency & Threads,2026-05-03 22:18:00,-1,Completed,22
+720,STU1072,Project Final Submission,2026-05-12 14:51:00,0,Completed,19
+721,STU1073,Assignment 1 - Setup & Hello World,2026-02-15 13:45:00,7,Late,2
+722,STU1073,Assignment 2 - Memory Management,2026-02-18 22:54:00,0,Completed,5
+723,STU1073,Lab 1 - Linked List Implementation,2026-02-28 23:52:00,0,Completed,1
+724,STU1073,Assignment 3 - Trees & Recursion,2026-03-24 13:43:00,14,Missing,5
+725,STU1073,Lab 2 - Binary Search Trees,2026-03-23 21:35:00,1,Late,4
+726,STU1073,Assignment 4 - Graph Algorithms,2026-04-18 20:13:00,13,Late,5
+727,STU1073,Lab 3 - Shortest Path Solver,2026-04-29 17:34:00,14,Missing,4
+728,STU1073,Assignment 5 - Dynamic Programming,2026-05-02 13:41:00,6,Late,2
+729,STU1073,Lab 4 - Concurrency & Threads,2026-05-10 18:10:00,6,Late,2
+730,STU1073,Project Final Submission,2026-05-22 15:18:00,10,Late,6
+731,STU1074,Assignment 1 - Setup & Hello World,2026-02-08 23:46:00,0,Completed,24
+732,STU1074,Assignment 2 - Memory Management,2026-02-18 15:44:00,0,Completed,25
+733,STU1074,Lab 1 - Linked List Implementation,2026-02-28 12:58:00,0,Completed,33
+734,STU1074,Assignment 3 - Trees & Recursion,2026-03-09 22:14:00,-1,Completed,27
+735,STU1074,Lab 2 - Binary Search Trees,2026-03-22 19:14:00,0,Completed,12
+736,STU1074,Assignment 4 - Graph Algorithms,2026-04-05 14:23:00,0,Completed,12
+737,STU1074,Lab 3 - Shortest Path Solver,2026-04-15 10:35:00,0,Completed,13
+738,STU1074,Assignment 5 - Dynamic Programming,2026-04-25 14:50:00,-1,Completed,28
+739,STU1074,Lab 4 - Concurrency & Threads,2026-05-03 18:59:00,-1,Completed,34
+740,STU1074,Project Final Submission,2026-05-12 16:54:00,0,Completed,25
+741,STU1075,Assignment 1 - Setup & Hello World,2026-02-09 11:50:00,1,Late,11
+742,STU1075,Assignment 2 - Memory Management,2026-02-19 18:49:00,1,Late,13
+743,STU1075,Lab 1 - Linked List Implementation,2026-03-01 14:15:00,1,Late,7
+744,STU1075,Assignment 3 - Trees & Recursion,2026-03-13 11:42:00,3,Late,9
+745,STU1075,Lab 2 - Binary Search Trees,2026-03-24 22:19:00,2,Late,8
+746,STU1075,Assignment 4 - Graph Algorithms,2026-04-06 15:35:00,1,Late,13
+747,STU1075,Lab 3 - Shortest Path Solver,2026-04-15 20:58:00,0,Completed,14
+748,STU1075,Assignment 5 - Dynamic Programming,2026-04-27 20:53:00,1,Late,18
+749,STU1075,Lab 4 - Concurrency & Threads,2026-05-07 11:29:00,3,Late,15
+750,STU1075,Project Final Submission,2026-05-13 16:56:00,1,Late,16
+751,STU1076,Assignment 1 - Setup & Hello World,2026-02-08 10:25:00,0,Completed,19
+752,STU1076,Assignment 2 - Memory Management,2026-02-18 16:17:00,0,Completed,14
+753,STU1076,Lab 1 - Linked List Implementation,2026-02-27 19:48:00,-1,Completed,26
+754,STU1076,Assignment 3 - Trees & Recursion,2026-03-10 14:52:00,0,Completed,13
+755,STU1076,Lab 2 - Binary Search Trees,2026-03-22 20:57:00,0,Completed,35
+756,STU1076,Assignment 4 - Graph Algorithms,2026-04-04 11:10:00,-1,Completed,17
+757,STU1076,Lab 3 - Shortest Path Solver,2026-04-14 12:54:00,-1,Completed,34
+758,STU1076,Assignment 5 - Dynamic Programming,2026-04-26 12:41:00,0,Completed,12
+759,STU1076,Lab 4 - Concurrency & Threads,2026-05-04 18:43:00,0,Completed,23
+760,STU1076,Project Final Submission,2026-05-11 14:20:00,-1,Completed,35
+761,STU1077,Assignment 1 - Setup & Hello World,2026-02-08 12:57:00,0,Completed,23
+762,STU1077,Assignment 2 - Memory Management,2026-02-18 21:17:00,0,Completed,20
+763,STU1077,Lab 1 - Linked List Implementation,2026-02-27 15:37:00,-1,Completed,12
+764,STU1077,Assignment 3 - Trees & Recursion,2026-03-09 18:14:00,-1,Completed,20
+765,STU1077,Lab 2 - Binary Search Trees,2026-03-21 21:46:00,-1,Completed,20
+766,STU1077,Assignment 4 - Graph Algorithms,2026-04-05 11:41:00,0,Completed,32
+767,STU1077,Lab 3 - Shortest Path Solver,2026-04-14 18:33:00,-1,Completed,26
+768,STU1077,Assignment 5 - Dynamic Programming,2026-04-25 17:46:00,-1,Completed,13
+769,STU1077,Lab 4 - Concurrency & Threads,2026-05-04 15:20:00,0,Completed,17
+770,STU1077,Project Final Submission,2026-05-12 22:16:00,0,Completed,20
+771,STU1078,Assignment 1 - Setup & Hello World,2026-02-07 20:56:00,-1,Completed,30
+772,STU1078,Assignment 2 - Memory Management,2026-02-18 13:57:00,0,Completed,15
+773,STU1078,Lab 1 - Linked List Implementation,2026-02-28 10:12:00,0,Completed,28
+774,STU1078,Assignment 3 - Trees & Recursion,2026-03-10 13:12:00,0,Completed,12
+775,STU1078,Lab 2 - Binary Search Trees,2026-03-22 15:34:00,0,Completed,27
+776,STU1078,Assignment 4 - Graph Algorithms,2026-04-04 12:12:00,-1,Completed,16
+777,STU1078,Lab 3 - Shortest Path Solver,2026-04-15 22:55:00,0,Completed,29
+778,STU1078,Assignment 5 - Dynamic Programming,2026-04-26 20:36:00,0,Completed,35
+779,STU1078,Lab 4 - Concurrency & Threads,2026-05-04 15:25:00,0,Completed,19
+780,STU1078,Project Final Submission,2026-05-12 21:30:00,0,Completed,25
+781,STU1079,Assignment 1 - Setup & Hello World,2026-02-08 23:14:00,0,Completed,20
+782,STU1079,Assignment 2 - Memory Management,2026-02-17 15:17:00,-1,Completed,30
+783,STU1079,Lab 1 - Linked List Implementation,2026-02-28 20:13:00,0,Completed,28
+784,STU1079,Assignment 3 - Trees & Recursion,2026-03-10 13:43:00,0,Completed,17
+785,STU1079,Lab 2 - Binary Search Trees,2026-03-22 16:14:00,0,Completed,13
+786,STU1079,Assignment 4 - Graph Algorithms,2026-04-04 23:28:00,-1,Completed,26
+787,STU1079,Lab 3 - Shortest Path Solver,2026-04-15 15:15:00,0,Completed,21
+788,STU1079,Assignment 5 - Dynamic Programming,2026-04-26 17:10:00,0,Completed,29
+789,STU1079,Lab 4 - Concurrency & Threads,2026-05-03 13:28:00,-1,Completed,23
+790,STU1079,Project Final Submission,2026-05-12 22:29:00,0,Completed,30
+791,STU1080,Assignment 1 - Setup & Hello World,2026-02-08 19:25:00,0,Completed,35
+792,STU1080,Assignment 2 - Memory Management,2026-02-18 15:47:00,0,Completed,26
+793,STU1080,Lab 1 - Linked List Implementation,2026-02-28 22:59:00,0,Completed,27
+794,STU1080,Assignment 3 - Trees & Recursion,2026-03-10 21:44:00,0,Completed,18
+795,STU1080,Lab 2 - Binary Search Trees,2026-03-21 12:10:00,-1,Completed,19
+796,STU1080,Assignment 4 - Graph Algorithms,2026-04-05 10:24:00,0,Completed,25
+797,STU1080,Lab 3 - Shortest Path Solver,2026-04-15 15:50:00,0,Completed,29
+798,STU1080,Assignment 5 - Dynamic Programming,2026-04-26 10:31:00,0,Completed,34
+799,STU1080,Lab 4 - Concurrency & Threads,2026-05-04 22:52:00,0,Completed,12
+800,STU1080,Project Final Submission,2026-05-12 23:57:00,0,Completed,24
+801,STU1081,Assignment 1 - Setup & Hello World,2026-02-08 14:16:00,0,Completed,16
+802,STU1081,Assignment 2 - Memory Management,2026-02-21 18:25:00,3,Late,8
+803,STU1081,Lab 1 - Linked List Implementation,2026-03-01 17:13:00,1,Late,11
+804,STU1081,Assignment 3 - Trees & Recursion,2026-03-10 21:27:00,0,Completed,7
+805,STU1081,Lab 2 - Binary Search Trees,2026-03-22 10:24:00,0,Completed,6
+806,STU1081,Assignment 4 - Graph Algorithms,2026-04-06 18:36:00,1,Late,18
+807,STU1081,Lab 3 - Shortest Path Solver,2026-04-16 15:39:00,1,Late,16
+808,STU1081,Assignment 5 - Dynamic Programming,2026-04-27 11:47:00,1,Late,16
+809,STU1081,Lab 4 - Concurrency & Threads,2026-05-04 18:18:00,0,Completed,6
+810,STU1081,Project Final Submission,2026-05-13 23:35:00,1,Late,15
+811,STU1082,Assignment 1 - Setup & Hello World,2026-02-08 19:46:00,0,Completed,14
+812,STU1082,Assignment 2 - Memory Management,2026-02-18 16:52:00,0,Completed,13
+813,STU1082,Lab 1 - Linked List Implementation,2026-02-27 13:28:00,-1,Completed,16
+814,STU1082,Assignment 3 - Trees & Recursion,2026-03-10 23:30:00,0,Completed,20
+815,STU1082,Lab 2 - Binary Search Trees,2026-03-22 21:57:00,0,Completed,24
+816,STU1082,Assignment 4 - Graph Algorithms,2026-04-05 15:38:00,0,Completed,22
+817,STU1082,Lab 3 - Shortest Path Solver,2026-04-14 13:14:00,-1,Completed,20
+818,STU1082,Assignment 5 - Dynamic Programming,2026-04-26 12:59:00,0,Completed,18
+819,STU1082,Lab 4 - Concurrency & Threads,2026-05-03 11:19:00,-1,Completed,30
+820,STU1082,Project Final Submission,2026-05-11 12:38:00,-1,Completed,15
+821,STU1083,Assignment 1 - Setup & Hello World,2026-02-07 15:36:00,-1,Completed,26
+822,STU1083,Assignment 2 - Memory Management,2026-02-18 18:32:00,0,Completed,15
+823,STU1083,Lab 1 - Linked List Implementation,2026-02-27 17:29:00,-1,Completed,18
+824,STU1083,Assignment 3 - Trees & Recursion,2026-03-09 14:17:00,-1,Completed,26
+825,STU1083,Lab 2 - Binary Search Trees,2026-03-21 12:53:00,-1,Completed,14
+826,STU1083,Assignment 4 - Graph Algorithms,2026-04-05 23:55:00,0,Completed,21
+827,STU1083,Lab 3 - Shortest Path Solver,2026-04-15 19:12:00,0,Completed,34
+828,STU1083,Assignment 5 - Dynamic Programming,2026-04-25 23:30:00,-1,Completed,18
+829,STU1083,Lab 4 - Concurrency & Threads,2026-05-04 11:55:00,0,Completed,16
+830,STU1083,Project Final Submission,2026-05-12 15:35:00,0,Completed,19
+831,STU1084,Assignment 1 - Setup & Hello World,2026-02-08 10:53:00,0,Completed,28
+832,STU1084,Assignment 2 - Memory Management,2026-02-17 14:21:00,-1,Completed,21
+833,STU1084,Lab 1 - Linked List Implementation,2026-02-28 16:38:00,0,Completed,12
+834,STU1084,Assignment 3 - Trees & Recursion,2026-03-09 21:45:00,-1,Completed,29
+835,STU1084,Lab 2 - Binary Search Trees,2026-03-22 11:39:00,0,Completed,19
+836,STU1084,Assignment 4 - Graph Algorithms,2026-04-04 22:18:00,-1,Completed,15
+837,STU1084,Lab 3 - Shortest Path Solver,2026-04-14 10:13:00,-1,Completed,15
+838,STU1084,Assignment 5 - Dynamic Programming,2026-04-25 12:22:00,-1,Completed,19
+839,STU1084,Lab 4 - Concurrency & Threads,2026-05-04 15:53:00,0,Completed,24
+840,STU1084,Project Final Submission,2026-05-11 20:15:00,-1,Completed,32
+841,STU1085,Assignment 1 - Setup & Hello World,2026-02-08 19:26:00,0,Completed,30
+842,STU1085,Assignment 2 - Memory Management,2026-02-17 10:14:00,-1,Completed,14
+843,STU1085,Lab 1 - Linked List Implementation,2026-02-28 20:38:00,0,Completed,18
+844,STU1085,Assignment 3 - Trees & Recursion,2026-03-10 11:31:00,0,Completed,16
+845,STU1085,Lab 2 - Binary Search Trees,2026-03-22 10:39:00,0,Completed,15
+846,STU1085,Assignment 4 - Graph Algorithms,2026-04-05 12:46:00,0,Completed,13
+847,STU1085,Lab 3 - Shortest Path Solver,2026-04-15 23:56:00,0,Completed,25
+848,STU1085,Assignment 5 - Dynamic Programming,2026-04-25 17:11:00,-1,Completed,24
+849,STU1085,Lab 4 - Concurrency & Threads,2026-05-04 20:37:00,0,Completed,24
+850,STU1085,Project Final Submission,2026-05-11 15:23:00,-1,Completed,17
+851,STU1086,Assignment 1 - Setup & Hello World,2026-02-15 14:27:00,7,Late,3
+852,STU1086,Assignment 2 - Memory Management,2026-03-02 12:12:00,12,Late,8
+853,STU1086,Lab 1 - Linked List Implementation,2026-03-04 20:28:00,4,Late,4
+854,STU1086,Assignment 3 - Trees & Recursion,2026-03-15 16:45:00,5,Late,8
+855,STU1086,Lab 2 - Binary Search Trees,2026-03-27 10:15:00,5,Late,8
+856,STU1086,Assignment 4 - Graph Algorithms,2026-04-18 16:18:00,13,Late,5
+857,STU1086,Lab 3 - Shortest Path Solver,2026-04-29 13:51:00,14,Missing,7
+858,STU1086,Assignment 5 - Dynamic Programming,2026-05-05 20:44:00,9,Late,4
+859,STU1086,Lab 4 - Concurrency & Threads,2026-05-13 16:55:00,9,Late,1
+860,STU1086,Project Final Submission,2026-05-26 17:44:00,14,Missing,6
+861,STU1087,Assignment 1 - Setup & Hello World,2026-02-08 15:46:00,0,Completed,8
+862,STU1087,Assignment 2 - Memory Management,2026-02-20 16:27:00,2,Late,6
+863,STU1087,Lab 1 - Linked List Implementation,2026-03-12 10:30:00,12,Late,3
+864,STU1087,Assignment 3 - Trees & Recursion,2026-03-23 10:59:00,13,Late,4
+865,STU1087,Lab 2 - Binary Search Trees,2026-04-05 10:40:00,14,Missing,5
+866,STU1087,Assignment 4 - Graph Algorithms,2026-04-10 22:47:00,5,Late,6
+867,STU1087,Lab 3 - Shortest Path Solver,2026-04-17 12:16:00,2,Late,4
+868,STU1087,Assignment 5 - Dynamic Programming,2026-05-02 20:25:00,6,Late,4
+869,STU1087,Lab 4 - Concurrency & Threads,2026-05-08 18:57:00,4,Late,5
+870,STU1087,Project Final Submission,2026-05-19 22:24:00,7,Late,1
+871,STU1088,Assignment 1 - Setup & Hello World,2026-02-10 23:34:00,2,Late,14
+872,STU1088,Assignment 2 - Memory Management,2026-02-18 23:21:00,0,Completed,10
+873,STU1088,Lab 1 - Linked List Implementation,2026-03-03 13:47:00,3,Late,7
+874,STU1088,Assignment 3 - Trees & Recursion,2026-03-11 22:57:00,1,Late,10
+875,STU1088,Lab 2 - Binary Search Trees,2026-03-23 15:47:00,1,Late,16
+876,STU1088,Assignment 4 - Graph Algorithms,2026-04-05 21:54:00,0,Completed,5
+877,STU1088,Lab 3 - Shortest Path Solver,2026-04-16 19:46:00,1,Late,10
+878,STU1088,Assignment 5 - Dynamic Programming,2026-04-26 19:22:00,0,Completed,7
+879,STU1088,Lab 4 - Concurrency & Threads,2026-05-09 22:41:00,5,Late,18
+880,STU1088,Project Final Submission,2026-05-15 14:21:00,3,Late,13
+881,STU1089,Assignment 1 - Setup & Hello World,2026-02-12 10:15:00,4,Late,8
+882,STU1089,Assignment 2 - Memory Management,2026-02-20 13:48:00,2,Late,1
+883,STU1089,Lab 1 - Linked List Implementation,2026-03-14 10:43:00,14,Missing,4
+884,STU1089,Assignment 3 - Trees & Recursion,2026-03-15 10:31:00,5,Late,8
+885,STU1089,Lab 2 - Binary Search Trees,2026-03-25 22:18:00,3,Late,4
+886,STU1089,Assignment 4 - Graph Algorithms,2026-04-13 21:21:00,8,Late,6
+887,STU1089,Lab 3 - Shortest Path Solver,2026-04-29 10:11:00,14,Missing,6
+888,STU1089,Assignment 5 - Dynamic Programming,2026-04-28 19:55:00,2,Late,3
+889,STU1089,Lab 4 - Concurrency & Threads,2026-05-08 22:17:00,4,Late,3
+890,STU1089,Project Final Submission,2026-05-26 11:33:00,14,Missing,6
+891,STU1090,Assignment 1 - Setup & Hello World,2026-02-07 20:35:00,-1,Completed,34
+892,STU1090,Assignment 2 - Memory Management,2026-02-17 11:31:00,-1,Completed,30
+893,STU1090,Lab 1 - Linked List Implementation,2026-02-28 15:18:00,0,Completed,21
+894,STU1090,Assignment 3 - Trees & Recursion,2026-03-10 21:37:00,0,Completed,17
+895,STU1090,Lab 2 - Binary Search Trees,2026-03-22 17:51:00,0,Completed,32
+896,STU1090,Assignment 4 - Graph Algorithms,2026-04-06 12:55:00,1,Late,22
+897,STU1090,Lab 3 - Shortest Path Solver,2026-04-15 21:49:00,0,Completed,29
+898,STU1090,Assignment 5 - Dynamic Programming,2026-04-25 13:52:00,-1,Completed,23
+899,STU1090,Lab 4 - Concurrency & Threads,2026-05-05 23:21:00,1,Late,30
+900,STU1090,Project Final Submission,2026-05-12 14:56:00,0,Completed,24
+901,STU1091,Assignment 1 - Setup & Hello World,2026-02-09 14:18:00,1,Late,16
+902,STU1091,Assignment 2 - Memory Management,2026-02-19 21:10:00,1,Late,7
+903,STU1091,Lab 1 - Linked List Implementation,2026-03-01 19:35:00,1,Late,16
+904,STU1091,Assignment 3 - Trees & Recursion,2026-03-10 22:46:00,0,Completed,18
+905,STU1091,Lab 2 - Binary Search Trees,2026-03-22 12:48:00,0,Completed,5
+906,STU1091,Assignment 4 - Graph Algorithms,2026-04-06 22:49:00,1,Late,10
+907,STU1091,Lab 3 - Shortest Path Solver,2026-04-18 20:46:00,3,Late,8
+908,STU1091,Assignment 5 - Dynamic Programming,2026-04-27 17:19:00,1,Late,6
+909,STU1091,Lab 4 - Concurrency & Threads,2026-05-09 21:14:00,5,Late,10
+910,STU1091,Project Final Submission,2026-05-13 15:30:00,1,Late,8
+911,STU1092,Assignment 1 - Setup & Hello World,2026-02-07 20:15:00,-1,Completed,17
+912,STU1092,Assignment 2 - Memory Management,2026-02-17 20:50:00,-1,Completed,34
+913,STU1092,Lab 1 - Linked List Implementation,2026-02-27 15:38:00,-1,Completed,35
+914,STU1092,Assignment 3 - Trees & Recursion,2026-03-09 14:23:00,-1,Completed,12
+915,STU1092,Lab 2 - Binary Search Trees,2026-03-22 21:14:00,0,Completed,19
+916,STU1092,Assignment 4 - Graph Algorithms,2026-04-05 14:16:00,0,Completed,23
+917,STU1092,Lab 3 - Shortest Path Solver,2026-04-16 10:13:00,1,Late,35
+918,STU1092,Assignment 5 - Dynamic Programming,2026-04-25 17:56:00,-1,Completed,24
+919,STU1092,Lab 4 - Concurrency & Threads,2026-05-04 12:36:00,0,Completed,25
+920,STU1092,Project Final Submission,2026-05-11 16:32:00,-1,Completed,27
+921,STU1093,Assignment 1 - Setup & Hello World,2026-02-10 11:40:00,2,Late,7
+922,STU1093,Assignment 2 - Memory Management,2026-03-04 12:38:00,14,Missing,4
+923,STU1093,Lab 1 - Linked List Implementation,2026-03-07 22:12:00,7,Late,2
+924,STU1093,Assignment 3 - Trees & Recursion,2026-03-13 10:30:00,3,Late,5
+925,STU1093,Lab 2 - Binary Search Trees,2026-03-27 11:14:00,5,Late,5
+926,STU1093,Assignment 4 - Graph Algorithms,2026-04-10 12:34:00,5,Late,6
+927,STU1093,Lab 3 - Shortest Path Solver,2026-04-29 21:14:00,14,Late,3
+928,STU1093,Assignment 5 - Dynamic Programming,2026-05-02 15:48:00,6,Late,2
+929,STU1093,Lab 4 - Concurrency & Threads,2026-05-18 21:11:00,14,Missing,8
+930,STU1093,Project Final Submission,2026-05-15 20:20:00,3,Late,7
+931,STU1094,Assignment 1 - Setup & Hello World,2026-02-09 16:20:00,1,Late,14
+932,STU1094,Assignment 2 - Memory Management,2026-02-19 11:31:00,1,Late,5
+933,STU1094,Lab 1 - Linked List Implementation,2026-03-01 13:36:00,1,Late,8
+934,STU1094,Assignment 3 - Trees & Recursion,2026-03-11 18:56:00,1,Late,16
+935,STU1094,Lab 2 - Binary Search Trees,2026-03-24 18:26:00,2,Late,16
+936,STU1094,Assignment 4 - Graph Algorithms,2026-04-08 14:29:00,3,Late,15
+937,STU1094,Lab 3 - Shortest Path Solver,2026-04-18 11:13:00,3,Late,8
+938,STU1094,Assignment 5 - Dynamic Programming,2026-04-29 19:45:00,3,Late,11
+939,STU1094,Lab 4 - Concurrency & Threads,2026-05-07 17:19:00,3,Late,18
+940,STU1094,Project Final Submission,2026-05-13 15:10:00,1,Late,5
+941,STU1095,Assignment 1 - Setup & Hello World,2026-02-08 11:28:00,0,Completed,25
+942,STU1095,Assignment 2 - Memory Management,2026-02-17 20:48:00,-1,Completed,33
+943,STU1095,Lab 1 - Linked List Implementation,2026-02-27 13:16:00,-1,Completed,27
+944,STU1095,Assignment 3 - Trees & Recursion,2026-03-09 13:20:00,-1,Completed,12
+945,STU1095,Lab 2 - Binary Search Trees,2026-03-22 14:15:00,0,Completed,32
+946,STU1095,Assignment 4 - Graph Algorithms,2026-04-04 23:17:00,-1,Completed,27
+947,STU1095,Lab 3 - Shortest Path Solver,2026-04-16 22:35:00,1,Late,21
+948,STU1095,Assignment 5 - Dynamic Programming,2026-04-25 17:52:00,-1,Completed,27
+949,STU1095,Lab 4 - Concurrency & Threads,2026-05-03 11:51:00,-1,Completed,20
+950,STU1095,Project Final Submission,2026-05-12 16:21:00,0,Completed,29
+951,STU1096,Assignment 1 - Setup & Hello World,2026-02-07 16:33:00,-1,Completed,23
+952,STU1096,Assignment 2 - Memory Management,2026-02-17 17:12:00,-1,Completed,17
+953,STU1096,Lab 1 - Linked List Implementation,2026-02-27 17:39:00,-1,Completed,20
+954,STU1096,Assignment 3 - Trees & Recursion,2026-03-10 13:27:00,0,Completed,20
+955,STU1096,Lab 2 - Binary Search Trees,2026-03-22 10:19:00,0,Completed,30
+956,STU1096,Assignment 4 - Graph Algorithms,2026-04-05 20:16:00,0,Completed,34
+957,STU1096,Lab 3 - Shortest Path Solver,2026-04-15 20:32:00,0,Completed,14
+958,STU1096,Assignment 5 - Dynamic Programming,2026-04-26 16:58:00,0,Completed,29
+959,STU1096,Lab 4 - Concurrency & Threads,2026-05-03 13:45:00,-1,Completed,30
+960,STU1096,Project Final Submission,2026-05-11 23:34:00,-1,Completed,13
+961,STU1097,Assignment 1 - Setup & Hello World,2026-02-08 16:44:00,0,Completed,28
+962,STU1097,Assignment 2 - Memory Management,2026-02-17 23:40:00,-1,Completed,33
+963,STU1097,Lab 1 - Linked List Implementation,2026-02-27 13:40:00,-1,Completed,30
+964,STU1097,Assignment 3 - Trees & Recursion,2026-03-10 11:35:00,0,Completed,21
+965,STU1097,Lab 2 - Binary Search Trees,2026-03-22 10:42:00,0,Completed,34
+966,STU1097,Assignment 4 - Graph Algorithms,2026-04-04 18:46:00,-1,Completed,30
+967,STU1097,Lab 3 - Shortest Path Solver,2026-04-14 19:19:00,-1,Completed,33
+968,STU1097,Assignment 5 - Dynamic Programming,2026-04-26 22:38:00,0,Completed,15
+969,STU1097,Lab 4 - Concurrency & Threads,2026-05-04 12:23:00,0,Completed,17
+970,STU1097,Project Final Submission,2026-05-12 12:12:00,0,Completed,18
+971,STU1098,Assignment 1 - Setup & Hello World,2026-02-12 11:53:00,4,Late,7
+972,STU1098,Assignment 2 - Memory Management,2026-02-25 13:50:00,7,Late,7
+973,STU1098,Lab 1 - Linked List Implementation,2026-03-14 23:48:00,14,Missing,3
+974,STU1098,Assignment 3 - Trees & Recursion,2026-03-24 15:56:00,14,Missing,5
+975,STU1098,Lab 2 - Binary Search Trees,2026-03-25 11:34:00,3,Late,2
+976,STU1098,Assignment 4 - Graph Algorithms,2026-04-18 18:30:00,13,Late,7
+977,STU1098,Lab 3 - Shortest Path Solver,2026-04-19 18:39:00,4,Late,5
+978,STU1098,Assignment 5 - Dynamic Programming,2026-04-30 22:54:00,4,Late,1
+979,STU1098,Lab 4 - Concurrency & Threads,2026-05-13 11:36:00,9,Late,7
+980,STU1098,Project Final Submission,2026-05-19 12:46:00,7,Late,3
+981,STU1099,Assignment 1 - Setup & Hello World,2026-02-08 19:58:00,0,Completed,30
+982,STU1099,Assignment 2 - Memory Management,2026-02-17 11:46:00,-1,Completed,15
+983,STU1099,Lab 1 - Linked List Implementation,2026-02-28 22:28:00,0,Completed,15
+984,STU1099,Assignment 3 - Trees & Recursion,2026-03-10 15:36:00,0,Completed,29
+985,STU1099,Lab 2 - Binary Search Trees,2026-03-22 16:51:00,0,Completed,20
+986,STU1099,Assignment 4 - Graph Algorithms,2026-04-04 19:48:00,-1,Completed,27
+987,STU1099,Lab 3 - Shortest Path Solver,2026-04-14 10:21:00,-1,Completed,27
+988,STU1099,Assignment 5 - Dynamic Programming,2026-04-26 16:19:00,0,Completed,20
+989,STU1099,Lab 4 - Concurrency & Threads,2026-05-03 19:53:00,-1,Completed,31
+990,STU1099,Project Final Submission,2026-05-13 16:12:00,1,Late,34
+991,STU1100,Assignment 1 - Setup & Hello World,2026-02-22 15:54:00,14,Missing,7
+992,STU1100,Assignment 2 - Memory Management,2026-02-20 10:57:00,2,Late,4
+993,STU1100,Lab 1 - Linked List Implementation,2026-03-02 14:33:00,2,Late,8
+994,STU1100,Assignment 3 - Trees & Recursion,2026-03-11 15:29:00,1,Late,1
+995,STU1100,Lab 2 - Binary Search Trees,2026-04-05 14:41:00,14,Missing,5
+996,STU1100,Assignment 4 - Graph Algorithms,2026-04-08 23:24:00,3,Late,2
+997,STU1100,Lab 3 - Shortest Path Solver,2026-04-21 14:57:00,6,Late,3
+998,STU1100,Assignment 5 - Dynamic Programming,2026-05-02 22:30:00,6,Late,8
+999,STU1100,Lab 4 - Concurrency & Threads,2026-05-13 21:36:00,9,Late,5
+1000,STU1100,Project Final Submission,2026-05-15 13:38:00,3,Late,2
+1001,STU1101,Assignment 1 - Setup & Hello World,2026-02-07 23:36:00,-1,Completed,18
+1002,STU1101,Assignment 2 - Memory Management,2026-02-18 17:58:00,0,Completed,35
+1003,STU1101,Lab 1 - Linked List Implementation,2026-02-28 23:33:00,0,Completed,28
+1004,STU1101,Assignment 3 - Trees & Recursion,2026-03-10 18:20:00,0,Completed,13
+1005,STU1101,Lab 2 - Binary Search Trees,2026-03-21 14:55:00,-1,Completed,14
+1006,STU1101,Assignment 4 - Graph Algorithms,2026-04-04 16:18:00,-1,Completed,28
+1007,STU1101,Lab 3 - Shortest Path Solver,2026-04-15 19:11:00,0,Completed,28
+1008,STU1101,Assignment 5 - Dynamic Programming,2026-04-25 13:22:00,-1,Completed,17
+1009,STU1101,Lab 4 - Concurrency & Threads,2026-05-04 13:12:00,0,Completed,13
+1010,STU1101,Project Final Submission,2026-05-12 10:33:00,0,Completed,26
+1011,STU1102,Assignment 1 - Setup & Hello World,2026-02-08 14:33:00,0,Completed,4
+1012,STU1102,Assignment 2 - Memory Management,2026-03-04 18:35:00,14,Missing,8
+1013,STU1102,Lab 1 - Linked List Implementation,2026-03-14 20:11:00,14,Missing,2
+1014,STU1102,Assignment 3 - Trees & Recursion,2026-03-11 15:41:00,1,Late,4
+1015,STU1102,Lab 2 - Binary Search Trees,2026-03-30 12:40:00,8,Late,8
+1016,STU1102,Assignment 4 - Graph Algorithms,2026-04-10 15:20:00,5,Late,6
+1017,STU1102,Lab 3 - Shortest Path Solver,2026-04-21 21:54:00,6,Late,5
+1018,STU1102,Assignment 5 - Dynamic Programming,2026-04-30 14:11:00,4,Late,2
+1019,STU1102,Lab 4 - Concurrency & Threads,2026-05-13 10:20:00,9,Late,7
+1020,STU1102,Project Final Submission,2026-05-26 23:24:00,14,Missing,4
+1021,STU1103,Assignment 1 - Setup & Hello World,2026-02-09 13:53:00,1,Late,15
+1022,STU1103,Assignment 2 - Memory Management,2026-02-18 14:51:00,0,Completed,8
+1023,STU1103,Lab 1 - Linked List Implementation,2026-03-02 18:11:00,2,Late,11
+1024,STU1103,Assignment 3 - Trees & Recursion,2026-03-11 22:59:00,1,Late,18
+1025,STU1103,Lab 2 - Binary Search Trees,2026-03-25 10:40:00,3,Late,15
+1026,STU1103,Assignment 4 - Graph Algorithms,2026-04-06 20:21:00,1,Late,7
+1027,STU1103,Lab 3 - Shortest Path Solver,2026-04-15 22:10:00,0,Completed,14
+1028,STU1103,Assignment 5 - Dynamic Programming,2026-04-26 14:48:00,0,Completed,8
+1029,STU1103,Lab 4 - Concurrency & Threads,2026-05-06 14:55:00,2,Late,17
+1030,STU1103,Project Final Submission,2026-05-13 20:27:00,1,Late,16
+1031,STU1104,Assignment 1 - Setup & Hello World,2026-02-10 16:32:00,2,Late,11
+1032,STU1104,Assignment 2 - Memory Management,2026-02-18 14:23:00,0,Completed,12
+1033,STU1104,Lab 1 - Linked List Implementation,2026-03-01 14:53:00,1,Late,12
+1034,STU1104,Assignment 3 - Trees & Recursion,2026-03-11 23:49:00,1,Late,13
+1035,STU1104,Lab 2 - Binary Search Trees,2026-03-25 19:16:00,3,Late,11
+1036,STU1104,Assignment 4 - Graph Algorithms,2026-04-08 18:52:00,3,Late,5
+1037,STU1104,Lab 3 - Shortest Path Solver,2026-04-15 23:33:00,0,Completed,18
+1038,STU1104,Assignment 5 - Dynamic Programming,2026-04-27 20:48:00,1,Late,13
+1039,STU1104,Lab 4 - Concurrency & Threads,2026-05-04 14:29:00,0,Completed,14
+1040,STU1104,Project Final Submission,2026-05-13 11:40:00,1,Late,15
+1041,STU1105,Assignment 1 - Setup & Hello World,2026-02-09 15:27:00,1,Late,6
+1042,STU1105,Assignment 2 - Memory Management,2026-02-21 15:27:00,3,Late,15
+1043,STU1105,Lab 1 - Linked List Implementation,2026-03-03 20:55:00,3,Late,9
+1044,STU1105,Assignment 3 - Trees & Recursion,2026-03-11 14:22:00,1,Late,15
+1045,STU1105,Lab 2 - Binary Search Trees,2026-03-23 18:58:00,1,Late,7
+1046,STU1105,Assignment 4 - Graph Algorithms,2026-04-08 10:48:00,3,Late,8
+1047,STU1105,Lab 3 - Shortest Path Solver,2026-04-18 20:30:00,3,Late,11
+1048,STU1105,Assignment 5 - Dynamic Programming,2026-04-26 12:56:00,0,Completed,15
+1049,STU1105,Lab 4 - Concurrency & Threads,2026-05-05 20:41:00,1,Late,5
+1050,STU1105,Project Final Submission,2026-05-13 14:36:00,1,Late,9
+1051,STU1106,Assignment 1 - Setup & Hello World,2026-02-07 16:57:00,-1,Completed,24
+1052,STU1106,Assignment 2 - Memory Management,2026-02-17 19:55:00,-1,Completed,13
+1053,STU1106,Lab 1 - Linked List Implementation,2026-02-27 23:22:00,-1,Completed,30
+1054,STU1106,Assignment 3 - Trees & Recursion,2026-03-10 21:55:00,0,Completed,22
+1055,STU1106,Lab 2 - Binary Search Trees,2026-03-21 20:44:00,-1,Completed,19
+1056,STU1106,Assignment 4 - Graph Algorithms,2026-04-04 22:40:00,-1,Completed,32
+1057,STU1106,Lab 3 - Shortest Path Solver,2026-04-14 15:42:00,-1,Completed,33
+1058,STU1106,Assignment 5 - Dynamic Programming,2026-04-26 23:20:00,0,Completed,21
+1059,STU1106,Lab 4 - Concurrency & Threads,2026-05-04 18:21:00,0,Completed,33
+1060,STU1106,Project Final Submission,2026-05-12 11:40:00,0,Completed,21
+1061,STU1107,Assignment 1 - Setup & Hello World,2026-02-08 21:26:00,0,Completed,16
+1062,STU1107,Assignment 2 - Memory Management,2026-02-19 22:45:00,1,Late,35
+1063,STU1107,Lab 1 - Linked List Implementation,2026-02-27 20:31:00,-1,Completed,17
+1064,STU1107,Assignment 3 - Trees & Recursion,2026-03-09 11:24:00,-1,Completed,32
+1065,STU1107,Lab 2 - Binary Search Trees,2026-03-21 13:57:00,-1,Completed,23
+1066,STU1107,Assignment 4 - Graph Algorithms,2026-04-04 16:31:00,-1,Completed,21
+1067,STU1107,Lab 3 - Shortest Path Solver,2026-04-14 14:47:00,-1,Completed,23
+1068,STU1107,Assignment 5 - Dynamic Programming,2026-04-26 17:17:00,0,Completed,21
+1069,STU1107,Lab 4 - Concurrency & Threads,2026-05-04 10:50:00,0,Completed,27
+1070,STU1107,Project Final Submission,2026-05-12 19:49:00,0,Completed,30
+1071,STU1108,Assignment 1 - Setup & Hello World,2026-02-22 17:22:00,14,Missing,2
+1072,STU1108,Assignment 2 - Memory Management,2026-02-18 23:53:00,0,Completed,2
+1073,STU1108,Lab 1 - Linked List Implementation,2026-03-02 18:29:00,2,Late,7
+1074,STU1108,Assignment 3 - Trees & Recursion,2026-03-18 10:19:00,8,Late,7
+1075,STU1108,Lab 2 - Binary Search Trees,2026-03-30 13:31:00,8,Late,3
+1076,STU1108,Assignment 4 - Graph Algorithms,2026-04-06 19:39:00,1,Late,7
+1077,STU1108,Lab 3 - Shortest Path Solver,2026-04-21 15:55:00,6,Late,3
+1078,STU1108,Assignment 5 - Dynamic Programming,2026-05-05 22:15:00,9,Late,3
+1079,STU1108,Lab 4 - Concurrency & Threads,2026-05-13 15:50:00,9,Late,8
+1080,STU1108,Project Final Submission,2026-05-22 15:50:00,10,Late,3
+1081,STU1109,Assignment 1 - Setup & Hello World,2026-02-07 10:38:00,-1,Completed,13
+1082,STU1109,Assignment 2 - Memory Management,2026-02-17 13:58:00,-1,Completed,20
+1083,STU1109,Lab 1 - Linked List Implementation,2026-02-28 19:58:00,0,Completed,17
+1084,STU1109,Assignment 3 - Trees & Recursion,2026-03-09 17:58:00,-1,Completed,17
+1085,STU1109,Lab 2 - Binary Search Trees,2026-03-22 12:49:00,0,Completed,14
+1086,STU1109,Assignment 4 - Graph Algorithms,2026-04-05 20:37:00,0,Completed,25
+1087,STU1109,Lab 3 - Shortest Path Solver,2026-04-14 16:40:00,-1,Completed,24
+1088,STU1109,Assignment 5 - Dynamic Programming,2026-04-26 10:12:00,0,Completed,24
+1089,STU1109,Lab 4 - Concurrency & Threads,2026-05-04 13:56:00,0,Completed,29
+1090,STU1109,Project Final Submission,2026-05-11 10:30:00,-1,Completed,23
+1091,STU1110,Assignment 1 - Setup & Hello World,2026-02-08 13:11:00,0,Completed,28
+1092,STU1110,Assignment 2 - Memory Management,2026-02-18 10:50:00,0,Completed,33
+1093,STU1110,Lab 1 - Linked List Implementation,2026-02-28 13:24:00,0,Completed,35
+1094,STU1110,Assignment 3 - Trees & Recursion,2026-03-09 15:29:00,-1,Completed,34
+1095,STU1110,Lab 2 - Binary Search Trees,2026-03-22 11:34:00,0,Completed,16
+1096,STU1110,Assignment 4 - Graph Algorithms,2026-04-05 19:29:00,0,Completed,28
+1097,STU1110,Lab 3 - Shortest Path Solver,2026-04-14 11:12:00,-1,Completed,17
+1098,STU1110,Assignment 5 - Dynamic Programming,2026-04-25 14:39:00,-1,Completed,21
+1099,STU1110,Lab 4 - Concurrency & Threads,2026-05-04 18:48:00,0,Completed,35
+1100,STU1110,Project Final Submission,2026-05-11 15:37:00,-1,Completed,28
+1101,STU1111,Assignment 1 - Setup & Hello World,2026-02-08 12:31:00,0,Completed,33
+1102,STU1111,Assignment 2 - Memory Management,2026-02-18 15:58:00,0,Completed,27
+1103,STU1111,Lab 1 - Linked List Implementation,2026-02-28 12:35:00,0,Completed,18
+1104,STU1111,Assignment 3 - Trees & Recursion,2026-03-09 13:24:00,-1,Completed,12
+1105,STU1111,Lab 2 - Binary Search Trees,2026-03-22 12:23:00,0,Completed,35
+1106,STU1111,Assignment 4 - Graph Algorithms,2026-04-04 10:47:00,-1,Completed,35
+1107,STU1111,Lab 3 - Shortest Path Solver,2026-04-15 12:17:00,0,Completed,28
+1108,STU1111,Assignment 5 - Dynamic Programming,2026-04-26 21:51:00,0,Completed,23
+1109,STU1111,Lab 4 - Concurrency & Threads,2026-05-04 16:50:00,0,Completed,13
+1110,STU1111,Project Final Submission,2026-05-13 22:44:00,1,Late,20
+1111,STU1112,Assignment 1 - Setup & Hello World,2026-02-08 10:48:00,0,Completed,31
+1112,STU1112,Assignment 2 - Memory Management,2026-02-17 20:16:00,-1,Completed,13
+1113,STU1112,Lab 1 - Linked List Implementation,2026-03-01 23:11:00,1,Late,32
+1114,STU1112,Assignment 3 - Trees & Recursion,2026-03-10 21:17:00,0,Completed,13
+1115,STU1112,Lab 2 - Binary Search Trees,2026-03-21 17:34:00,-1,Completed,25
+1116,STU1112,Assignment 4 - Graph Algorithms,2026-04-04 18:26:00,-1,Completed,15
+1117,STU1112,Lab 3 - Shortest Path Solver,2026-04-15 21:19:00,0,Completed,27
+1118,STU1112,Assignment 5 - Dynamic Programming,2026-04-25 21:53:00,-1,Completed,18
+1119,STU1112,Lab 4 - Concurrency & Threads,2026-05-04 10:29:00,0,Completed,32
+1120,STU1112,Project Final Submission,2026-05-12 20:16:00,0,Completed,25
+1121,STU1113,Assignment 1 - Setup & Hello World,2026-02-10 19:48:00,2,Late,5
+1122,STU1113,Assignment 2 - Memory Management,2026-02-25 16:16:00,7,Late,3
+1123,STU1113,Lab 1 - Linked List Implementation,2026-02-28 14:17:00,0,Completed,2
+1124,STU1113,Assignment 3 - Trees & Recursion,2026-03-15 17:22:00,5,Late,2
+1125,STU1113,Lab 2 - Binary Search Trees,2026-03-30 22:26:00,8,Late,4
+1126,STU1113,Assignment 4 - Graph Algorithms,2026-04-10 15:55:00,5,Late,4
+1127,STU1113,Lab 3 - Shortest Path Solver,2026-04-29 14:20:00,14,Late,7
+1128,STU1113,Assignment 5 - Dynamic Programming,2026-05-10 18:41:00,14,Late,1
+1129,STU1113,Lab 4 - Concurrency & Threads,2026-05-18 21:40:00,14,Late,4
+1130,STU1113,Project Final Submission,2026-05-15 13:10:00,3,Late,6
+1131,STU1114,Assignment 1 - Setup & Hello World,2026-02-07 20:15:00,-1,Completed,12
+1132,STU1114,Assignment 2 - Memory Management,2026-02-18 23:46:00,0,Completed,15
+1133,STU1114,Lab 1 - Linked List Implementation,2026-02-28 17:19:00,0,Completed,33
+1134,STU1114,Assignment 3 - Trees & Recursion,2026-03-10 22:42:00,0,Completed,14
+1135,STU1114,Lab 2 - Binary Search Trees,2026-03-22 21:56:00,0,Completed,14
+1136,STU1114,Assignment 4 - Graph Algorithms,2026-04-04 14:51:00,-1,Completed,15
+1137,STU1114,Lab 3 - Shortest Path Solver,2026-04-15 17:28:00,0,Completed,19
+1138,STU1114,Assignment 5 - Dynamic Programming,2026-04-26 17:13:00,0,Completed,20
+1139,STU1114,Lab 4 - Concurrency & Threads,2026-05-03 23:21:00,-1,Completed,15
+1140,STU1114,Project Final Submission,2026-05-11 23:28:00,-1,Completed,13
+1141,STU1115,Assignment 1 - Setup & Hello World,2026-02-08 22:53:00,0,Completed,23
+1142,STU1115,Assignment 2 - Memory Management,2026-02-17 16:57:00,-1,Completed,22
+1143,STU1115,Lab 1 - Linked List Implementation,2026-02-27 11:58:00,-1,Completed,15
+1144,STU1115,Assignment 3 - Trees & Recursion,2026-03-09 10:18:00,-1,Completed,13
+1145,STU1115,Lab 2 - Binary Search Trees,2026-03-22 20:20:00,0,Completed,33
+1146,STU1115,Assignment 4 - Graph Algorithms,2026-04-05 15:38:00,0,Completed,22
+1147,STU1115,Lab 3 - Shortest Path Solver,2026-04-15 14:56:00,0,Completed,31
+1148,STU1115,Assignment 5 - Dynamic Programming,2026-04-26 15:31:00,0,Completed,14
+1149,STU1115,Lab 4 - Concurrency & Threads,2026-05-03 11:35:00,-1,Completed,17
+1150,STU1115,Project Final Submission,2026-05-12 17:27:00,0,Completed,24
+1151,STU1116,Assignment 1 - Setup & Hello World,2026-02-07 21:40:00,-1,Completed,24
+1152,STU1116,Assignment 2 - Memory Management,2026-02-17 20:20:00,-1,Completed,25
+1153,STU1116,Lab 1 - Linked List Implementation,2026-02-28 12:54:00,0,Completed,15
+1154,STU1116,Assignment 3 - Trees & Recursion,2026-03-10 10:20:00,0,Completed,35
+1155,STU1116,Lab 2 - Binary Search Trees,2026-03-21 16:47:00,-1,Completed,15
+1156,STU1116,Assignment 4 - Graph Algorithms,2026-04-04 22:46:00,-1,Completed,27
+1157,STU1116,Lab 3 - Shortest Path Solver,2026-04-15 17:21:00,0,Completed,33
+1158,STU1116,Assignment 5 - Dynamic Programming,2026-04-25 16:59:00,-1,Completed,31
+1159,STU1116,Lab 4 - Concurrency & Threads,2026-05-03 19:11:00,-1,Completed,23
+1160,STU1116,Project Final Submission,2026-05-11 23:56:00,-1,Completed,33
+1161,STU1117,Assignment 1 - Setup & Hello World,2026-02-07 17:41:00,-1,Completed,16
+1162,STU1117,Assignment 2 - Memory Management,2026-02-18 16:38:00,0,Completed,15
+1163,STU1117,Lab 1 - Linked List Implementation,2026-02-27 11:26:00,-1,Completed,13
+1164,STU1117,Assignment 3 - Trees & Recursion,2026-03-09 15:10:00,-1,Completed,32
+1165,STU1117,Lab 2 - Binary Search Trees,2026-03-22 23:53:00,0,Completed,34
+1166,STU1117,Assignment 4 - Graph Algorithms,2026-04-05 22:57:00,0,Completed,28
+1167,STU1117,Lab 3 - Shortest Path Solver,2026-04-14 21:46:00,-1,Completed,30
+1168,STU1117,Assignment 5 - Dynamic Programming,2026-04-25 20:31:00,-1,Completed,19
+1169,STU1117,Lab 4 - Concurrency & Threads,2026-05-03 18:54:00,-1,Completed,28
+1170,STU1117,Project Final Submission,2026-05-12 19:16:00,0,Completed,34
+1171,STU1118,Assignment 1 - Setup & Hello World,2026-02-08 20:56:00,0,Completed,25
+1172,STU1118,Assignment 2 - Memory Management,2026-02-18 17:32:00,0,Completed,19
+1173,STU1118,Lab 1 - Linked List Implementation,2026-03-01 20:51:00,1,Late,33
+1174,STU1118,Assignment 3 - Trees & Recursion,2026-03-10 12:45:00,0,Completed,24
+1175,STU1118,Lab 2 - Binary Search Trees,2026-03-22 10:10:00,0,Completed,31
+1176,STU1118,Assignment 4 - Graph Algorithms,2026-04-05 12:42:00,0,Completed,32
+1177,STU1118,Lab 3 - Shortest Path Solver,2026-04-14 23:41:00,-1,Completed,27
+1178,STU1118,Assignment 5 - Dynamic Programming,2026-04-27 11:58:00,1,Late,17
+1179,STU1118,Lab 4 - Concurrency & Threads,2026-05-03 15:25:00,-1,Completed,27
+1180,STU1118,Project Final Submission,2026-05-11 14:13:00,-1,Completed,22
+1181,STU1119,Assignment 1 - Setup & Hello World,2026-02-08 13:45:00,0,Completed,28
+1182,STU1119,Assignment 2 - Memory Management,2026-02-17 16:35:00,-1,Completed,32
+1183,STU1119,Lab 1 - Linked List Implementation,2026-02-28 11:39:00,0,Completed,19
+1184,STU1119,Assignment 3 - Trees & Recursion,2026-03-10 22:46:00,0,Completed,26
+1185,STU1119,Lab 2 - Binary Search Trees,2026-03-22 11:41:00,0,Completed,26
+1186,STU1119,Assignment 4 - Graph Algorithms,2026-04-05 15:17:00,0,Completed,26
+1187,STU1119,Lab 3 - Shortest Path Solver,2026-04-14 21:51:00,-1,Completed,27
+1188,STU1119,Assignment 5 - Dynamic Programming,2026-04-26 11:35:00,0,Completed,12
+1189,STU1119,Lab 4 - Concurrency & Threads,2026-05-04 10:45:00,0,Completed,25
+1190,STU1119,Project Final Submission,2026-05-12 10:15:00,0,Completed,29
+1191,STU1120,Assignment 1 - Setup & Hello World,2026-02-20 18:45:00,12,Late,5
+1192,STU1120,Assignment 2 - Memory Management,2026-02-22 20:52:00,4,Late,4
+1193,STU1120,Lab 1 - Linked List Implementation,2026-03-07 15:33:00,7,Late,8
+1194,STU1120,Assignment 3 - Trees & Recursion,2026-03-13 23:24:00,3,Late,1
+1195,STU1120,Lab 2 - Binary Search Trees,2026-04-05 15:45:00,14,Missing,8
+1196,STU1120,Assignment 4 - Graph Algorithms,2026-04-10 21:52:00,5,Late,8
+1197,STU1120,Lab 3 - Shortest Path Solver,2026-04-29 21:38:00,14,Late,6
+1198,STU1120,Assignment 5 - Dynamic Programming,2026-04-28 11:58:00,2,Late,2
+1199,STU1120,Lab 4 - Concurrency & Threads,2026-05-08 10:31:00,4,Late,4
+1200,STU1120,Project Final Submission,2026-05-19 23:50:00,7,Late,6
+1201,STU1121,Assignment 1 - Setup & Hello World,2026-02-22 18:43:00,14,Missing,5
+1202,STU1121,Assignment 2 - Memory Management,2026-02-25 21:16:00,7,Late,6
+1203,STU1121,Lab 1 - Linked List Implementation,2026-03-14 12:41:00,14,Missing,1
+1204,STU1121,Assignment 3 - Trees & Recursion,2026-03-15 23:55:00,5,Late,3
+1205,STU1121,Lab 2 - Binary Search Trees,2026-03-27 11:26:00,5,Late,7
+1206,STU1121,Assignment 4 - Graph Algorithms,2026-04-08 13:17:00,3,Late,4
+1207,STU1121,Lab 3 - Shortest Path Solver,2026-04-29 13:39:00,14,Late,7
+1208,STU1121,Assignment 5 - Dynamic Programming,2026-04-30 21:31:00,4,Late,4
+1209,STU1121,Lab 4 - Concurrency & Threads,2026-05-18 22:36:00,14,Missing,2
+1210,STU1121,Project Final Submission,2026-05-26 20:53:00,14,Missing,1
+1211,STU1122,Assignment 1 - Setup & Hello World,2026-02-11 11:59:00,3,Late,14
+1212,STU1122,Assignment 2 - Memory Management,2026-02-19 17:52:00,1,Late,12
+1213,STU1122,Lab 1 - Linked List Implementation,2026-03-02 18:18:00,2,Late,14
+1214,STU1122,Assignment 3 - Trees & Recursion,2026-03-12 10:43:00,2,Late,12
+1215,STU1122,Lab 2 - Binary Search Trees,2026-03-22 10:45:00,0,Completed,16
+1216,STU1122,Assignment 4 - Graph Algorithms,2026-04-07 23:47:00,2,Late,11
+1217,STU1122,Lab 3 - Shortest Path Solver,2026-04-15 18:59:00,0,Completed,12
+1218,STU1122,Assignment 5 - Dynamic Programming,2026-04-27 21:47:00,1,Late,7
+1219,STU1122,Lab 4 - Concurrency & Threads,2026-05-04 21:18:00,0,Completed,7
+1220,STU1122,Project Final Submission,2026-05-12 16:52:00,0,Completed,6
+1221,STU1123,Assignment 1 - Setup & Hello World,2026-02-07 19:30:00,-1,Completed,31
+1222,STU1123,Assignment 2 - Memory Management,2026-02-18 16:36:00,0,Completed,28
+1223,STU1123,Lab 1 - Linked List Implementation,2026-02-28 21:58:00,0,Completed,31
+1224,STU1123,Assignment 3 - Trees & Recursion,2026-03-09 14:35:00,-1,Completed,19
+1225,STU1123,Lab 2 - Binary Search Trees,2026-03-22 14:38:00,0,Completed,22
+1226,STU1123,Assignment 4 - Graph Algorithms,2026-04-04 12:36:00,-1,Completed,16
+1227,STU1123,Lab 3 - Shortest Path Solver,2026-04-15 21:57:00,0,Completed,31
+1228,STU1123,Assignment 5 - Dynamic Programming,2026-04-26 14:54:00,0,Completed,28
+1229,STU1123,Lab 4 - Concurrency & Threads,2026-05-04 23:30:00,0,Completed,29
+1230,STU1123,Project Final Submission,2026-05-12 21:45:00,0,Completed,34
+1231,STU1124,Assignment 1 - Setup & Hello World,2026-02-09 13:22:00,1,Late,15
+1232,STU1124,Assignment 2 - Memory Management,2026-02-20 19:55:00,2,Late,8
+1233,STU1124,Lab 1 - Linked List Implementation,2026-03-01 20:32:00,1,Late,9
+1234,STU1124,Assignment 3 - Trees & Recursion,2026-03-11 12:55:00,1,Late,15
+1235,STU1124,Lab 2 - Binary Search Trees,2026-03-24 12:42:00,2,Late,15
+1236,STU1124,Assignment 4 - Graph Algorithms,2026-04-05 21:50:00,0,Completed,13
+1237,STU1124,Lab 3 - Shortest Path Solver,2026-04-17 21:17:00,2,Late,10
+1238,STU1124,Assignment 5 - Dynamic Programming,2026-04-28 15:45:00,2,Late,17
+1239,STU1124,Lab 4 - Concurrency & Threads,2026-05-05 19:46:00,1,Late,12
+1240,STU1124,Project Final Submission,2026-05-12 21:36:00,0,Completed,15
+1241,STU1125,Assignment 1 - Setup & Hello World,2026-02-07 21:44:00,-1,Completed,33
+1242,STU1125,Assignment 2 - Memory Management,2026-02-18 23:37:00,0,Completed,21
+1243,STU1125,Lab 1 - Linked List Implementation,2026-02-28 18:16:00,0,Completed,12
+1244,STU1125,Assignment 3 - Trees & Recursion,2026-03-09 16:19:00,-1,Completed,12
+1245,STU1125,Lab 2 - Binary Search Trees,2026-03-21 20:13:00,-1,Completed,13
+1246,STU1125,Assignment 4 - Graph Algorithms,2026-04-05 14:58:00,0,Completed,18
+1247,STU1125,Lab 3 - Shortest Path Solver,2026-04-15 14:53:00,0,Completed,17
+1248,STU1125,Assignment 5 - Dynamic Programming,2026-04-25 12:13:00,-1,Completed,20
+1249,STU1125,Lab 4 - Concurrency & Threads,2026-05-03 22:28:00,-1,Completed,34
+1250,STU1125,Project Final Submission,2026-05-12 22:44:00,0,Completed,18
+1251,STU1126,Assignment 1 - Setup & Hello World,2026-02-08 15:38:00,0,Completed,1
+1252,STU1126,Assignment 2 - Memory Management,2026-02-20 19:53:00,2,Late,2
+1253,STU1126,Lab 1 - Linked List Implementation,2026-03-14 21:51:00,14,Missing,4
+1254,STU1126,Assignment 3 - Trees & Recursion,2026-03-18 13:42:00,8,Late,7
+1255,STU1126,Lab 2 - Binary Search Trees,2026-03-27 21:52:00,5,Late,5
+1256,STU1126,Assignment 4 - Graph Algorithms,2026-04-06 16:34:00,1,Late,1
+1257,STU1126,Lab 3 - Shortest Path Solver,2026-04-17 22:53:00,2,Late,7
+1258,STU1126,Assignment 5 - Dynamic Programming,2026-04-30 18:13:00,4,Late,6
+1259,STU1126,Lab 4 - Concurrency & Threads,2026-05-18 21:26:00,14,Missing,1
+1260,STU1126,Project Final Submission,2026-05-19 19:59:00,7,Late,4
+1261,STU1127,Assignment 1 - Setup & Hello World,2026-02-08 23:24:00,0,Completed,26
+1262,STU1127,Assignment 2 - Memory Management,2026-02-18 21:55:00,0,Completed,32
+1263,STU1127,Lab 1 - Linked List Implementation,2026-02-28 15:58:00,0,Completed,32
+1264,STU1127,Assignment 3 - Trees & Recursion,2026-03-09 18:57:00,-1,Completed,30
+1265,STU1127,Lab 2 - Binary Search Trees,2026-03-22 13:59:00,0,Completed,31
+1266,STU1127,Assignment 4 - Graph Algorithms,2026-04-05 13:28:00,0,Completed,35
+1267,STU1127,Lab 3 - Shortest Path Solver,2026-04-15 12:53:00,0,Completed,26
+1268,STU1127,Assignment 5 - Dynamic Programming,2026-04-25 12:21:00,-1,Completed,14
+1269,STU1127,Lab 4 - Concurrency & Threads,2026-05-04 18:17:00,0,Completed,35
+1270,STU1127,Project Final Submission,2026-05-12 10:37:00,0,Completed,24
+1271,STU1128,Assignment 1 - Setup & Hello World,2026-02-08 18:26:00,0,Completed,20
+1272,STU1128,Assignment 2 - Memory Management,2026-02-17 12:47:00,-1,Completed,16
+1273,STU1128,Lab 1 - Linked List Implementation,2026-02-28 10:31:00,0,Completed,20
+1274,STU1128,Assignment 3 - Trees & Recursion,2026-03-10 21:19:00,0,Completed,26
+1275,STU1128,Lab 2 - Binary Search Trees,2026-03-22 12:30:00,0,Completed,13
+1276,STU1128,Assignment 4 - Graph Algorithms,2026-04-05 10:59:00,0,Completed,31
+1277,STU1128,Lab 3 - Shortest Path Solver,2026-04-14 19:52:00,-1,Completed,32
+1278,STU1128,Assignment 5 - Dynamic Programming,2026-04-25 17:46:00,-1,Completed,21
+1279,STU1128,Lab 4 - Concurrency & Threads,2026-05-03 15:14:00,-1,Completed,29
+1280,STU1128,Project Final Submission,2026-05-12 15:43:00,0,Completed,34
+1281,STU1129,Assignment 1 - Setup & Hello World,2026-02-07 12:43:00,-1,Completed,19
+1282,STU1129,Assignment 2 - Memory Management,2026-02-18 22:42:00,0,Completed,14
+1283,STU1129,Lab 1 - Linked List Implementation,2026-02-28 16:44:00,0,Completed,17
+1284,STU1129,Assignment 3 - Trees & Recursion,2026-03-09 16:15:00,-1,Completed,29
+1285,STU1129,Lab 2 - Binary Search Trees,2026-03-22 13:23:00,0,Completed,23
+1286,STU1129,Assignment 4 - Graph Algorithms,2026-04-05 15:31:00,0,Completed,33
+1287,STU1129,Lab 3 - Shortest Path Solver,2026-04-15 14:23:00,0,Completed,23
+1288,STU1129,Assignment 5 - Dynamic Programming,2026-04-26 18:40:00,0,Completed,31
+1289,STU1129,Lab 4 - Concurrency & Threads,2026-05-04 23:58:00,0,Completed,29
+1290,STU1129,Project Final Submission,2026-05-11 10:17:00,-1,Completed,32
+1291,STU1130,Assignment 1 - Setup & Hello World,2026-02-08 15:38:00,0,Completed,33
+1292,STU1130,Assignment 2 - Memory Management,2026-02-17 20:49:00,-1,Completed,19
+1293,STU1130,Lab 1 - Linked List Implementation,2026-02-28 13:12:00,0,Completed,31
+1294,STU1130,Assignment 3 - Trees & Recursion,2026-03-09 15:34:00,-1,Completed,33
+1295,STU1130,Lab 2 - Binary Search Trees,2026-03-22 16:26:00,0,Completed,15
+1296,STU1130,Assignment 4 - Graph Algorithms,2026-04-05 21:28:00,0,Completed,29
+1297,STU1130,Lab 3 - Shortest Path Solver,2026-04-15 18:59:00,0,Completed,12
+1298,STU1130,Assignment 5 - Dynamic Programming,2026-04-25 18:42:00,-1,Completed,23
+1299,STU1130,Lab 4 - Concurrency & Threads,2026-05-04 17:12:00,0,Completed,26
+1300,STU1130,Project Final Submission,2026-05-12 20:22:00,0,Completed,21

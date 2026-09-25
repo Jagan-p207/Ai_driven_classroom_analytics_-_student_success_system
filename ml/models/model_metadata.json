@@ -1,0 +1,210 @@
+{
+  "best_model_name": "Logistic Regression",
+  "feature_columns": [
+    "attendance_pct",
+    "attendance_trend",
+    "avg_score",
+    "recent_score",
+    "score_std",
+    "score_trend",
+    "avg_submission_delay",
+    "max_submission_delay",
+    "submission_delay_trend",
+    "missing_submissions_count",
+    "completion_rate",
+    "composite_engagement"
+  ],
+  "labels": [
+    "Low",
+    "Medium",
+    "High"
+  ],
+  "comparison_metrics": {
+    "Logistic Regression": {
+      "cv_accuracy_mean": 1.0,
+      "cv_f1_macro_mean": 1.0,
+      "test_accuracy": 1.0,
+      "test_f1_macro": 1.0,
+      "test_f1_weighted": 1.0,
+      "confusion_matrix": [
+        [
+          16,
+          0,
+          0
+        ],
+        [
+          0,
+          6,
+          0
+        ],
+        [
+          0,
+          0,
+          4
+        ]
+      ],
+      "classification_report": {
+        "Low": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 16.0
+        },
+        "Medium": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 6.0
+        },
+        "High": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 4.0
+        },
+        "accuracy": 1.0,
+        "macro avg": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 26.0
+        },
+        "weighted avg": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 26.0
+        }
+      }
+    },
+    "Random Forest": {
+      "cv_accuracy_mean": 1.0,
+      "cv_f1_macro_mean": 1.0,
+      "test_accuracy": 1.0,
+      "test_f1_macro": 1.0,
+      "test_f1_weighted": 1.0,
+      "confusion_matrix": [
+        [
+          16,
+          0,
+          0
+        ],
+        [
+          0,
+          6,
+          0
+        ],
+        [
+          0,
+          0,
+          4
+        ]
+      ],
+      "classification_report": {
+        "Low": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 16.0
+        },
+        "Medium": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 6.0
+        },
+        "High": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 4.0
+        },
+        "accuracy": 1.0,
+        "macro avg": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 26.0
+        },
+        "weighted avg": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 26.0
+        }
+      }
+    },
+    "XGBoost": {
+      "cv_accuracy_mean": 0.9609523809523809,
+      "cv_f1_macro_mean": 0.9430273752012882,
+      "test_accuracy": 1.0,
+      "test_f1_macro": 1.0,
+      "test_f1_weighted": 1.0,
+      "confusion_matrix": [
+        [
+          16,
+          0,
+          0
+        ],
+        [
+          0,
+          6,
+          0
+        ],
+        [
+          0,
+          0,
+          4
+        ]
+      ],
+      "classification_report": {
+        "Low": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 16.0
+        },
+        "Medium": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 6.0
+        },
+        "High": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 4.0
+        },
+        "accuracy": 1.0,
+        "macro avg": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 26.0
+        },
+        "weighted avg": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 26.0
+        }
+      }
+    }
+  },
+  "global_feature_importances": {
+    "completion_rate": 16.31,
+    "avg_score": 10.45,
+    "composite_engagement": 10.11,
+    "avg_submission_delay": 9.68,
+    "max_submission_delay": 9.59,
+    "recent_score": 9.57,
+    "attendance_pct": 8.9,
+    "attendance_trend": 6.27,
+    "missing_submissions_count": 6.27,
+    "score_trend": 4.48,
+    "score_std": 4.3,
+    "submission_delay_trend": 4.07
+  },
+  "has_shap": true
+}
