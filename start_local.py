@@ -8,7 +8,14 @@ import sys
 import time
 import os
 
+def get_python_exe():
+    py311 = r"C:\Users\Admin\AppData\Local\Programs\Python\Python311\python.exe"
+    if os.path.exists(py311):
+        return py311
+    return sys.executable
+
 def main():
+    py_exe = get_python_exe()
     print("=" * 65)
     print("AI-Driven Classroom Analytics and Student Success System (EduPulse)")
     print("=" * 65)
@@ -17,16 +24,16 @@ def main():
     # Check if raw data exists
     if not os.path.exists("data/raw/students.csv"):
         print("Running synthetic data generator...")
-        subprocess.run([sys.executable, "ml/synthetic_data_generator.py"], check=True)
+        subprocess.run([py_exe, "ml/synthetic_data_generator.py"], check=True)
 
     # Check if models exist
     if not os.path.exists("ml/models/best_model.joblib"):
         print("Training baseline and primary ML models...")
-        subprocess.run([sys.executable, "ml/train_models.py"], check=True)
+        subprocess.run([py_exe, "ml/train_models.py"], check=True)
 
     print("\n2. Starting FastAPI Backend on http://127.0.0.1:8000 ...")
     backend_proc = subprocess.Popen(
-        [sys.executable, "-m", "uvicorn", "backend.app.main:app", "--host", "127.0.0.1", "--port", "8000", "--reload"],
+        [py_exe, "-m", "uvicorn", "backend.app.main:app", "--host", "127.0.0.1", "--port", "8000", "--reload"],
         cwd=os.getcwd()
     )
 
