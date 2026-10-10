@@ -2,7 +2,7 @@
  * API Client for AI-Driven Classroom Analytics and Student Success System.
  */
 
-const BASE_URL = ''; // Relative path leverages Vite dev server proxy
+const BASE_URL = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
 
 export async function fetchClassRiskSummary(classId = 'CS101') {
   const res = await fetch(`${BASE_URL}/api/class/${classId}/risk-summary`);

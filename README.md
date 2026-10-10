@@ -138,11 +138,26 @@ npm run dev
 
 ---
 
+## 🌐 Production Cloud Deployment (Render Blueprint)
+
+The repository includes a ready-to-use `render.yaml` configuration file for deploying to Render:
+
+1. **Backend Web Service**: Runs FastAPI with Uvicorn bound to `0.0.0.0` and `$PORT`.
+2. **Frontend Static Site**: Builds Vite React application and publishes static assets.
+
+### Environment Variables
+- `VITE_API_URL`: Environment variable used by the frontend to point to the deployed FastAPI backend URL (e.g., `https://edupulse-backend.onrender.com`).
+- `CORS_ORIGINS`: Allowed origins for FastAPI CORS middleware (supports comma-separated origins or `*`).
+- `DATABASE_URL`: PostgreSQL connection string (or default SQLite fallback).
+
+---
+
 ## 🧪 Automated Testing
 
 Execute the end-to-end integration and API test suite:
 
 ```bash
+$env:PYTHONPATH="." # PowerShell or set PYTHONPATH=.
 pytest tests/test_api_and_pipeline.py -v
 ```
 All 6 test suites validate API contracts, batch computation, DB seeding, and student risk drill-downs.

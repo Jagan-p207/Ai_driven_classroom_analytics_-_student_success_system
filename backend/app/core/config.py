@@ -1,5 +1,5 @@
 import os
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 @dataclass
 class Settings:
@@ -19,5 +19,17 @@ class Settings:
 
     # Batch scoring interval (seconds) if background daemon is active
     RECOMPUTE_INTERVAL_SECONDS: int = int(os.getenv("RECOMPUTE_INTERVAL_SECONDS", "3600"))
+
+    # CORS origins
+    CORS_ORIGINS: list = field(
+        default_factory=lambda: [
+            origin.strip()
+            for origin in os.getenv(
+                "CORS_ORIGINS",
+                "http://localhost:5173,http://127.0.0.1:5173,http://localhost:3000,*"
+            ).split(",")
+            if origin.strip()
+        ]
+    )
 
 settings = Settings()
