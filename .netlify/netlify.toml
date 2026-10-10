@@ -7,11 +7,11 @@ headers = []
 [functions."*"]
 
 [build]
-publish = "E:\\Programming\\Mini Project\\frontend\\dist"
+publish = "frontend/dist"
 publishOrigin = "config"
 commandOrigin = "config"
 command = "npm run build"
-base = "E:\\Programming\\Mini Project\\frontend"
+base = "frontend"
 
 [build.environment]
 NODE_VERSION = "18"
