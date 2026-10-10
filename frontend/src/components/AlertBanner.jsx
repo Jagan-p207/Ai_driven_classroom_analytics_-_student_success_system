@@ -98,7 +98,7 @@ export default function AlertBanner({ alerts = [], onSelectStudent }) {
               onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
             >
               <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
                   <span className={`badge-risk ${item.risk_level.toLowerCase()}`}>
                     {item.risk_level}
                   </span>
@@ -108,6 +108,29 @@ export default function AlertBanner({ alerts = [], onSelectStudent }) {
                   <span style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>
                     ({item.student_id})
                   </span>
+                  {item.intervention_status ? (
+                    <span style={{
+                      fontSize: '0.7rem',
+                      fontWeight: 600,
+                      padding: '2px 6px',
+                      borderRadius: 4,
+                      background: item.is_overdue ? 'rgba(239, 68, 68, 0.25)' : 'rgba(56, 189, 248, 0.2)',
+                      color: item.is_overdue ? '#fca5a5' : '#7dd3fc'
+                    }}>
+                      {item.is_overdue ? '⚠ Overdue' : `✓ ${item.intervention_status}`}
+                    </span>
+                  ) : (
+                    <span style={{
+                      fontSize: '0.7rem',
+                      fontWeight: 600,
+                      padding: '2px 6px',
+                      borderRadius: 4,
+                      background: 'rgba(245, 158, 11, 0.2)',
+                      color: '#fbbf24'
+                    }}>
+                      Needs Intervention
+                    </span>
+                  )}
                 </div>
                 <p style={{ fontSize: '0.78rem', color: '#94a3b8', marginTop: 4 }}>
                   <strong style={{ color: '#e2e8f0' }}>Driver:</strong> {item.primary_driver}

@@ -206,3 +206,41 @@ export function getDemoModelInfo() {
     }
   };
 }
+
+export function getDemoHistoricalAnalytics() {
+  return {
+    class_id: "CS101",
+    milestone_progression: [
+      { milestone: "Week 2 - Diagnostic Quiz", date: "2026-02-01", Low: 105, Medium: 18, High: 7, avg_score: 84.2, avg_attendance: 94.5 },
+      { milestone: "Week 4 - Assessment 1", date: "2026-02-15", Low: 96, Medium: 22, High: 12, avg_score: 80.5, avg_attendance: 90.1 },
+      { milestone: "Week 8 - Midterm Exam", date: "2026-03-01", Low: 88, Medium: 26, High: 16, avg_score: 75.8, avg_attendance: 85.3 },
+      { milestone: "Week 12 - Project Milestone", date: "2026-03-20", Low: 82, Medium: 28, High: 20, avg_score: 74.1, avg_attendance: 83.2 }
+    ],
+    attendance_trajectory: [
+      { week: "W1", average_attendance: 96.2 },
+      { week: "W2", average_attendance: 94.5 },
+      { week: "W3", average_attendance: 92.8 },
+      { week: "W4", average_attendance: 90.1 },
+      { week: "W5", average_attendance: 88.4 },
+      { week: "W6", average_attendance: 87.0 },
+      { week: "W7", average_attendance: 86.2 },
+      { week: "W8", average_attendance: 85.3 },
+      { week: "W9", average_attendance: 84.7 },
+      { week: "W10", average_attendance: 83.9 },
+      { week: "W11", average_attendance: 83.5 },
+      { week: "W12", average_attendance: 83.2 }
+    ],
+    risk_mobility: {
+      escalated: 14,
+      improved: 9,
+      stable: 107
+    },
+    intervention_metrics: {
+      total_interventions: 24,
+      resolved: 11,
+      in_progress: 10,
+      escalated: 3,
+      avg_resolution_days: 8.5
+    }
+  };
+}

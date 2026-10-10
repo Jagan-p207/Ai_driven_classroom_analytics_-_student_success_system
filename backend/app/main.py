@@ -13,6 +13,7 @@ from backend.app.api.students import router as students_router
 from backend.app.api.class_analytics import router as class_router
 from backend.app.api.recompute import router as recompute_router
 from backend.app.api.model_info import router as model_router
+from backend.app.api.reports import router as reports_router
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("main")
@@ -51,12 +52,14 @@ app.include_router(students_router, prefix="/api", tags=["Students & Risk"])
 app.include_router(class_router, prefix="/api", tags=["Class Analytics"])
 app.include_router(recompute_router, prefix="/api", tags=["Model Scoring"])
 app.include_router(model_router, prefix="/api", tags=["Model Transparency"])
+app.include_router(reports_router, prefix="/api", tags=["Reports & Exports"])
 
 # Direct routes without /api prefix as specified in prompt
 app.include_router(ingest_router, prefix="", tags=["Data Ingestion (Direct)"])
 app.include_router(students_router, prefix="", tags=["Students & Risk (Direct)"])
 app.include_router(class_router, prefix="", tags=["Class Analytics (Direct)"])
 app.include_router(recompute_router, prefix="", tags=["Model Scoring (Direct)"])
+app.include_router(reports_router, prefix="", tags=["Reports & Exports (Direct)"])
 
 @app.get("/health", tags=["Health"])
 def health_check():

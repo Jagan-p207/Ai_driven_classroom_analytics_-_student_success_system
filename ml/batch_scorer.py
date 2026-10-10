@@ -170,7 +170,8 @@ def batch_score_students(
     X = df_features[FEATURE_COLUMNS].copy()
 
     # Predict probabilities & classes
-    if hasattr(model, "predict_proba"):
+    has_proba = hasattr(model, "predict_proba")
+    if has_proba:
         probs = model.predict_proba(X)
         preds = np.argmax(probs, axis=1)
         # Continuous risk score: weighted combination: Low=0.0, Medium=0.5, High=1.0
@@ -182,6 +183,7 @@ def batch_score_students(
     else:
         preds = model.predict(X)
         risk_scores = np.where(preds == 2, 0.9, np.where(preds == 1, 0.5, 0.1))
+        probs = None
 
     scored_records = []
     now_iso = datetime.utcnow().isoformat()
@@ -191,6 +193,17 @@ def batch_score_students(
         pred_idx = int(preds[i])
         pred_label = LABELS[pred_idx]
         r_score = float(np.clip(risk_scores[i], 0.0, 1.0))
+
+        # Class probabilities and model confidence
+        if probs is not None and probs.shape[1] == 3:
+            p_low = round(float(probs[i, 0]), 3)
+            p_med = round(float(probs[i, 1]), 3)
+            p_high = round(float(probs[i, 2]), 3)
+            prob_dict = {"Low": p_low, "Medium": p_med, "High": p_high}
+            confidence = round(float(np.max(probs[i])), 3)
+        else:
+            prob_dict = {"Low": 0.1, "Medium": 0.2, "High": 0.7} if pred_label == "High" else {"Low": 0.8, "Medium": 0.15, "High": 0.05}
+            confidence = 0.85
 
         # Alert flag: triggered if Medium or High risk, or score >= 0.35
         alert_flag = bool(pred_label in ["Medium", "High"] or r_score >= 0.35)
@@ -213,6 +226,8 @@ def batch_score_students(
             "alert_flag": alert_flag,
             "contributing_factors": json.dumps(top_factors),
             "recommendations": json.dumps(recommendations),
+            "confidence": confidence,
+            "risk_probabilities": json.dumps(prob_dict),
             "computed_at": now_iso
         })
 

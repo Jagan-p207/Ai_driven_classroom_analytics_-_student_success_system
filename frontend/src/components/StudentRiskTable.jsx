@@ -1,21 +1,41 @@
 import React, { useState } from 'react';
-import { Search, TrendingDown, TrendingUp, AlertTriangle, ArrowUpDown, ChevronRight } from 'lucide-react';
+import {
+  Search, TrendingDown, TrendingUp, AlertTriangle, ArrowUpDown,
+  ChevronRight, X, Clock, CheckCircle2, UserCheck, RotateCcw
+} from 'lucide-react';
 
-export default function StudentRiskTable({ students = [], onSelectStudent }) {
+export default function StudentRiskTable({
+  students = [],
+  onSelectStudent,
+  riskFilter = 'ALL',
+  onRiskFilterChange
+}) {
   const [searchTerm, setSearchTerm] = useState('');
-  const [riskFilter, setRiskFilter] = useState('ALL');
+  const [interventionFilter, setInterventionFilter] = useState('ALL');
   const [sortBy, setSortBy] = useState('risk_score');
   const [sortAsc, setSortAsc] = useState(false);
 
   // Filter students
   const filtered = students.filter(s => {
-    const matchesSearch = 
+    const matchesSearch =
       s.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       s.student_id.toLowerCase().includes(searchTerm.toLowerCase()) ||
       s.email.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    const matchesFilter = riskFilter === 'ALL' || s.risk_level.toUpperCase() === riskFilter;
-    return matchesSearch && matchesFilter;
+
+    const matchesRisk = riskFilter === 'ALL' || s.risk_level.toUpperCase() === riskFilter.toUpperCase();
+
+    let matchesIntervention = true;
+    if (interventionFilter === 'OVERDUE') {
+      matchesIntervention = s.is_intervention_overdue === true;
+    } else if (interventionFilter === 'NEEDS_ACTION') {
+      matchesIntervention = (s.risk_level === 'High' || s.risk_level === 'Medium') && (!s.latest_intervention_status || s.is_intervention_overdue);
+    } else if (interventionFilter === 'ACTIVE') {
+      matchesIntervention = s.latest_intervention_status === 'Planned' || s.latest_intervention_status === 'In Progress';
+    } else if (interventionFilter === 'RESOLVED') {
+      matchesIntervention = s.latest_intervention_status === 'Resolved' || s.latest_intervention_status === 'Completed';
+    }
+
+    return matchesSearch && matchesRisk && matchesIntervention;
   });
 
   // Sort students
@@ -25,7 +45,7 @@ export default function StudentRiskTable({ students = [], onSelectStudent }) {
     if (typeof valA === 'string') {
       return sortAsc ? valA.localeCompare(valB) : valB.localeCompare(valA);
     }
-    return sortAsc ? (valA - valB) : (valB - valA);
+    return sortAsc ? ((valA ?? 0) - (valB ?? 0)) : ((valB ?? 0) - (valA ?? 0));
   });
 
   const handleSort = (field) => {
@@ -33,13 +53,21 @@ export default function StudentRiskTable({ students = [], onSelectStudent }) {
       setSortAsc(!sortAsc);
     } else {
       setSortBy(field);
-      setSortAsc(false); // default descending for metrics
+      setSortAsc(false); // default descending for risk/scores
     }
+  };
+
+  const hasActiveFilters = searchTerm !== '' || riskFilter !== 'ALL' || interventionFilter !== 'ALL';
+
+  const clearAllFilters = () => {
+    setSearchTerm('');
+    setInterventionFilter('ALL');
+    if (onRiskFilterChange) onRiskFilterChange('ALL');
   };
 
   return (
     <div className="glass-card" style={{ padding: 24, marginBottom: 24 }}>
-      {/* Table Controls */}
+      {/* Table Header & Controls */}
       <div style={{
         display: 'flex',
         alignItems: 'center',
@@ -49,15 +77,20 @@ export default function StudentRiskTable({ students = [], onSelectStudent }) {
         marginBottom: 20
       }}>
         <div>
-          <h2 style={{ fontSize: '1.2rem', color: '#fff' }}>
-            Student Roster & Risk Registry
-          </h2>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <h2 style={{ fontSize: '1.2rem', color: '#fff', margin: 0 }}>
+              Student Roster & Risk Registry
+            </h2>
+            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+              ({sorted.length} of {students.length} students)
+            </span>
+          </div>
           <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: 2 }}>
-            Multi-factor assessment rankings and performance trends
+            Multi-factor assessment rankings, active interventions, and performance trends
           </p>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
           {/* Search Bar */}
           <div style={{
             display: 'flex',
@@ -67,12 +100,12 @@ export default function StudentRiskTable({ students = [], onSelectStudent }) {
             borderRadius: 'var(--radius-sm)',
             padding: '6px 12px',
             gap: 8,
-            minWidth: 220
+            minWidth: 200
           }}>
             <Search size={15} color="var(--text-muted)" />
             <input
               type="text"
-              placeholder="Search name or ID..."
+              placeholder="Search name, ID, email..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               style={{
@@ -84,9 +117,39 @@ export default function StudentRiskTable({ students = [], onSelectStudent }) {
                 width: '100%'
               }}
             />
+            {searchTerm && (
+              <button
+                onClick={() => setSearchTerm('')}
+                style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--text-muted)', padding: 0 }}
+              >
+                <X size={14} />
+              </button>
+            )}
           </div>
 
-          {/* Filter Tabs */}
+          {/* Intervention Filter Select */}
+          <select
+            value={interventionFilter}
+            onChange={(e) => setInterventionFilter(e.target.value)}
+            style={{
+              background: '#0f172a',
+              border: '1px solid var(--border-glass)',
+              borderRadius: 'var(--radius-sm)',
+              padding: '6px 10px',
+              fontSize: '0.78rem',
+              color: '#fff',
+              outline: 'none',
+              cursor: 'pointer'
+            }}
+          >
+            <option value="ALL">Interventions: All</option>
+            <option value="NEEDS_ACTION">Needs Action / Unassigned</option>
+            <option value="OVERDUE">Overdue Follow-Ups</option>
+            <option value="ACTIVE">Active (Planned/In Progress)</option>
+            <option value="RESOLVED">Resolved / Completed</option>
+          </select>
+
+          {/* Risk Level Filter Chips */}
           <div style={{
             display: 'inline-flex',
             background: 'rgba(255, 255, 255, 0.05)',
@@ -97,7 +160,7 @@ export default function StudentRiskTable({ students = [], onSelectStudent }) {
             {['ALL', 'HIGH', 'MEDIUM', 'LOW'].map((lvl) => (
               <button
                 key={lvl}
-                onClick={() => setRiskFilter(lvl)}
+                onClick={() => onRiskFilterChange && onRiskFilterChange(lvl)}
                 style={{
                   padding: '5px 12px',
                   fontSize: '0.76rem',
@@ -105,8 +168,8 @@ export default function StudentRiskTable({ students = [], onSelectStudent }) {
                   borderRadius: 6,
                   border: 'none',
                   cursor: 'pointer',
-                  background: riskFilter === lvl ? '#6366f1' : 'transparent',
-                  color: riskFilter === lvl ? '#fff' : 'var(--text-secondary)',
+                  background: riskFilter.toUpperCase() === lvl ? '#6366f1' : 'transparent',
+                  color: riskFilter.toUpperCase() === lvl ? '#fff' : 'var(--text-secondary)',
                   transition: 'all 0.2s ease'
                 }}
               >
@@ -114,6 +177,26 @@ export default function StudentRiskTable({ students = [], onSelectStudent }) {
               </button>
             ))}
           </div>
+
+          {/* Clear Filters Button */}
+          {hasActiveFilters && (
+            <button
+              onClick={clearAllFilters}
+              className="btn btn-outline"
+              style={{
+                padding: '6px 10px',
+                fontSize: '0.76rem',
+                borderColor: 'rgba(239, 68, 68, 0.3)',
+                color: '#fca5a5',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 4
+              }}
+              title="Reset search and filters"
+            >
+              <RotateCcw size={12} /> Clear Filters
+            </button>
+          )}
         </div>
       </div>
 
@@ -139,6 +222,9 @@ export default function StudentRiskTable({ students = [], onSelectStudent }) {
               <th style={{ padding: '12px 14px', cursor: 'pointer' }} onClick={() => handleSort('risk_score')}>
                 Risk Classification <ArrowUpDown size={12} style={{ verticalAlign: 'middle' }} />
               </th>
+              <th style={{ padding: '12px 14px' }}>
+                Intervention
+              </th>
               <th style={{ padding: '12px 14px', cursor: 'pointer' }} onClick={() => handleSort('attendance_pct')}>
                 Attendance <ArrowUpDown size={12} style={{ verticalAlign: 'middle' }} />
               </th>
@@ -157,8 +243,15 @@ export default function StudentRiskTable({ students = [], onSelectStudent }) {
           <tbody>
             {sorted.length === 0 ? (
               <tr>
-                <td colSpan={7} style={{ textAlign: 'center', padding: '36px', color: 'var(--text-muted)' }}>
-                  No students found matching current search/filters.
+                <td colSpan={8} style={{ textAlign: 'center', padding: '36px', color: 'var(--text-muted)' }}>
+                  No students found matching current filters.
+                  {hasActiveFilters && (
+                    <div style={{ marginTop: 8 }}>
+                      <button onClick={clearAllFilters} className="btn btn-outline" style={{ fontSize: '0.76rem', padding: '4px 10px' }}>
+                        Clear Filters
+                      </button>
+                    </div>
+                  )}
                 </td>
               </tr>
             ) : (
@@ -185,7 +278,7 @@ export default function StudentRiskTable({ students = [], onSelectStudent }) {
                         {s.name}
                       </div>
                       <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>
-                        {s.student_id} • {s.email}
+                        {s.student_id} • {s.department}
                       </div>
                     </td>
 
@@ -201,20 +294,61 @@ export default function StudentRiskTable({ students = [], onSelectStudent }) {
                           </span>
                         )}
                       </div>
-                      {/* Risk score progress bar */}
                       <div style={{
-                        width: 100,
+                        width: 90,
                         height: 5,
                         background: 'rgba(255, 255, 255, 0.1)',
                         borderRadius: 3,
                         overflow: 'hidden'
                       }}>
                         <div style={{
-                          width: `${Math.min(100, s.risk_score * 100)}%`,
+                          width: `${Math.min(100, (s.risk_score || 0) * 100)}%`,
                           height: '100%',
                           background: isHigh ? '#ef4444' : isMed ? '#f59e0b' : '#10b981'
                         }} />
                       </div>
+                    </td>
+
+                    {/* Intervention Status Column */}
+                    <td style={{ padding: '14px' }}>
+                      {s.latest_intervention_status ? (
+                        <div>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                            <span style={{
+                              fontSize: '0.72rem',
+                              fontWeight: 700,
+                              padding: '2px 7px',
+                              borderRadius: 4,
+                              background: s.latest_intervention_status === 'Resolved' || s.latest_intervention_status === 'Completed'
+                                ? 'rgba(16, 185, 129, 0.15)'
+                                : s.latest_intervention_status === 'In Progress'
+                                ? 'rgba(56, 189, 248, 0.15)'
+                                : 'rgba(245, 158, 11, 0.15)',
+                              color: s.latest_intervention_status === 'Resolved' || s.latest_intervention_status === 'Completed'
+                                ? '#34d399'
+                                : s.latest_intervention_status === 'In Progress'
+                                ? '#38bdf8'
+                                : '#fbbf24'
+                            }}>
+                              {s.latest_intervention_status}
+                            </span>
+                            {s.is_intervention_overdue && (
+                              <span style={{ color: '#f87171', fontSize: '0.68rem', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: 2 }} title="Follow-up date passed">
+                                <Clock size={11} /> Overdue
+                              </span>
+                            )}
+                          </div>
+                          {s.latest_intervention_staff && (
+                            <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', marginTop: 2, maxWidth: 130, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                              {s.latest_intervention_staff.split(' (')[0]}
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        <span style={{ fontSize: '0.74rem', color: (isHigh || isMed) ? '#f87171' : 'var(--text-muted)' }}>
+                          {(isHigh || isMed) ? 'Needs Assignment' : '—'}
+                        </span>
+                      )}
                     </td>
 
                     {/* Attendance */}

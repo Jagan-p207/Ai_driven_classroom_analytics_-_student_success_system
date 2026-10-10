@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from backend.app.core.database import get_db
-from backend.app.schemas.pydantic_models import ClassRiskSummary
-from backend.app.services.pipeline_service import get_class_risk_summary
+from backend.app.schemas.pydantic_models import ClassRiskSummary, HistoricalAnalyticsResponse
+from backend.app.services.pipeline_service import get_class_risk_summary, get_historical_analytics
 
 router = APIRouter()
 
@@ -16,3 +16,12 @@ def get_class_summary(class_id: str, db: Session = Depends(get_db)):
     """
     summary = get_class_risk_summary(db, class_id=class_id)
     return summary
+
+@router.get("/class/{class_id}/historical-analytics", response_model=HistoricalAnalyticsResponse)
+def get_historical_trends(class_id: str, db: Session = Depends(get_db)):
+    """
+    Returns historical analytics across assessment milestones,
+    attendance progression, risk-tier transitions, and intervention progress.
+    """
+    trends = get_historical_analytics(db, class_id=class_id)
+    return trends

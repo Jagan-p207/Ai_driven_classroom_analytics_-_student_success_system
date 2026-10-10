@@ -22,6 +22,10 @@ class StudentSummary(BaseModel):
     score_trend: Optional[float] = 0.0
     composite_engagement: Optional[float] = 0.0
     alert_flag: Optional[bool] = False
+    latest_intervention_status: Optional[str] = None
+    latest_intervention_staff: Optional[str] = None
+    latest_follow_up_date: Optional[str] = None
+    is_intervention_overdue: Optional[bool] = False
 
 class ContributingFactor(BaseModel):
     feature: str
@@ -56,6 +60,37 @@ class RiskScoreDetail(BaseModel):
     alert_flag: bool
     contributing_factors: List[ContributingFactor] = []
     recommendations: List[str] = []
+    confidence: Optional[float] = None
+    risk_probabilities: Optional[Dict[str, float]] = None
+
+class HistoricalRiskItem(BaseModel):
+    id: int
+    computed_at: str
+    risk_level: str
+    risk_score: float
+    composite_engagement: float
+
+class InterventionBase(BaseModel):
+    assigned_staff: str
+    follow_up_date: str # YYYY-MM-DD
+    notes: Optional[str] = None
+    status: str = "Planned" # 'Planned', 'In Progress', 'Completed', 'Resolved'
+
+class InterventionCreate(InterventionBase):
+    pass
+
+class InterventionUpdate(BaseModel):
+    status: Optional[str] = None
+    assigned_staff: Optional[str] = None
+    follow_up_date: Optional[str] = None
+    notes: Optional[str] = None
+
+class InterventionResponse(InterventionBase):
+    id: int
+    student_id: str
+    created_at: str
+    updated_at: str
+    is_overdue: bool = False
 
 class StudentRiskFullProfile(BaseModel):
     student: StudentBase
@@ -63,6 +98,8 @@ class StudentRiskFullProfile(BaseModel):
     assessment_history: List[AssessmentTrendItem] = []
     attendance_history: List[AttendanceTrendItem] = []
     recent_lms_activities: List[Dict[str, Any]] = []
+    historical_risk_scores: List[HistoricalRiskItem] = []
+    interventions: List[InterventionResponse] = []
 
 class HeatmapStudentItem(BaseModel):
     student_id: str
@@ -74,6 +111,7 @@ class HeatmapStudentItem(BaseModel):
     score_trend: float
     composite_engagement: float
     alert_flag: bool
+    intervention_status: Optional[str] = None
 
 class ClassRiskSummary(BaseModel):
     class_id: str
@@ -96,6 +134,40 @@ class IngestResponse(BaseModel):
     message: str
     results: List[IngestionResult]
     pipeline_triggered: bool
+
+class CSVValidationIssue(BaseModel):
+    row: Optional[int] = None
+    column: Optional[str] = None
+    message: str
+
+class CSVPreviewResponse(BaseModel):
+    source_type: str
+    filename: str
+    file_size_bytes: int
+    total_rows: int
+    valid_rows_count: int
+    invalid_rows_count: int
+    duplicate_rows_count: int
+    headers: List[str]
+    sample_records: List[Dict[str, Any]] = []
+    issues: List[CSVValidationIssue] = []
+    can_import: bool
+
+class AssessmentMilestone(BaseModel):
+    assessment_name: str
+    date: str
+    avg_score_pct: float
+    passing_rate_pct: float
+    high_risk_count: int
+    medium_risk_count: int
+    low_risk_count: int
+
+class HistoricalAnalyticsResponse(BaseModel):
+    class_id: str
+    milestones: List[AssessmentMilestone]
+    attendance_trend_overall: List[Dict[str, Any]]
+    risk_tier_shifts: Dict[str, int] # {"improved": X, "stable": Y, "declined": Z}
+    intervention_metrics: Dict[str, Any] # {"total": X, "planned": Y, "in_progress": Z, "resolved": W, "overdue": V}
 
 class RecomputeResponse(BaseModel):
     message: str

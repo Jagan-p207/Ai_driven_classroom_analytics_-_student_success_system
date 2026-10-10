@@ -7,6 +7,7 @@ import StudentRiskTable from './components/StudentRiskTable';
 import StudentDetailModal from './components/StudentDetailModal';
 import IngestionModal from './components/IngestionModal';
 import ModelInfoModal from './components/ModelInfoModal';
+import HistoricalAnalyticsSection from './components/HistoricalAnalyticsSection';
 import { fetchClassRiskSummary, fetchStudents, triggerRecompute, seedSampleData } from './services/api';
 
 export default function App() {
@@ -19,6 +20,7 @@ export default function App() {
   const [isModelInfoOpen, setIsModelInfoOpen] = useState(false);
   const [notification, setNotification] = useState(null);
   const [lastRecomputeTime, setLastRecomputeTime] = useState(null);
+  const [riskFilter, setRiskFilter] = useState('ALL');
 
   const loadData = async () => {
     try {
@@ -136,12 +138,20 @@ export default function App() {
             <ClassHeatmap
               heatmapData={classSummary?.heatmap_data || []}
               onSelectStudent={(id) => setSelectedStudentId(id)}
+              selectedStudentId={selectedStudentId}
+              riskFilter={riskFilter}
+              onFilterChange={(f) => setRiskFilter(f)}
             />
+
+            {/* Historical Milestone Progression & Mobility Section */}
+            <HistoricalAnalyticsSection classId="CS101" />
 
             {/* Full Student Roster & Trend Registry */}
             <StudentRiskTable
               students={students}
               onSelectStudent={(id) => setSelectedStudentId(id)}
+              riskFilter={riskFilter}
+              onFilterChange={(f) => setRiskFilter(f)}
             />
           </div>
         )}
@@ -163,6 +173,10 @@ export default function App() {
       <StudentDetailModal
         studentId={selectedStudentId}
         onClose={() => setSelectedStudentId(null)}
+        onInterventionUpdated={() => {
+          loadData();
+          showNotification('Intervention record updated successfully.');
+        }}
       />
 
       {/* CSV Ingestion Modal */}

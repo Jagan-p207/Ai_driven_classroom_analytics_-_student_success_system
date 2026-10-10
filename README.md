@@ -2,6 +2,8 @@
 
 An early-warning institutional analytics dashboard that flags at-risk students by fusing attendance, internal assessment marks, and LMS/assignment activity into a unified, explainable risk score.
 
+> 📖 **Developer Onboarding**: For a complete overview of features, stack, and onboarding steps for new contributors, see the [Developer Onboarding & Project Handover Guide](file:///d:/AI_DRIVEN_CLASSROOM_ANALYTICS_AND_STUDENT_SUCCESS_SYSTEM/DEVELOPER_GUIDE.md).
+
 ---
 
 ## 🏛️ System Architecture (Three-Tier)
@@ -128,39 +130,73 @@ npm run dev
 | Method | Endpoint | Description |
 | :--- | :--- | :--- |
 | `GET` | `/class/{class_id}/risk-summary` | Class-level summary, heat-map student matrix, and at-risk alerts |
+| `GET` | `/class/{class_id}/historical-analytics` | Milestone progression, attendance trajectory, risk mobility & intervention statistics |
 | `GET` | `/students` | Roster list with risk tiers, filters (`risk_level`, `search`), and metrics |
-| `GET` | `/students/{student_id}/risk` | Student drill-down profile, score trend lines, and SHAP factors |
+| `GET` | `/students/{student_id}/risk` | Student drill-down profile, score trend lines, probabilities & SHAP factors |
+| `POST` | `/students/{student_id}/interventions` | Assign counselor intervention with follow-up dates & action notes |
+| `GET` | `/students/{student_id}/interventions` | Retrieve student intervention history |
+| `PUT` | `/interventions/{intervention_id}` | Update status (`IN_PROGRESS`, `RESOLVED`, `ESCALATED`) |
+| `POST` | `/ingest/preview` | Dry-run validation of uploaded CSV (checks schema, FKs, types & preview) |
+| `POST` | `/ingest` | Bulk CSV commit for attendance, marks, LMS logs, or students |
+| `GET` | `/reports/csv` | Download institution-grade risk & intervention roster as CSV |
+| `GET` | `/reports/summary` | Executive high-level risk overview metrics |
 | `POST` | `/recompute` | Manually triggers the batch scoring job across all students |
-| `POST` | `/ingest` | Bulk CSV upload for attendance, marks, LMS logs, or students |
-| `GET` | `/api/model/info` | Returns model benchmark comparison table & global feature importances |
+| `GET` | `/api/model/info` | Returns model benchmark comparison table, 3x3 confusion matrix & global importances |
 | `POST` | `/api/seed` | Resets/reloads pilot demo dataset (130 students) |
 | `GET` | `/health` | Health check endpoint |
 
 ---
 
-## 🌐 Production Cloud Deployment (Render Blueprint)
+## 🌐 Production Cloud Deployment
 
-The repository includes a ready-to-use `render.yaml` configuration file for deploying to Render:
+### 1. Deploy Frontend to Vercel
+EduPulseAI includes ready-to-use `vercel.json` configurations for both root and subfolder deployments.
+1. Connect your repository on [vercel.com](https://vercel.com).
+2. Set **Root Directory** to `frontend` (or leave as root `/`).
+3. Set Build Command: `npm run build`
+4. Set Output Directory: `dist`
+5. Under **Environment Variables**, add:
+   - `VITE_API_URL`: Your deployed FastAPI backend URL (e.g., `https://edupulse-backend.onrender.com`).
+6. Click **Deploy**.
 
-1. **Backend Web Service**: Runs FastAPI with Uvicorn bound to `0.0.0.0` and `$PORT`.
-2. **Frontend Static Site**: Builds Vite React application and publishes static assets.
+### 2. Deploy Frontend to Netlify
+The repository includes a ready-to-use `netlify.toml` and SPA redirect rules.
+1. Connect your GitHub repository on [netlify.com](https://app.netlify.com).
+2. Base directory: `frontend`
+3. Build command: `npm run build`
+4. Publish directory: `dist`
+5. In **Environment Variables**, add:
+   - `VITE_API_URL`: Your deployed FastAPI backend URL.
+6. Click **Deploy Site**.
 
-### Environment Variables
-- `VITE_API_URL`: Environment variable used by the frontend to point to the deployed FastAPI backend URL (e.g., `https://edupulse-backend.onrender.com`).
-- `CORS_ORIGINS`: Allowed origins for FastAPI CORS middleware (supports comma-separated origins or `*`).
-- `DATABASE_URL`: PostgreSQL connection string (or default SQLite fallback).
+### 3. Deploy Backend to Render (or Railway / VPS)
+The repository includes `render.yaml` for 1-click infrastructure deployment:
+1. Push this repository to GitHub.
+2. In [Render Dashboard](https://dashboard.render.com), select **Blueprints** -> New Blueprint Instance -> connect this repository.
+3. Render automatically provisions:
+   - FastAPI Backend with Uvicorn on Python 3.11 (`pip install -r backend/requirements.txt`).
+   - React Vite static frontend linked to the backend service.
 
 ---
 
 ## 🧪 Automated Testing
 
-Execute the end-to-end integration and API test suite:
+Execute the comprehensive 10-suite test pipeline:
 
 ```bash
-$env:PYTHONPATH="." # PowerShell or set PYTHONPATH=.
-pytest tests/test_api_and_pipeline.py -v
+python -m pytest tests/test_api_and_pipeline.py -v
 ```
-All 6 test suites validate API contracts, batch computation, DB seeding, and student risk drill-downs.
+All 10 test suites validate:
+- SQLite schema & automatic migration
+- Batch scoring pipeline & SHAP local explainability
+- Model confidence & continuous multiclass probability calculation
+- Synthetic pilot data seeding
+- Class analytics & heat-map matrix contracts
+- Student risk profiles with trend history
+- Counselor interventions CRUD & overdue status calculation
+- Historical analytics & milestone risk shifts
+- CSV ingestion schema validation & error preview
+- Executive report metrics & institutional CSV roster download
 
 ---
 

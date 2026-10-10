@@ -39,6 +39,13 @@ class Student(Base):
         order_by="desc(RiskScore.id)",
         lazy="selectin"
     )
+    interventions = relationship(
+        "Intervention",
+        back_populates="student",
+        cascade="all, delete-orphan",
+        order_by="desc(Intervention.id)",
+        lazy="selectin"
+    )
 
 class Attendance(Base):
     __tablename__ = "attendance"
@@ -93,5 +100,21 @@ class RiskScore(Base):
     alert_flag = Column(Boolean, nullable=False, default=False)
     contributing_factors = Column(Text, nullable=True) # JSON array of top SHAP / feature factors
     recommendations = Column(Text, nullable=True) # JSON array of actionable recommendations
+    confidence = Column(Float, nullable=True, default=0.9)
+    risk_probabilities = Column(Text, nullable=True) # JSON dict {"Low": p, "Medium": p, "High": p}
 
     student = relationship("Student", back_populates="risk_scores")
+ 
+class Intervention(Base):
+    __tablename__ = "interventions"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    student_id = Column(String(50), ForeignKey("students.student_id", ondelete="CASCADE"), nullable=False, index=True)
+    status = Column(String(30), nullable=False, default="Planned")  # 'Planned', 'In Progress', 'Completed', 'Resolved'
+    assigned_staff = Column(String(100), nullable=False)
+    follow_up_date = Column(String(50), nullable=False)  # 'YYYY-MM-DD'
+    notes = Column(Text, nullable=True)
+    created_at = Column(String(50), nullable=False, default=lambda: datetime.utcnow().isoformat())
+    updated_at = Column(String(50), nullable=False, default=lambda: datetime.utcnow().isoformat())
+
+    student = relationship("Student", back_populates="interventions")

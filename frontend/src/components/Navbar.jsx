@@ -1,5 +1,6 @@
 import React from 'react';
-import { Activity, RefreshCw, UploadCloud, BrainCircuit, Sparkles } from 'lucide-react';
+import { Activity, RefreshCw, UploadCloud, BrainCircuit, Sparkles, Download } from 'lucide-react';
+import { getDownloadReportUrl } from '../services/api';
 
 export default function Navbar({
   onTriggerRecompute,
@@ -103,6 +104,17 @@ export default function Navbar({
             <BrainCircuit size={16} color="#a78bfa" />
             ML Intelligence
           </button>
+
+          <a
+            href={getDownloadReportUrl('CS101')}
+            download="EduPulseAI_CS101_Institutional_Risk_Report.csv"
+            className="btn btn-outline"
+            title="Export institution-grade student risk & intervention CSV report"
+            style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 6 }}
+          >
+            <Download size={15} color="#38bdf8" />
+            Export CSV
+          </a>
 
           <button
             onClick={onSeedData}
