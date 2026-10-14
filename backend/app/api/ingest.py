@@ -1,4 +1,5 @@
 import io
+import re
 import pandas as pd
 from fastapi import APIRouter, Depends, UploadFile, File, Form, HTTPException
 from sqlalchemy.orm import Session
@@ -33,8 +34,34 @@ VALID_LMS_STATUSES = {"completed", "late", "missing"}
 def validate_csv_dataframe(source_type: str, df: pd.DataFrame, db: Session):
     """
     Validates CSV schema, data types, missing values, foreign keys, and duplicates.
+    Normalizes numeric/prefixed student IDs (e.g. 1001 -> STU1001) and applies column aliasing.
     Returns (valid_rows, invalid_rows, duplicate_rows, issues).
     """
+    # Strip whitespace from column names
+    df.columns = [str(c).strip() for c in df.columns]
+
+    if "student_id" in df.columns:
+        df["student_id"] = df["student_id"].astype(str)
+
+    # Flexible column aliasing
+    if source_type == "assessments":
+        if "score_obtained" not in df.columns and "marks" in df.columns:
+            df["score_obtained"] = df["marks"]
+        if "max_score" not in df.columns:
+            df["max_score"] = 100.0
+        if "assessment_name" not in df.columns and "date" in df.columns:
+            df["assessment_name"] = "Assessment " + df["date"].astype(str)
+    elif source_type == "lms_activity":
+        if "delay_days" not in df.columns and "delays" in df.columns:
+            df["delay_days"] = df["delays"]
+        if "activity_type" not in df.columns:
+            df["activity_type"] = "Coursework"
+        if "completion_status" not in df.columns:
+            if "delays" in df.columns:
+                df["completion_status"] = df["delays"].apply(lambda d: "Late" if float(d or 0) > 0 else "Completed")
+            else:
+                df["completion_status"] = "Completed"
+
     issues: List[CSVValidationIssue] = []
     req_cols = REQUIRED_COLUMNS.get(source_type, [])
 
@@ -49,8 +76,32 @@ def validate_csv_dataframe(source_type: str, df: pd.DataFrame, db: Session):
             ))
         return 0, len(df), 0, issues
 
-    # Cache existing student IDs for foreign key validation
-    existing_student_ids = {s[0] for s in db.query(Student.student_id).all()}
+    # Cache existing student IDs and construct comprehensive flexible lookup mapping
+    existing_students = db.query(Student.student_id).all()
+    existing_student_ids = {s[0] for s in existing_students}
+
+    id_lookup = {}
+    for eid in existing_student_ids:
+        id_lookup[eid] = eid
+        id_lookup[eid.upper()] = eid
+        id_lookup[eid.lower()] = eid
+        # Handle numeric IDs (e.g., STU1001 -> 1001)
+        clean_num = re.sub(r"^STU-?", "", eid, flags=re.IGNORECASE)
+        id_lookup[clean_num] = eid
+        id_lookup[clean_num.lstrip("0")] = eid
+
+    def resolve_sid(raw_val: Any) -> Optional[str]:
+        if raw_val is None or pd.isna(raw_val):
+            return None
+        raw_str = str(raw_val).strip()
+        if raw_str in id_lookup:
+            return id_lookup[raw_str]
+        clean = re.sub(r"^STU-?", "", raw_str, flags=re.IGNORECASE)
+        if clean in id_lookup:
+            return id_lookup[clean]
+        if clean.lstrip("0") in id_lookup:
+            return id_lookup[clean.lstrip("0")]
+        return None
 
     valid_indices = []
     invalid_indices = []
@@ -76,7 +127,13 @@ def validate_csv_dataframe(source_type: str, df: pd.DataFrame, db: Session):
             invalid_indices.append(idx)
             continue
 
-        sid = str(row["student_id"]).strip()
+        raw_sid = row.get("student_id")
+        resolved_sid = resolve_sid(raw_sid)
+        if resolved_sid:
+            sid = resolved_sid
+            df.at[idx, "student_id"] = resolved_sid
+        else:
+            sid = str(raw_sid).strip() if raw_sid is not None else ""
 
         # Foreign key check for non-students imports
         if source_type != "students" and sid not in existing_student_ids:
@@ -361,6 +418,56 @@ async def ingest_csv_data(
                         course_id=c_id
                     ))
                     records_added += 1
+
+                # If the CSV additionally contains 'marks', record assessment mark
+                if "marks" in row and pd.notna(row["marks"]):
+                    try:
+                        obt_m = float(row["marks"])
+                        a_name = f"Session Quiz ({d_str})"
+                        existing_a = db.query(Assessment).filter(
+                            Assessment.student_id == sid,
+                            Assessment.assessment_name == a_name,
+                            Assessment.date == d_str
+                        ).first()
+                        if existing_a:
+                            existing_a.score_obtained = obt_m
+                        else:
+                            db.add(Assessment(
+                                student_id=sid,
+                                assessment_name=a_name,
+                                date=d_str,
+                                max_score=100.0,
+                                score_obtained=obt_m,
+                                course_id=c_id
+                            ))
+                    except (ValueError, TypeError):
+                        pass
+
+                # If the CSV additionally contains 'delays', record LMS activity
+                if "delays" in row and pd.notna(row["delays"]):
+                    try:
+                        del_days = float(row["delays"])
+                        act_type = "Coursework"
+                        ts_str = f"{d_str} 12:00:00"
+                        existing_lms = db.query(LMSActivity).filter(
+                            LMSActivity.student_id == sid,
+                            LMSActivity.activity_type == act_type,
+                            LMSActivity.timestamp == ts_str
+                        ).first()
+                        if existing_lms:
+                            existing_lms.delay_days = del_days
+                            existing_lms.completion_status = "Late" if del_days > 0 else "Completed"
+                        else:
+                            db.add(LMSActivity(
+                                student_id=sid,
+                                activity_type=act_type,
+                                timestamp=ts_str,
+                                delay_days=del_days,
+                                completion_status="Late" if del_days > 0 else "Completed",
+                                score_or_views=float(row.get("marks", 75.0))
+                            ))
+                    except (ValueError, TypeError):
+                        pass
             db.commit()
 
         elif source_type == "assessments":
