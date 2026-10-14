@@ -10,7 +10,8 @@ from backend.app.schemas.pydantic_models import (
     IngestResponse,
     IngestionResult,
     CSVPreviewResponse,
-    CSVValidationIssue
+    CSVValidationIssue,
+    RecomputeResponse
 )
 from backend.app.services.pipeline_service import run_full_batch_pipeline
 
@@ -307,6 +308,7 @@ async def ingest_csv_data(
         )
 
     records_added = 0
+    records_updated = 0
     req_cols = REQUIRED_COLUMNS[source_type]
 
     try:
@@ -321,6 +323,7 @@ async def ingest_csv_data(
                     existing.email = str(row["email"]).strip()
                     existing.class_id = str(row.get("class_id", existing.class_id)).strip()
                     existing.department = str(row.get("department", existing.department)).strip()
+                    records_updated += 1
                 else:
                     db.add(Student(
                         student_id=sid,
@@ -330,7 +333,7 @@ async def ingest_csv_data(
                         department=str(row.get("department", "Computer Science")).strip(),
                         enrollment_date=str(row.get("enrollment_date", "2026-01-15")).strip()
                     ))
-                records_added += 1
+                    records_added += 1
             db.commit()
 
         elif source_type == "attendance":
@@ -339,13 +342,25 @@ async def ingest_csv_data(
                 st = str(row["status"]).strip().capitalize()
                 if st.lower() not in VALID_ATTENDANCE_STATUSES:
                     continue
-                db.add(Attendance(
-                    student_id=sid,
-                    date=str(row["date"]).strip(),
-                    status=st,
-                    course_id=str(row.get("course_id", "CS101")).strip()
-                ))
-                records_added += 1
+                d_str = str(row["date"]).strip()
+                c_id = str(row.get("course_id", "CS101")).strip()
+
+                existing = db.query(Attendance).filter(
+                    Attendance.student_id == sid,
+                    Attendance.date == d_str,
+                    Attendance.course_id == c_id
+                ).first()
+                if existing:
+                    existing.status = st
+                    records_updated += 1
+                else:
+                    db.add(Attendance(
+                        student_id=sid,
+                        date=d_str,
+                        status=st,
+                        course_id=c_id
+                    ))
+                    records_added += 1
             db.commit()
 
         elif source_type == "assessments":
@@ -356,15 +371,30 @@ async def ingest_csv_data(
                     obt_s = float(row["score_obtained"])
                 except (ValueError, TypeError):
                     continue
-                db.add(Assessment(
-                    student_id=sid,
-                    assessment_name=str(row["assessment_name"]).strip(),
-                    date=str(row["date"]).strip(),
-                    max_score=max_s,
-                    score_obtained=obt_s,
-                    course_id=str(row.get("course_id", "CS101")).strip()
-                ))
-                records_added += 1
+                a_name = str(row["assessment_name"]).strip()
+                a_date = str(row["date"]).strip()
+                c_id = str(row.get("course_id", "CS101")).strip()
+
+                existing = db.query(Assessment).filter(
+                    Assessment.student_id == sid,
+                    Assessment.assessment_name == a_name,
+                    Assessment.date == a_date
+                ).first()
+                if existing:
+                    existing.max_score = max_s
+                    existing.score_obtained = obt_s
+                    existing.course_id = c_id
+                    records_updated += 1
+                else:
+                    db.add(Assessment(
+                        student_id=sid,
+                        assessment_name=a_name,
+                        date=a_date,
+                        max_score=max_s,
+                        score_obtained=obt_s,
+                        course_id=c_id
+                    ))
+                    records_added += 1
             db.commit()
 
         elif source_type == "lms_activity":
@@ -376,35 +406,70 @@ async def ingest_csv_data(
                     sc_views = float(row.get("score_or_views", 10.0))
                 except (ValueError, TypeError):
                     continue
-                db.add(LMSActivity(
-                    student_id=sid,
-                    activity_type=str(row["activity_type"]).strip(),
-                    timestamp=str(row.get("timestamp", "2026-04-01 12:00:00")).strip(),
-                    delay_days=del_days,
-                    completion_status=c_status,
-                    score_or_views=sc_views
-                ))
-                records_added += 1
+                act_type = str(row["activity_type"]).strip()
+                ts_str = str(row.get("timestamp", "2026-04-01 12:00:00")).strip()
+
+                existing = db.query(LMSActivity).filter(
+                    LMSActivity.student_id == sid,
+                    LMSActivity.activity_type == act_type,
+                    LMSActivity.timestamp == ts_str
+                ).first()
+                if existing:
+                    existing.delay_days = del_days
+                    existing.completion_status = c_status
+                    existing.score_or_views = sc_views
+                    records_updated += 1
+                else:
+                    db.add(LMSActivity(
+                        student_id=sid,
+                        activity_type=act_type,
+                        timestamp=ts_str,
+                        delay_days=del_days,
+                        completion_status=c_status,
+                        score_or_views=sc_views
+                    ))
+                    records_added += 1
             db.commit()
 
     except Exception as e:
         db.rollback()
         raise HTTPException(status_code=500, detail=f"Database commit error during ingestion: {str(e)}")
 
+    total_processed = records_added + records_updated
     pipeline_triggered = False
-    if auto_recompute and records_added > 0:
-        run_full_batch_pipeline(db)
-        pipeline_triggered = True
+    recompute_data = None
 
-    status_str = "SUCCESS" if invalid_cnt == 0 else "PARTIAL_SUCCESS"
+    if auto_recompute and total_processed > 0:
+        try:
+            pipeline_result = run_full_batch_pipeline(db)
+            pipeline_triggered = True
+            recompute_data = RecomputeResponse(
+                message="Batch scoring pipeline recomputed successfully.",
+                students_scored=pipeline_result["students_scored"],
+                execution_time_seconds=pipeline_result["execution_time_seconds"],
+                timestamp=pipeline_result["timestamp"],
+                risk_distribution=pipeline_result["risk_distribution"]
+            )
+        except Exception as e:
+            raise HTTPException(
+                status_code=500,
+                detail=f"Records ingested successfully ({records_added} added, {records_updated} updated), but recomputation pipeline failed: {str(e)}"
+            )
+
+    status_str = "success" if invalid_cnt == 0 else "partial_success"
 
     return IngestResponse(
-        message=f"Ingestion completed for '{source_type}'. {records_added} records imported ({invalid_cnt} invalid, {dup_cnt} duplicates skipped).",
+        status=status_str,
+        message=f"Ingestion completed for '{source_type}'. {total_processed} records processed ({records_added} added, {records_updated} updated, {invalid_cnt} invalid, {dup_cnt} duplicates skipped).",
+        records_imported=total_processed,
+        duplicates_skipped=dup_cnt,
         results=[IngestionResult(
             source=source_type,
-            records_processed=records_added,
-            validation_status=status_str,
+            records_processed=total_processed,
+            validation_status=status_str.upper(),
             issues_found=issue_messages
         )],
-        pipeline_triggered=pipeline_triggered
+        pipeline_triggered=pipeline_triggered,
+        recompute_triggered=pipeline_triggered,
+        recompute_result=recompute_data
     )

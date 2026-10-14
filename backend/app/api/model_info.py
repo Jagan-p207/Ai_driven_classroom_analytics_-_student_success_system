@@ -17,12 +17,18 @@ def get_model_info():
             "status": "not_trained",
             "message": "Model metadata not found. Train the model first."
         }
-    with open(meta_path, "r") as f:
-        meta = json.load(f)
-    return {
-        "status": "ready",
-        "data": meta
-    }
+    try:
+        with open(meta_path, "r") as f:
+            meta = json.load(f)
+        return {
+            "status": "ready",
+            "data": meta
+        }
+    except Exception as e:
+        return {
+            "status": "not_trained",
+            "message": f"Model metadata could not be loaded: {str(e)}"
+        }
 
 @router.post("/seed")
 def seed_sample_data():

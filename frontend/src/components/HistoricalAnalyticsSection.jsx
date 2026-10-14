@@ -9,7 +9,7 @@ import {
 } from 'recharts';
 import { fetchHistoricalAnalytics } from '../services/api';
 
-export default function HistoricalAnalyticsSection({ classId = 'CS101' }) {
+export default function HistoricalAnalyticsSection({ classId = 'CS101', refreshTrigger }) {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState(true);
@@ -25,7 +25,7 @@ export default function HistoricalAnalyticsSection({ classId = 'CS101' }) {
         console.error('Failed to load historical analytics:', err);
         setLoading(false);
       });
-  }, [classId]);
+  }, [classId, refreshTrigger]);
 
   if (!data && !loading) return null;
 

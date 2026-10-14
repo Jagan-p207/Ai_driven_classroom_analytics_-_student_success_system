@@ -6,25 +6,46 @@ export default function ClassHeatmap({
   onSelectStudent,
   selectedStudentId,
   riskFilter = 'ALL',
-  onRiskFilterChange
+  onRiskFilterChange,
+  onFilterChange
 }) {
   const [hoveredStudent, setHoveredStudent] = useState(null);
 
+  const handleFilterClick = (lvl) => {
+    if (onRiskFilterChange) onRiskFilterChange(lvl);
+    if (onFilterChange) onFilterChange(lvl);
+  };
+
+  const currentFilter = (riskFilter || 'ALL').toUpperCase();
+
+  // Category counts based on actual student risk levels
+  const counts = {
+    ALL: heatmapData.length,
+    HIGH: heatmapData.filter(s => (s.risk_level || '').toUpperCase() === 'HIGH').length,
+    MEDIUM: heatmapData.filter(s => (s.risk_level || '').toUpperCase() === 'MEDIUM').length,
+    LOW: heatmapData.filter(s => (s.risk_level || '').toUpperCase() === 'LOW').length
+  };
+
   const filtered = heatmapData.filter(s => {
-    if (!riskFilter || riskFilter === 'ALL') return true;
-    return s.risk_level.toUpperCase() === riskFilter.toUpperCase();
+    if (currentFilter === 'ALL') return true;
+    const sLevel = (s.risk_level || '').toUpperCase();
+    return sLevel === currentFilter;
   });
 
-  const getTileColor = (riskLevel, riskScore) => {
-    if (riskLevel === 'High') {
-      const alpha = 0.55 + Math.min(0.45, riskScore * 0.45);
+  const getTileColor = (riskLevel, riskScore = 0.5) => {
+    const level = (riskLevel || '').toUpperCase();
+    if (level === 'HIGH') {
+      const alpha = 0.55 + Math.min(0.45, (riskScore || 0) * 0.45);
       return `rgba(239, 68, 68, ${alpha})`;
     }
-    if (riskLevel === 'Medium') {
-      const alpha = 0.55 + Math.min(0.35, riskScore * 0.35);
+    if (level === 'MEDIUM') {
+      const alpha = 0.55 + Math.min(0.35, (riskScore || 0) * 0.35);
       return `rgba(245, 158, 11, ${alpha})`;
     }
-    return 'rgba(16, 185, 129, 0.7)';
+    if (level === 'LOW') {
+      return 'rgba(16, 185, 129, 0.7)';
+    }
+    return 'rgba(148, 163, 184, 0.5)';
   };
 
   return (
@@ -77,7 +98,7 @@ export default function ClassHeatmap({
             {['ALL', 'HIGH', 'MEDIUM', 'LOW'].map((lvl) => (
               <button
                 key={lvl}
-                onClick={() => onRiskFilterChange && onRiskFilterChange(lvl)}
+                onClick={() => handleFilterClick(lvl)}
                 style={{
                   padding: '4px 10px',
                   fontSize: '0.74rem',
@@ -85,12 +106,24 @@ export default function ClassHeatmap({
                   borderRadius: 6,
                   border: 'none',
                   cursor: 'pointer',
-                  background: riskFilter.toUpperCase() === lvl ? '#6366f1' : 'transparent',
-                  color: riskFilter.toUpperCase() === lvl ? '#fff' : 'var(--text-secondary)',
-                  transition: 'all 0.2s ease'
+                  background: currentFilter === lvl ? '#6366f1' : 'transparent',
+                  color: currentFilter === lvl ? '#fff' : 'var(--text-secondary)',
+                  transition: 'all 0.2s ease',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 5
                 }}
               >
-                {lvl}
+                <span>{lvl}</span>
+                <span style={{
+                  fontSize: '0.68rem',
+                  opacity: 0.85,
+                  background: currentFilter === lvl ? 'rgba(255,255,255,0.22)' : 'rgba(255,255,255,0.08)',
+                  padding: '1px 5px',
+                  borderRadius: 4
+                }}>
+                  {counts[lvl] ?? 0}
+                </span>
               </button>
             ))}
           </div>
@@ -99,44 +132,63 @@ export default function ClassHeatmap({
 
       {/* Grid Container */}
       <div style={{ position: 'relative' }}>
-        <div className="heatmap-grid">
-          {filtered.map((student) => {
-            const isHovered = hoveredStudent?.student_id === student.student_id;
-            const isSelected = selectedStudentId === student.student_id;
-            const bg = getTileColor(student.risk_level, student.risk_score);
+        {filtered.length === 0 ? (
+          <div style={{
+            textAlign: 'center',
+            padding: '36px 16px',
+            background: 'rgba(255, 255, 255, 0.02)',
+            borderRadius: 'var(--radius-sm)',
+            border: '1px dashed var(--border-glass)',
+            color: 'var(--text-muted)'
+          }}>
+            <AlertCircle size={28} color="var(--text-muted)" style={{ margin: '0 auto 8px', opacity: 0.7 }} />
+            <div style={{ fontSize: '0.9rem', color: '#fff', fontWeight: 600 }}>
+              No students found in {currentFilter} Risk category
+            </div>
+            <p style={{ fontSize: '0.78rem', marginTop: 4 }}>
+              Switch to another filter or reset to ALL to view all {heatmapData.length} students.
+            </p>
+          </div>
+        ) : (
+          <div className="heatmap-grid">
+            {filtered.map((student) => {
+              const isHovered = hoveredStudent?.student_id === student.student_id;
+              const isSelected = selectedStudentId === student.student_id;
+              const bg = getTileColor(student.risk_level, student.risk_score);
 
-            return (
-              <div
-                key={student.student_id}
-                className={`heatmap-tile ${isSelected ? 'selected-tile' : ''}`}
-                style={{
-                  background: bg,
-                  color: '#fff',
-                  border: isSelected
-                    ? '2px solid #38bdf8'
-                    : isHovered
-                    ? '2px solid #fff'
-                    : student.alert_flag
-                    ? '1px solid rgba(255, 255, 255, 0.4)'
-                    : '1px solid rgba(0,0,0,0.2)',
-                  boxShadow: isSelected
-                    ? '0 0 14px rgba(56, 189, 248, 0.9), inset 0 0 6px rgba(255,255,255,0.4)'
-                    : student.alert_flag && student.risk_level === 'High'
-                    ? '0 0 8px rgba(239, 68, 68, 0.6)'
-                    : 'none',
-                  transform: isSelected ? 'scale(1.12)' : 'none',
-                  zIndex: isSelected ? 5 : 1
-                }}
-                onMouseEnter={() => setHoveredStudent(student)}
-                onMouseLeave={() => setHoveredStudent(null)}
-                onClick={() => onSelectStudent(student.student_id)}
-                title={`${student.name} (${student.student_id}) - ${student.risk_level} Risk`}
-              >
-                <span>{student.student_id.replace('STU', '')}</span>
-              </div>
-            );
-          })}
-        </div>
+              return (
+                <div
+                  key={student.student_id}
+                  className={`heatmap-tile ${isSelected ? 'selected-tile' : ''}`}
+                  style={{
+                    background: bg,
+                    color: '#fff',
+                    border: isSelected
+                      ? '2px solid #38bdf8'
+                      : isHovered
+                      ? '2px solid #fff'
+                      : student.alert_flag
+                      ? '1px solid rgba(255, 255, 255, 0.4)'
+                      : '1px solid rgba(0,0,0,0.2)',
+                    boxShadow: isSelected
+                      ? '0 0 14px rgba(56, 189, 248, 0.9), inset 0 0 6px rgba(255,255,255,0.4)'
+                      : student.alert_flag && (student.risk_level || '').toUpperCase() === 'HIGH'
+                      ? '0 0 8px rgba(239, 68, 68, 0.6)'
+                      : 'none',
+                    transform: isSelected ? 'scale(1.12)' : 'none',
+                    zIndex: isSelected ? 5 : 1
+                  }}
+                  onMouseEnter={() => setHoveredStudent(student)}
+                  onMouseLeave={() => setHoveredStudent(null)}
+                  onClick={() => onSelectStudent(student.student_id)}
+                  title={`${student.name} (${student.student_id}) - ${student.risk_level} Risk`}
+                >
+                  <span>{student.student_id.replace(/^STU-?/i, '') || student.student_id}</span>
+                </div>
+              );
+            })}
+          </div>
+        )}
 
         {/* Floating Tooltip Card */}
         {hoveredStudent && (

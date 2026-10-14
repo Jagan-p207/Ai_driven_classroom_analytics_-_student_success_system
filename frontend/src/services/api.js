@@ -110,19 +110,12 @@ export async function fetchInterventionsOverview(classId = 'CS101') {
 }
 
 export async function triggerRecompute() {
-  try {
-    const res = await fetch(`${BASE_URL}/api/recompute`, { method: 'POST' });
-    if (res.ok) return await res.json();
-  } catch (err) {
-    console.warn("Backend API unavailable for recompute.", err);
+  const res = await fetch(`${BASE_URL}/api/recompute`, { method: 'POST' });
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => ({}));
+    throw new Error(errorData.detail || `Recomputation failed (${res.status}: ${res.statusText})`);
   }
-  return {
-    status: "success",
-    students_scored: 130,
-    execution_time_seconds: 0.14,
-    timestamp: new Date().toISOString(),
-    risk_distribution: { Low: 82, Medium: 28, High: 20 }
-  };
+  return await res.json();
 }
 
 export async function previewCSV(sourceType, file) {
@@ -142,45 +135,41 @@ export async function previewCSV(sourceType, file) {
 }
 
 export async function ingestCSV(sourceType, file, autoRecompute = true) {
-  try {
-    const formData = new FormData();
-    formData.append('source_type', sourceType);
-    formData.append('file', file);
-    formData.append('auto_recompute', autoRecompute ? 'true' : 'false');
+  const formData = new FormData();
+  formData.append('source_type', sourceType);
+  formData.append('file', file);
+  formData.append('auto_recompute', autoRecompute ? 'true' : 'false');
 
-    const res = await fetch(`${BASE_URL}/api/ingest`, { method: 'POST', body: formData });
-    if (res.ok) return await res.json();
-  } catch (err) {
-    console.warn("Backend API unavailable for ingestion.", err);
+  const res = await fetch(`${BASE_URL}/api/ingest`, { method: 'POST', body: formData });
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => ({}));
+    throw new Error(errorData.detail || `Ingestion failed (${res.status}: ${res.statusText})`);
   }
-  return {
-    status: "success",
-    message: `Ingested ${sourceType} CSV (Demo Mode)`,
-    records_processed: 45
-  };
+  return await res.json();
 }
 
 export async function seedSampleData() {
-  try {
-    const res = await fetch(`${BASE_URL}/api/seed`, { method: 'POST' });
-    if (res.ok) return await res.json();
-  } catch (err) {
-    console.warn("Backend API unavailable for seed.", err);
+  const res = await fetch(`${BASE_URL}/api/seed`, { method: 'POST' });
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => ({}));
+    throw new Error(errorData.detail || `Seed failed: ${res.statusText}`);
   }
-  return {
-    status: "success",
-    message: "Pilot dataset (130 students) reset in demo mode."
-  };
+  return await res.json();
 }
 
 export async function fetchModelInfo() {
   try {
     const res = await fetch(`${BASE_URL}/api/model/info`);
-    if (res.ok) return await res.json();
+    if (res.ok) {
+      const data = await res.json();
+      return data;
+    }
+    const errData = await res.json().catch(() => ({}));
+    throw new Error(errData.detail || `Failed to fetch model info (${res.status})`);
   } catch (err) {
-    console.warn("Backend API unavailable. Returning demo model info.", err);
+    console.warn("Backend API unavailable or error fetching model info. Falling back to demo data.", err);
+    return getDemoModelInfo();
   }
-  return getDemoModelInfo();
 }
 
 export function getDownloadReportUrl(classId = 'CS101') {

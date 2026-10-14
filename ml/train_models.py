@@ -167,8 +167,13 @@ def train_and_evaluate_models(X: pd.DataFrame, y: pd.Series, output_dir="ml/mode
         print("\nBuilding SHAP explainer for explainability...")
         if best_model_name in ["Random Forest", "XGBoost"]:
             explainer = shap.TreeExplainer(best_model)
+        elif hasattr(best_model, "named_steps") and "clf" in best_model.named_steps:
+            scaler = best_model.named_steps["scaler"]
+            clf = best_model.named_steps["clf"]
+            X_train_scaled = scaler.transform(X_train)
+            explainer = shap.LinearExplainer(clf, X_train_scaled)
         else:
-            explainer = shap.Explainer(best_model.predict_proba, X_train)
+            explainer = shap.LinearExplainer(best_model, X_train)
         joblib.dump(explainer, shap_explainer_path)
         has_shap = True
         print("SHAP explainer saved successfully.")

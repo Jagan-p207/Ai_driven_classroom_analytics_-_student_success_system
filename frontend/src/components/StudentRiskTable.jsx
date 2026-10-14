@@ -1,34 +1,50 @@
 import React, { useState } from 'react';
 import {
   Search, TrendingDown, TrendingUp, AlertTriangle, ArrowUpDown,
-  ChevronRight, X, Clock, CheckCircle2, UserCheck, RotateCcw
+  ChevronRight, X, Clock, CheckCircle2, RotateCcw
 } from 'lucide-react';
 
 export default function StudentRiskTable({
   students = [],
   onSelectStudent,
   riskFilter = 'ALL',
-  onRiskFilterChange
+  onRiskFilterChange,
+  onFilterChange
 }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [interventionFilter, setInterventionFilter] = useState('ALL');
   const [sortBy, setSortBy] = useState('risk_score');
   const [sortAsc, setSortAsc] = useState(false);
 
+  const handleRiskFilterChange = (lvl) => {
+    if (onRiskFilterChange) onRiskFilterChange(lvl);
+    if (onFilterChange) onFilterChange(lvl);
+  };
+
+  const normalizedFilter = (riskFilter || 'ALL').toUpperCase();
+
+  const riskCounts = {
+    ALL: students.length,
+    HIGH: students.filter(s => (s.risk_level || '').toUpperCase() === 'HIGH').length,
+    MEDIUM: students.filter(s => (s.risk_level || '').toUpperCase() === 'MEDIUM').length,
+    LOW: students.filter(s => (s.risk_level || '').toUpperCase() === 'LOW').length
+  };
+
   // Filter students
   const filtered = students.filter(s => {
     const matchesSearch =
-      s.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      s.student_id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      s.email.toLowerCase().includes(searchTerm.toLowerCase());
+      (s.name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (s.student_id || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (s.email || '').toLowerCase().includes(searchTerm.toLowerCase());
 
-    const matchesRisk = riskFilter === 'ALL' || s.risk_level.toUpperCase() === riskFilter.toUpperCase();
+    const sRisk = (s.risk_level || '').toUpperCase();
+    const matchesRisk = normalizedFilter === 'ALL' || sRisk === normalizedFilter;
 
     let matchesIntervention = true;
     if (interventionFilter === 'OVERDUE') {
       matchesIntervention = s.is_intervention_overdue === true;
     } else if (interventionFilter === 'NEEDS_ACTION') {
-      matchesIntervention = (s.risk_level === 'High' || s.risk_level === 'Medium') && (!s.latest_intervention_status || s.is_intervention_overdue);
+      matchesIntervention = (sRisk === 'HIGH' || sRisk === 'MEDIUM') && (!s.latest_intervention_status || s.is_intervention_overdue);
     } else if (interventionFilter === 'ACTIVE') {
       matchesIntervention = s.latest_intervention_status === 'Planned' || s.latest_intervention_status === 'In Progress';
     } else if (interventionFilter === 'RESOLVED') {
@@ -160,7 +176,7 @@ export default function StudentRiskTable({
             {['ALL', 'HIGH', 'MEDIUM', 'LOW'].map((lvl) => (
               <button
                 key={lvl}
-                onClick={() => onRiskFilterChange && onRiskFilterChange(lvl)}
+                onClick={() => handleRiskFilterChange(lvl)}
                 style={{
                   padding: '5px 12px',
                   fontSize: '0.76rem',
@@ -168,12 +184,24 @@ export default function StudentRiskTable({
                   borderRadius: 6,
                   border: 'none',
                   cursor: 'pointer',
-                  background: riskFilter.toUpperCase() === lvl ? '#6366f1' : 'transparent',
-                  color: riskFilter.toUpperCase() === lvl ? '#fff' : 'var(--text-secondary)',
-                  transition: 'all 0.2s ease'
+                  background: normalizedFilter === lvl ? '#6366f1' : 'transparent',
+                  color: normalizedFilter === lvl ? '#fff' : 'var(--text-secondary)',
+                  transition: 'all 0.2s ease',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 5
                 }}
               >
-                {lvl}
+                <span>{lvl}</span>
+                <span style={{
+                  fontSize: '0.68rem',
+                  opacity: 0.85,
+                  background: normalizedFilter === lvl ? 'rgba(255,255,255,0.22)' : 'rgba(255,255,255,0.08)',
+                  padding: '1px 5px',
+                  borderRadius: 4
+                }}>
+                  {riskCounts[lvl] ?? 0}
+                </span>
               </button>
             ))}
           </div>

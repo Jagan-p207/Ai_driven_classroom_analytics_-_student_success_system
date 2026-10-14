@@ -189,20 +189,65 @@ export function getDemoModelInfo() {
   return {
     status: "ready",
     data: {
-      primary_model: "XGBoost Classifier",
+      best_model_name: "Logistic Regression",
+      primary_model: "Logistic Regression",
       trained_at: "2026-10-10",
-      comparison_metrics: [
-        { model: "Logistic Regression (Baseline)", accuracy: 0.862, macro_f1: 0.841, weighted_f1: 0.854 },
-        { model: "Random Forest (Primary)", accuracy: 0.938, macro_f1: 0.924, weighted_f1: 0.935 },
-        { model: "XGBoost Classifier (Selected)", accuracy: 0.961, macro_f1: 0.952, weighted_f1: 0.960 }
-      ],
-      global_feature_importances: [
-        { feature: "score_trend", importance: 0.32, description: "Assessment Performance Trajectory Slope" },
-        { feature: "attendance_pct", importance: 0.28, description: "Overall Session Attendance Percentage" },
-        { feature: "avg_submission_delay", importance: 0.18, description: "LMS Coursework Delay Days" },
-        { feature: "composite_engagement", importance: 0.14, description: "Fused 0-100 Composite Engagement Score" },
-        { feature: "attendance_trend", importance: 0.08, description: "Attendance Trajectory Slope" }
-      ]
+      comparison_metrics: {
+        "Logistic Regression": {
+          cv_accuracy_mean: 1.0,
+          cv_f1_macro_mean: 1.0,
+          test_accuracy: 1.0,
+          test_f1_macro: 1.0,
+          test_f1_weighted: 1.0,
+          confusion_matrix: [[16, 0, 0], [0, 6, 0], [0, 0, 4]],
+          classification_report: {
+            "Low": { precision: 1.0, recall: 1.0, "f1-score": 1.0, support: 16 },
+            "Medium": { precision: 1.0, recall: 1.0, "f1-score": 1.0, support: 6 },
+            "High": { precision: 1.0, recall: 1.0, "f1-score": 1.0, support: 4 }
+          }
+        },
+        "Random Forest": {
+          cv_accuracy_mean: 1.0,
+          cv_f1_macro_mean: 1.0,
+          test_accuracy: 1.0,
+          test_f1_macro: 1.0,
+          test_f1_weighted: 1.0,
+          confusion_matrix: [[16, 0, 0], [0, 6, 0], [0, 0, 4]],
+          classification_report: {
+            "Low": { precision: 1.0, recall: 1.0, "f1-score": 1.0, support: 16 },
+            "Medium": { precision: 1.0, recall: 1.0, "f1-score": 1.0, support: 6 },
+            "High": { precision: 1.0, recall: 1.0, "f1-score": 1.0, support: 4 }
+          }
+        },
+        "XGBoost": {
+          cv_accuracy_mean: 0.961,
+          cv_f1_macro_mean: 0.943,
+          test_accuracy: 1.0,
+          test_f1_macro: 1.0,
+          test_f1_weighted: 1.0,
+          confusion_matrix: [[16, 0, 0], [0, 6, 0], [0, 0, 4]],
+          classification_report: {
+            "Low": { precision: 1.0, recall: 1.0, "f1-score": 1.0, support: 16 },
+            "Medium": { precision: 1.0, recall: 1.0, "f1-score": 1.0, support: 6 },
+            "High": { precision: 1.0, recall: 1.0, "f1-score": 1.0, support: 4 }
+          }
+        }
+      },
+      global_feature_importances: {
+        "completion_rate": 16.31,
+        "avg_score": 10.45,
+        "composite_engagement": 10.11,
+        "avg_submission_delay": 9.68,
+        "max_submission_delay": 9.59,
+        "recent_score": 9.57,
+        "attendance_pct": 8.90,
+        "attendance_trend": 6.27,
+        "missing_submissions_count": 6.27,
+        "score_trend": 4.48,
+        "score_std": 4.30,
+        "submission_delay_trend": 4.07
+      },
+      has_shap: true
     }
   };
 }

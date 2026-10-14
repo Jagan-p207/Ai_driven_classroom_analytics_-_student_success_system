@@ -140,17 +140,19 @@ export default function App() {
               onSelectStudent={(id) => setSelectedStudentId(id)}
               selectedStudentId={selectedStudentId}
               riskFilter={riskFilter}
+              onRiskFilterChange={(f) => setRiskFilter(f)}
               onFilterChange={(f) => setRiskFilter(f)}
             />
 
             {/* Historical Milestone Progression & Mobility Section */}
-            <HistoricalAnalyticsSection classId="CS101" />
+            <HistoricalAnalyticsSection classId="CS101" refreshTrigger={lastRecomputeTime} />
 
             {/* Full Student Roster & Trend Registry */}
             <StudentRiskTable
               students={students}
               onSelectStudent={(id) => setSelectedStudentId(id)}
               riskFilter={riskFilter}
+              onRiskFilterChange={(f) => setRiskFilter(f)}
               onFilterChange={(f) => setRiskFilter(f)}
             />
           </div>
@@ -183,10 +185,17 @@ export default function App() {
       <IngestionModal
         isOpen={isIngestOpen}
         onClose={() => setIsIngestOpen(false)}
-        onIngestionComplete={() => {
-          setIsIngestOpen(false);
+        onIngestionComplete={(res) => {
           loadData();
-          showNotification('New records ingested. Recomputing risk scores...');
+          if (res?.recompute_result?.timestamp) {
+            setLastRecomputeTime(res.recompute_result.timestamp);
+          } else {
+            setLastRecomputeTime(new Date().toISOString());
+          }
+          const msg = res?.recompute_result
+            ? `Ingested ${res.records_imported} records. Recomputed risk scores for ${res.recompute_result.students_scored} students.`
+            : res?.message || 'Ingestion completed successfully.';
+          showNotification(msg);
         }}
       />
 

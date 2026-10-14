@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  X, UploadCloud, CheckCircle2, AlertCircle, FileText, Database,
+  X, UploadCloud, AlertCircle, FileText, Database,
   ArrowRight, RefreshCw, AlertTriangle, Check, RotateCcw
 } from 'lucide-react';
 import { previewCSV, ingestCSV, seedSampleData } from '../services/api';
@@ -367,7 +367,7 @@ export default function IngestionModal({ isOpen, onClose, onIngestionComplete })
 
           {/* STEP 3: RESULT */}
           {step === 'result' && result && (
-            <div style={{ textAlign: 'center', padding: '20px 0' }}>
+            <div style={{ textAlign: 'center', padding: '16px 0' }}>
               <div style={{
                 width: 48,
                 height: 48,
@@ -384,9 +384,48 @@ export default function IngestionModal({ isOpen, onClose, onIngestionComplete })
               <h4 style={{ fontSize: '1.1rem', color: '#fff', marginBottom: 8 }}>
                 Ingestion Completed Successfully
               </h4>
-              <p style={{ fontSize: '0.84rem', color: 'var(--text-secondary)', marginBottom: 20 }}>
+              <p style={{ fontSize: '0.84rem', color: 'var(--text-secondary)', marginBottom: 16 }}>
                 {result.message}
               </p>
+
+              {/* Recomputation Metrics if triggered */}
+              {result.recompute_result && (
+                <div style={{
+                  background: 'rgba(255, 255, 255, 0.03)',
+                  border: '1px solid var(--border-glass)',
+                  borderRadius: 8,
+                  padding: '16px',
+                  marginBottom: 20,
+                  textAlign: 'left'
+                }}>
+                  <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#38bdf8', marginBottom: 10, display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <RefreshCw size={14} /> ML Batch Recomputation Summary
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(110px, 1fr))', gap: 10, marginBottom: 12 }}>
+                    <div style={{ background: 'rgba(255, 255, 255, 0.04)', padding: '8px 10px', borderRadius: 6 }}>
+                      <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>Students Scored</div>
+                      <div style={{ fontSize: '1.1rem', fontWeight: 700, color: '#fff' }}>{result.recompute_result.students_scored}</div>
+                    </div>
+                    <div style={{ background: 'rgba(239, 68, 68, 0.1)', padding: '8px 10px', borderRadius: 6, border: '1px solid rgba(239, 68, 68, 0.2)' }}>
+                      <div style={{ fontSize: '0.7rem', color: '#fca5a5' }}>High Risk</div>
+                      <div style={{ fontSize: '1.1rem', fontWeight: 700, color: '#ef4444' }}>{result.recompute_result.risk_distribution?.High ?? 0}</div>
+                    </div>
+                    <div style={{ background: 'rgba(245, 158, 11, 0.1)', padding: '8px 10px', borderRadius: 6, border: '1px solid rgba(245, 158, 11, 0.2)' }}>
+                      <div style={{ fontSize: '0.7rem', color: '#fde68a' }}>Medium Risk</div>
+                      <div style={{ fontSize: '1.1rem', fontWeight: 700, color: '#f59e0b' }}>{result.recompute_result.risk_distribution?.Medium ?? 0}</div>
+                    </div>
+                    <div style={{ background: 'rgba(16, 185, 129, 0.1)', padding: '8px 10px', borderRadius: 6, border: '1px solid rgba(16, 185, 129, 0.2)' }}>
+                      <div style={{ fontSize: '0.7rem', color: '#a7f3d0' }}>Low Risk</div>
+                      <div style={{ fontSize: '1.1rem', fontWeight: 700, color: '#10b981' }}>{result.recompute_result.risk_distribution?.Low ?? 0}</div>
+                    </div>
+                  </div>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8 }}>
+                    <span>Pipeline Runtime: <strong style={{ color: '#e2e8f0' }}>{result.recompute_result.execution_time_seconds}s</strong></span>
+                    <span>Model: <strong style={{ color: '#e2e8f0' }}>{result.recompute_result.model_name || 'Logistic Regression (SHAP)'}</strong></span>
+                  </div>
+                </div>
+              )}
+
               <button
                 onClick={() => {
                   resetState();

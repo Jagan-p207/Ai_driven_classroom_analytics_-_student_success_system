@@ -131,9 +131,14 @@ class IngestionResult(BaseModel):
     issues_found: List[str] = []
 
 class IngestResponse(BaseModel):
+    status: str = "success"
     message: str
-    results: List[IngestionResult]
-    pipeline_triggered: bool
+    records_imported: int = 0
+    duplicates_skipped: int = 0
+    results: List[IngestionResult] = []
+    pipeline_triggered: bool = False
+    recompute_triggered: bool = False
+    recompute_result: Optional['RecomputeResponse'] = None
 
 class CSVValidationIssue(BaseModel):
     row: Optional[int] = None

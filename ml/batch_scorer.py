@@ -97,19 +97,51 @@ def compute_contributions_for_student(
     student_feats: pd.Series,
     model,
     explainer,
-    predicted_class_idx: int
+    predicted_class_idx: int,
+    precomputed_shap: Any = None
 ) -> List[Dict[str, Any]]:
     """
     Computes top contributing factors for a single student using SHAP or fallback.
     """
-    X_single = pd.DataFrame([student_feats[FEATURE_COLUMNS]])
     contributions = []
-
-    # Attempt SHAP computation
     shap_calculated = False
-    if explainer is not None:
+
+    # 1. Use precomputed SHAP values if available
+    if precomputed_shap is not None:
         try:
-            shap_values = explainer(X_single)
+            values = precomputed_shap
+            if hasattr(values, "shape") and len(values.shape) == 2:  # (features, classes)
+                target_idx = max(1, predicted_class_idx)
+                if target_idx < values.shape[1]:
+                    student_shap = values[:, target_idx]
+                else:
+                    student_shap = values[:, -1]
+            elif hasattr(values, "shape") and len(values.shape) == 1:
+                student_shap = values
+            else:
+                student_shap = np.array(values).flatten()
+
+            for feat, val, s_val in zip(FEATURE_COLUMNS, student_feats[FEATURE_COLUMNS], student_shap):
+                contributions.append({
+                    "feature": feat,
+                    "label": HUMAN_FACTOR_NAMES.get(feat, feat),
+                    "value": round(float(val), 2),
+                    "impact": round(float(s_val), 4),
+                    "is_risk_driver": bool(s_val > 0)
+                })
+            shap_calculated = True
+        except Exception:
+            shap_calculated = False
+
+    # 2. Attempt single-row SHAP computation if not precomputed
+    if not shap_calculated and explainer is not None:
+        try:
+            X_single = pd.DataFrame([student_feats[FEATURE_COLUMNS]])
+            if hasattr(model, "named_steps") and "scaler" in model.named_steps:
+                X_single_trans = model.named_steps["scaler"].transform(X_single)
+            else:
+                X_single_trans = X_single
+            shap_values = explainer(X_single_trans)
             # Depending on explainer type, values could be shape (1, features, classes) or (1, features)
             values = shap_values.values
             if len(values.shape) == 3: # multi-class
@@ -188,6 +220,19 @@ def batch_score_students(
     scored_records = []
     now_iso = datetime.utcnow().isoformat()
 
+    # Precompute SHAP values across all rows in a single batch pass
+    all_shap_values = None
+    if explainer is not None:
+        try:
+            if hasattr(model, "named_steps") and "scaler" in model.named_steps:
+                X_trans = model.named_steps["scaler"].transform(X)
+            else:
+                X_trans = X
+            computed = explainer(X_trans)
+            all_shap_values = computed.values
+        except Exception:
+            all_shap_values = None
+
     for i in range(len(df_features)):
         row = df_features.iloc[i]
         pred_idx = int(preds[i])
@@ -208,8 +253,9 @@ def batch_score_students(
         # Alert flag: triggered if Medium or High risk, or score >= 0.35
         alert_flag = bool(pred_label in ["Medium", "High"] or r_score >= 0.35)
 
-        # Contributing factors for explainability
-        top_factors = compute_contributions_for_student(row, model, explainer, pred_idx)
+        # Contributing factors for explainability (using precomputed SHAP if available)
+        pre_shap = all_shap_values[i] if all_shap_values is not None else None
+        top_factors = compute_contributions_for_student(row, model, explainer, pred_idx, precomputed_shap=pre_shap)
         recommendations = generate_recommendations(pred_label, top_factors)
 
         scored_records.append({
