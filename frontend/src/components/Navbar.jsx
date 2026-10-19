@@ -1,8 +1,10 @@
 import React from 'react';
-import { Activity, RefreshCw, UploadCloud, BrainCircuit, Sparkles, Download } from 'lucide-react';
+import { GraduationCap, RefreshCw, Upload, Brain, Download, Database } from 'lucide-react';
 import { getDownloadReportUrl } from '../services/api';
 
 export default function Navbar({
+  activeView = 'overview',
+  onSelectView,
   onTriggerRecompute,
   recomputing,
   onOpenIngest,
@@ -10,66 +12,93 @@ export default function Navbar({
   onSeedData,
   lastRecomputeTime
 }) {
+  const navItems = [
+    { id: 'overview', label: 'Class Overview' },
+    { id: 'roster', label: 'Student Registry' },
+    { id: 'ml-models', label: 'ML Intelligence' },
+    { id: 'data-ingest', label: 'Data Ingestion' }
+  ];
+
+  const handleNavClick = (id) => {
+    if (onSelectView) {
+      onSelectView(id);
+    }
+    if (id === 'data-ingest' && onOpenIngest) {
+      onOpenIngest();
+    } else if (id === 'ml-models' && onOpenModelInfo) {
+      onOpenModelInfo();
+    }
+  };
+
   return (
     <header style={{
-      background: 'rgba(10, 14, 26, 0.85)',
-      backdropFilter: 'blur(16px)',
-      borderBottom: '1px solid var(--border-glass)',
+      background: 'var(--bg-surface)',
+      borderBottom: '1px solid var(--border-subtle)',
       position: 'sticky',
       top: 0,
       zIndex: 100,
-      padding: '14px 28px'
+      boxShadow: '0 1px 2px rgba(15, 23, 42, 0.04)'
     }}>
+      {/* Top Institutional Context Bar */}
       <div style={{
         maxWidth: 1400,
         margin: '0 auto',
+        padding: '12px 28px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
         flexWrap: 'wrap',
         gap: 16
       }}>
-        {/* Brand */}
+        {/* Brand & Context */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <div style={{
-            width: 42,
-            height: 42,
-            borderRadius: 12,
-            background: 'linear-gradient(135deg, #6366f1 0%, #06b6d4 100%)',
+            width: 38,
+            height: 38,
+            borderRadius: 'var(--radius-md)',
+            background: 'var(--color-primary-subtle)',
+            border: '1px solid var(--color-primary-border)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: '0 0 20px rgba(99, 102, 241, 0.4)'
+            color: 'var(--color-primary)'
           }}>
-            <Activity size={24} color="#fff" />
+            <GraduationCap size={22} strokeWidth={2} />
           </div>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <h1 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#fff', letterSpacing: '-0.02em' }}>
+              <span style={{
+                fontSize: '1.18rem',
+                fontWeight: 700,
+                color: 'var(--text-primary)',
+                fontFamily: 'var(--font-heading)',
+                letterSpacing: '-0.02em'
+              }}>
                 EduPulse AI
-              </h1>
+              </span>
               <span style={{
                 fontSize: '0.68rem',
-                fontWeight: 700,
-                padding: '2px 8px',
-                borderRadius: 99,
-                background: 'rgba(99, 102, 241, 0.2)',
-                color: '#a5b4fc',
-                border: '1px solid rgba(99, 102, 241, 0.4)'
+                fontWeight: 600,
+                padding: '2px 7px',
+                borderRadius: 'var(--radius-xs)',
+                background: 'var(--bg-subtle)',
+                color: 'var(--text-muted)',
+                border: '1px solid var(--border-subtle)',
+                letterSpacing: '0.04em'
               }}>
-                EARLY-WARNING SYSTEM
+                EARLY-WARNING ANALYTICS
               </span>
             </div>
-            <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
-              Classroom Analytics & Student Success • Class CS101
+            <p style={{ fontSize: '0.76rem', color: 'var(--text-muted)', marginTop: 1, margin: 0 }}>
+              Class CS101 • Computer Science • Fall Semester
             </p>
           </div>
         </div>
 
         {/* Action Controls */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
           {lastRecomputeTime && (
-            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginRight: 4 }}>
+            <span style={{ fontSize: '0.74rem', color: 'var(--text-muted)', marginRight: 4 }}>
               Scored: {new Date(lastRecomputeTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
             </span>
           )}
@@ -78,30 +107,30 @@ export default function Navbar({
             onClick={onTriggerRecompute}
             disabled={recomputing}
             className="btn btn-primary"
-            style={{ opacity: recomputing ? 0.7 : 1 }}
-            title="Batch inference job calculates latest risk scores & SHAP contributions"
+            style={{ fontSize: '0.82rem', padding: '7px 13px' }}
+            title="Batch inference pipeline recomputes risk scores across all students"
           >
-            <RefreshCw size={16} className={recomputing ? 'spin-anim' : ''} style={{
-              animation: recomputing ? 'spin 1s linear infinite' : 'none'
-            }} />
+            <RefreshCw size={14} className={recomputing ? 'spin-anim' : ''} strokeWidth={2} />
             {recomputing ? 'Scoring Batch...' : 'Batch Recompute'}
           </button>
 
           <button
             onClick={onOpenIngest}
             className="btn btn-outline"
-            title="Upload CSV records for attendance, marks, or LMS logs"
+            style={{ fontSize: '0.82rem', padding: '7px 12px' }}
+            title="Upload CSV records for attendance, assessment marks, or LMS activity"
           >
-            <UploadCloud size={16} color="#38bdf8" />
+            <Upload size={14} strokeWidth={2} />
             Ingest CSV
           </button>
 
           <button
             onClick={onOpenModelInfo}
             className="btn btn-outline"
-            title="View trained ML models, SHAP explainability, and feature importances"
+            style={{ fontSize: '0.82rem', padding: '7px 12px' }}
+            title="Inspect machine learning benchmark comparison and SHAP feature attributions"
           >
-            <BrainCircuit size={16} color="#a78bfa" />
+            <Brain size={14} strokeWidth={2} />
             ML Intelligence
           </button>
 
@@ -109,29 +138,60 @@ export default function Navbar({
             href={getDownloadReportUrl('CS101')}
             download="EduPulseAI_CS101_Institutional_Risk_Report.csv"
             className="btn btn-outline"
-            title="Export institution-grade student risk & intervention CSV report"
-            style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 6 }}
+            title="Export institution-grade student risk CSV report"
+            style={{ textDecoration: 'none', fontSize: '0.82rem', padding: '7px 12px' }}
           >
-            <Download size={15} color="#38bdf8" />
+            <Download size={14} strokeWidth={2} />
             Export CSV
           </a>
 
           <button
             onClick={onSeedData}
             className="btn btn-outline"
-            style={{ fontSize: '0.8rem', padding: '10px 14px' }}
-            title="Reload synthetic pilot dataset (130 students)"
+            style={{ fontSize: '0.78rem', padding: '7px 10px', color: 'var(--text-muted)' }}
+            title="Reset synthetic baseline pilot cohort dataset (130 students)"
           >
-            <Sparkles size={15} color="#34d399" />
-            Sample Data
+            <Database size={13} strokeWidth={2} />
+            Reset Data
           </button>
         </div>
       </div>
-      <style>{`
-        @keyframes spin {
-          100% { transform: rotate(360deg); }
-        }
-      `}</style>
+
+      {/* Navigation View Switcher Tabs */}
+      <div style={{
+        maxWidth: 1400,
+        margin: '0 auto',
+        padding: '0 28px',
+        display: 'flex',
+        gap: 4,
+        borderTop: '1px solid var(--border-subtle)'
+      }}>
+        {navItems.map((item) => {
+          const isActive = activeView === item.id;
+          return (
+            <button
+              key={item.id}
+              onClick={() => handleNavClick(item.id)}
+              style={{
+                background: 'none',
+                border: 'none',
+                borderBottom: isActive ? '2px solid var(--color-primary)' : '2px solid transparent',
+                color: isActive ? 'var(--color-primary)' : 'var(--text-muted)',
+                fontWeight: isActive ? 600 : 500,
+                fontSize: '0.82rem',
+                padding: '10px 14px',
+                cursor: 'pointer',
+                transition: 'all 0.15s ease',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 6
+              }}
+            >
+              {item.label}
+            </button>
+          );
+        })}
+      </div>
     </header>
   );
 }

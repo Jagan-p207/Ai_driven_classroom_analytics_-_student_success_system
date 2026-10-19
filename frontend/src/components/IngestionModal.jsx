@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import {
-  X, UploadCloud, AlertCircle, FileText, Database,
-  ArrowRight, RefreshCw, AlertTriangle, Check, RotateCcw
+  X, Upload, AlertCircle, FileText, CheckCircle2,
+  ArrowRight, RefreshCw, AlertTriangle, RotateCcw, Check
 } from 'lucide-react';
 import { previewCSV, ingestCSV, seedSampleData } from '../services/api';
 
-export default function IngestionModal({ isOpen, onClose, onIngestionComplete }) {
+export function IngestionContent({ onClose, onIngestionComplete, isModal = true }) {
   const [sourceType, setSourceType] = useState('attendance');
   const [selectedFile, setSelectedFile] = useState(null);
   const [autoRecompute, setAutoRecompute] = useState(true);
@@ -17,8 +17,6 @@ export default function IngestionModal({ isOpen, onClose, onIngestionComplete })
   const [uploading, setUploading] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
-
-  if (!isOpen) return null;
 
   const resetState = () => {
     setSelectedFile(null);
@@ -71,7 +69,7 @@ export default function IngestionModal({ isOpen, onClose, onIngestionComplete })
       const res = await ingestCSV(sourceType, selectedFile, autoRecompute);
       setResult(res);
       setStep('result');
-      if (onIngestionComplete) onIngestionComplete();
+      if (onIngestionComplete) onIngestionComplete(res);
     } catch (err) {
       setError(err.message || 'Ingestion commit failed.');
     } finally {
@@ -85,9 +83,9 @@ export default function IngestionModal({ isOpen, onClose, onIngestionComplete })
     setResult(null);
     try {
       const res = await seedSampleData();
-      setResult({ message: res.message });
+      setResult({ message: res.message, records_imported: 130 });
       setStep('result');
-      if (onIngestionComplete) onIngestionComplete();
+      if (onIngestionComplete) onIngestionComplete(res);
     } catch (err) {
       setError(err.message || 'Failed to seed sample dataset.');
     } finally {
@@ -96,348 +94,434 @@ export default function IngestionModal({ isOpen, onClose, onIngestionComplete })
   };
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" style={{ maxWidth: step === 'preview' ? 760 : 580 }} onClick={(e) => e.stopPropagation()}>
-        {/* Header */}
+    <div style={{ padding: isModal ? '20px 24px' : '0' }}>
+      {/* Workflow Step Indicator */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 8,
+        marginBottom: 20,
+        fontSize: '0.74rem'
+      }}>
+        <span style={{
+          fontWeight: step === 'upload' ? 600 : 500,
+          color: step === 'upload' ? 'var(--color-primary)' : 'var(--text-muted)',
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: 4
+        }}>
+          <span style={{
+            width: 18,
+            height: 18,
+            borderRadius: '50%',
+            background: step === 'upload' ? 'var(--color-primary)' : 'var(--border-subtle)',
+            color: step === 'upload' ? '#ffffff' : 'var(--text-muted)',
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '0.68rem',
+            fontWeight: 700
+          }}>1</span>
+          Select Dataset
+        </span>
+        <ArrowRight size={12} color="var(--border-medium)" />
+        <span style={{
+          fontWeight: step === 'preview' ? 600 : 500,
+          color: step === 'preview' ? 'var(--color-primary)' : 'var(--text-muted)',
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: 4
+        }}>
+          <span style={{
+            width: 18,
+            height: 18,
+            borderRadius: '50%',
+            background: step === 'preview' ? 'var(--color-primary)' : 'var(--border-subtle)',
+            color: step === 'preview' ? '#ffffff' : 'var(--text-muted)',
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '0.68rem',
+            fontWeight: 700
+          }}>2</span>
+          Validate Schema
+        </span>
+        <ArrowRight size={12} color="var(--border-medium)" />
+        <span style={{
+          fontWeight: step === 'result' ? 600 : 500,
+          color: step === 'result' ? 'var(--risk-low-text)' : 'var(--text-muted)',
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: 4
+        }}>
+          <span style={{
+            width: 18,
+            height: 18,
+            borderRadius: '50%',
+            background: step === 'result' ? 'var(--risk-low-solid)' : 'var(--border-subtle)',
+            color: step === 'result' ? '#ffffff' : 'var(--text-muted)',
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '0.68rem',
+            fontWeight: 700
+          }}>3</span>
+          Batch Scoring
+        </span>
+      </div>
+
+      {error && (
         <div style={{
-          padding: '20px 24px',
-          borderBottom: '1px solid var(--border-glass)',
+          background: 'var(--risk-high-bg)',
+          border: '1px solid var(--risk-high-border)',
+          borderRadius: 'var(--radius-sm)',
+          padding: '10px 12px',
+          color: 'var(--risk-high-text)',
+          fontSize: '0.8rem',
+          marginBottom: 16,
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'space-between'
+          gap: 8
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <UploadCloud size={20} color="#38bdf8" />
-            <h3 style={{ fontSize: '1.15rem', color: '#fff', margin: 0 }}>
-              Institutional Data Ingestion & Validation Pipeline
+          <AlertCircle size={15} strokeWidth={2} style={{ flexShrink: 0 }} />
+          <span>{error}</span>
+        </div>
+      )}
+
+      {/* STEP 1: Upload & File Selection */}
+      {step === 'upload' && (
+        <div>
+          <div style={{ marginBottom: 14 }}>
+            <label style={{ display: 'block', fontSize: '0.74rem', color: 'var(--text-muted)', fontWeight: 600, marginBottom: 4 }}>
+              DATA SOURCE ENTITY
+            </label>
+            <select
+              value={sourceType}
+              onChange={(e) => setSourceType(e.target.value)}
+              className="form-select"
+              style={{ width: '100%', padding: '7px 10px' }}
+            >
+              <option value="attendance">Daily Attendance Log (student_id, date, status)</option>
+              <option value="assessments">Examination Marks (student_id, assessment_name, date, max_score, score_obtained)</option>
+              <option value="lms_activity">LMS Coursework Submissions (student_id, activity_type, delay_days, completion_status)</option>
+              <option value="students">Student Roster Registry (student_id, name, email)</option>
+            </select>
+          </div>
+
+          {/* Drag & Drop File Upload Area */}
+          <div
+            onDragOver={(e) => e.preventDefault()}
+            onDrop={(e) => {
+              e.preventDefault();
+              if (e.dataTransfer.files?.[0]) handleFileSelect(e.dataTransfer.files[0]);
+            }}
+            style={{
+              border: `2px dashed ${selectedFile ? 'var(--color-primary)' : 'var(--border-medium)'}`,
+              borderRadius: 'var(--radius-md)',
+              padding: '28px 20px',
+              textAlign: 'center',
+              background: selectedFile ? 'var(--color-primary-subtle)' : 'var(--bg-subtle)',
+              cursor: 'pointer',
+              marginBottom: 14,
+              transition: 'all 0.15s ease'
+            }}
+            onClick={() => document.getElementById('csvFileInput')?.click()}
+          >
+            <input
+              id="csvFileInput"
+              type="file"
+              accept=".csv"
+              style={{ display: 'none' }}
+              onChange={(e) => handleFileSelect(e.target.files?.[0])}
+            />
+            <div style={{
+              width: 38,
+              height: 38,
+              borderRadius: '50%',
+              background: '#ffffff',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: 'var(--color-primary)',
+              boxShadow: 'var(--shadow-xs)',
+              marginBottom: 8
+            }}>
+              <Upload size={18} strokeWidth={2} />
+            </div>
+            <div style={{ fontSize: '0.86rem', fontWeight: 600, color: 'var(--text-primary)' }}>
+              {selectedFile ? selectedFile.name : 'Choose or drag a CSV file to validate'}
+            </div>
+            <p style={{ fontSize: '0.74rem', color: 'var(--text-muted)', marginTop: 2, margin: '2px 0 0' }}>
+              {selectedFile ? `${(selectedFile.size / 1024).toFixed(1)} KB` : 'Maximum file size 10MB • UTF-8 CSV formatting'}
+            </p>
+          </div>
+
+          {/* Options */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            background: 'var(--bg-subtle)',
+            padding: '10px 14px',
+            borderRadius: 'var(--radius-sm)',
+            border: '1px solid var(--border-subtle)',
+            marginBottom: 18
+          }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
+              <input
+                type="checkbox"
+                checked={autoRecompute}
+                onChange={(e) => setAutoRecompute(e.target.checked)}
+                style={{ accentColor: 'var(--color-primary)', cursor: 'pointer' }}
+              />
+              <span>Trigger batch scoring model immediately after ingestion</span>
+            </label>
+          </div>
+
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <button
+              type="button"
+              onClick={handleSeed}
+              disabled={uploading}
+              className="btn btn-outline"
+              style={{ fontSize: '0.78rem' }}
+              title="Reset synthetic baseline pilot cohort dataset"
+            >
+              <RotateCcw size={12} strokeWidth={2} /> Reload Pilot Dataset
+            </button>
+
+            <button
+              type="button"
+              onClick={handleGeneratePreview}
+              disabled={!selectedFile || previewing}
+              className="btn btn-primary"
+            >
+              {previewing ? (
+                <>
+                  <RefreshCw size={14} className="spin-anim" strokeWidth={2} />
+                  Validating Schema...
+                </>
+              ) : (
+                <>
+                  Validate & Preview <ArrowRight size={14} strokeWidth={2} />
+                </>
+              )}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* STEP 2: Preview & Validation Table */}
+      {step === 'preview' && previewData && (
+        <div>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))',
+            gap: 10,
+            marginBottom: 14
+          }}>
+            <div style={{ background: 'var(--bg-subtle)', padding: 10, borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-subtle)' }}>
+              <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)' }}>TOTAL ROWS</div>
+              <div style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--text-primary)' }}>{previewData.total_rows}</div>
+            </div>
+            <div style={{ background: 'var(--risk-low-bg)', padding: 10, borderRadius: 'var(--radius-sm)', border: '1px solid var(--risk-low-border)' }}>
+              <div style={{ fontSize: '0.68rem', color: 'var(--risk-low-text)' }}>VALID ROWS</div>
+              <div style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--risk-low-text)' }}>{previewData.valid_rows_count}</div>
+            </div>
+            <div style={{ background: previewData.invalid_rows_count > 0 ? 'var(--risk-high-bg)' : 'var(--bg-subtle)', padding: 10, borderRadius: 'var(--radius-sm)', border: `1px solid ${previewData.invalid_rows_count > 0 ? 'var(--risk-high-border)' : 'var(--border-subtle)'}` }}>
+              <div style={{ fontSize: '0.68rem', color: previewData.invalid_rows_count > 0 ? 'var(--risk-high-text)' : 'var(--text-muted)' }}>INVALID ROWS</div>
+              <div style={{ fontSize: '1.2rem', fontWeight: 700, color: previewData.invalid_rows_count > 0 ? 'var(--risk-high-text)' : 'var(--text-primary)' }}>{previewData.invalid_rows_count}</div>
+            </div>
+            <div style={{ background: 'var(--bg-subtle)', padding: 10, borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-subtle)' }}>
+              <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)' }}>DUPLICATES</div>
+              <div style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--text-primary)' }}>{previewData.duplicate_rows_count || 0}</div>
+            </div>
+          </div>
+
+          {/* Validation Issues Alert */}
+          {previewData.issues && previewData.issues.length > 0 && (
+            <div style={{
+              background: 'var(--risk-med-bg)',
+              border: '1px solid var(--risk-med-border)',
+              borderRadius: 'var(--radius-sm)',
+              padding: 10,
+              marginBottom: 14,
+              maxHeight: 120,
+              overflowY: 'auto'
+            }}>
+              <div style={{ fontSize: '0.74rem', fontWeight: 600, color: 'var(--risk-med-text)', marginBottom: 4 }}>
+                Detected Validation Notes:
+              </div>
+              {previewData.issues.slice(0, 5).map((iss, i) => (
+                <div key={i} style={{ fontSize: '0.72rem', color: 'var(--text-secondary)' }}>
+                  • Row {iss.row || 'Header'} [{iss.column}]: {iss.message}
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Preview Rows Table */}
+          {previewData.preview_rows && previewData.preview_rows.length > 0 && (
+            <div style={{ overflowX: 'auto', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-sm)', marginBottom: 16 }}>
+              <table className="editorial-table" style={{ fontSize: '0.74rem' }}>
+                <thead>
+                  <tr>
+                    {Object.keys(previewData.preview_rows[0]).map((col) => (
+                      <th key={col} style={{ padding: '6px 8px' }}>{col}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {previewData.preview_rows.slice(0, 4).map((row, i) => (
+                    <tr key={i}>
+                      {Object.values(row).map((val, ci) => (
+                        <td key={ci} style={{ padding: '6px 8px', color: 'var(--text-secondary)' }}>{String(val)}</td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <button
+              type="button"
+              onClick={() => setStep('upload')}
+              className="btn btn-outline"
+              style={{ fontSize: '0.78rem' }}
+            >
+              Back to File
+            </button>
+
+            <button
+              type="button"
+              onClick={handleCommitIngest}
+              disabled={uploading || previewData.can_import === false}
+              className="btn btn-primary"
+            >
+              {uploading ? (
+                <>
+                  <RefreshCw size={14} className="spin-anim" strokeWidth={2} />
+                  Ingesting & Recomputing...
+                </>
+              ) : (
+                <>
+                  <Check size={14} strokeWidth={2} />
+                  Commit & Recompute
+                </>
+              )}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* STEP 3: Ingestion Result */}
+      {step === 'result' && result && (
+        <div style={{ textAlign: 'center', padding: '20px 10px' }}>
+          <div style={{
+            width: 44,
+            height: 44,
+            borderRadius: '50%',
+            background: 'var(--risk-low-bg)',
+            border: '1px solid var(--risk-low-border)',
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: 'var(--risk-low-solid)',
+            marginBottom: 12
+          }}>
+            <CheckCircle2 size={24} strokeWidth={2} />
+          </div>
+          <h4 style={{ fontSize: '1.05rem', color: 'var(--text-primary)', marginBottom: 6 }}>
+            Ingestion & Recomputation Completed
+          </h4>
+          <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', maxWidth: 460, margin: '0 auto 16px', lineHeight: 1.5 }}>
+            {result.message}
+          </p>
+
+          {result.recompute_result && (
+            <div style={{
+              background: 'var(--bg-subtle)',
+              border: '1px solid var(--border-subtle)',
+              borderRadius: 'var(--radius-sm)',
+              padding: 12,
+              maxWidth: 420,
+              margin: '0 auto 16px',
+              textAlign: 'left',
+              fontSize: '0.76rem'
+            }}>
+              <div>Students Scored: <strong style={{ color: 'var(--text-primary)' }}>{result.recompute_result.students_scored}</strong></div>
+              <div>Execution Time: <strong style={{ color: 'var(--text-primary)' }}>{result.recompute_result.execution_time_seconds}s</strong></div>
+              {result.recompute_result.risk_distribution && (
+                <div style={{ marginTop: 4 }}>
+                  Distribution: High ({result.recompute_result.risk_distribution.High || 0}),
+                  Medium ({result.recompute_result.risk_distribution.Medium || 0}),
+                  Low ({result.recompute_result.risk_distribution.Low || 0})
+                </div>
+              )}
+            </div>
+          )}
+
+          <div style={{ display: 'flex', justifyContent: 'center', gap: 8 }}>
+            <button
+              onClick={resetState}
+              className="btn btn-outline"
+              style={{ fontSize: '0.8rem' }}
+            >
+              Upload Another File
+            </button>
+            {isModal && onClose && (
+              <button
+                onClick={onClose}
+                className="btn btn-primary"
+                style={{ fontSize: '0.8rem' }}
+              >
+                Close Pipeline
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default function IngestionModal({ isOpen, onClose, onIngestionComplete }) {
+  if (!isOpen) return null;
+
+  return (
+    <div className="modal-overlay" onClick={onClose} role="dialog" aria-modal="true" aria-label="Institutional Data Ingestion Pipeline">
+      <div className="modal-content" style={{ maxWidth: 620 }} onClick={(e) => e.stopPropagation()}>
+        {/* Header */}
+        <div style={{
+          padding: '16px 22px',
+          borderBottom: '1px solid var(--border-subtle)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          background: 'var(--bg-subtle)'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <Upload size={17} color="var(--color-primary)" strokeWidth={2} />
+            <h3 style={{ fontSize: '1.05rem', color: 'var(--text-primary)', margin: 0 }}>
+              Institutional Data Ingestion & Validation
             </h3>
           </div>
           <button
             onClick={onClose}
-            aria-label="Close modal"
-            style={{
-              background: 'transparent',
-              border: 'none',
-              cursor: 'pointer',
-              color: 'var(--text-secondary)'
-            }}
+            aria-label="Close dialog"
+            className="btn btn-outline"
+            style={{ padding: '5px' }}
           >
-            <X size={18} />
+            <X size={15} strokeWidth={2} />
           </button>
         </div>
 
         {/* Content */}
-        <div style={{ padding: '24px' }}>
-          {error && (
-            <div style={{
-              background: 'rgba(239, 68, 68, 0.15)',
-              border: '1px solid rgba(239, 68, 68, 0.3)',
-              borderRadius: 8,
-              padding: '12px 14px',
-              color: '#fca5a5',
-              fontSize: '0.84rem',
-              marginBottom: 18,
-              display: 'flex',
-              alignItems: 'center',
-              gap: 8
-            }}>
-              <AlertCircle size={16} />
-              <span>{error}</span>
-            </div>
-          )}
-
-          {/* STEP 1: UPLOAD & CONFIGURATION */}
-          {step === 'upload' && (
-            <div>
-              <p style={{ fontSize: '0.84rem', color: 'var(--text-secondary)', marginBottom: 20 }}>
-                Bulk upload normalized CSV institutional records. The system validates schema completeness, flags missing values, checks for duplicates, and provides an import preview before database commit.
-              </p>
-
-              <form onSubmit={handleGeneratePreview}>
-                {/* Source Type Selector */}
-                <div style={{ marginBottom: 16 }}>
-                  <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 600, color: 'var(--text-muted)', marginBottom: 6 }}>
-                    DATA SOURCE TYPE
-                  </label>
-                  <select
-                    value={sourceType}
-                    onChange={(e) => setSourceType(e.target.value)}
-                    style={{
-                      width: '100%',
-                      background: 'rgba(255, 255, 255, 0.05)',
-                      border: '1px solid var(--border-glass)',
-                      borderRadius: 'var(--radius-sm)',
-                      padding: '10px 14px',
-                      color: '#fff',
-                      fontSize: '0.88rem',
-                      outline: 'none'
-                    }}
-                  >
-                    <option value="attendance" style={{ background: '#0f172a' }}>Attendance Records (Sessions)</option>
-                    <option value="assessments" style={{ background: '#0f172a' }}>Assessment / Exam Marks</option>
-                    <option value="lms_activity" style={{ background: '#0f172a' }}>LMS Activity & Coursework Submissions</option>
-                    <option value="students" style={{ background: '#0f172a' }}>Student Directory / Class Roster</option>
-                  </select>
-                </div>
-
-                {/* File Drop Area */}
-                <div style={{
-                  border: '2px dashed var(--border-glass-bright)',
-                  borderRadius: 'var(--radius-md)',
-                  padding: '24px 16px',
-                  textAlign: 'center',
-                  marginBottom: 20,
-                  background: selectedFile ? 'rgba(56, 189, 248, 0.04)' : 'rgba(255, 255, 255, 0.02)',
-                  cursor: 'pointer'
-                }}>
-                  <input
-                    type="file"
-                    accept=".csv"
-                    id="csvInput"
-                    onChange={(e) => handleFileSelect(e.target.files[0])}
-                    style={{ display: 'none' }}
-                  />
-                  <label htmlFor="csvInput" style={{ cursor: 'pointer', display: 'block' }}>
-                    <FileText size={32} color={selectedFile ? '#38bdf8' : '#94a3b8'} style={{ margin: '0 auto 8px' }} />
-                    <div style={{ fontSize: '0.88rem', color: '#fff', fontWeight: 600 }}>
-                      {selectedFile ? selectedFile.name : 'Choose CSV file or drag & drop'}
-                    </div>
-                    <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)', marginTop: 4 }}>
-                      Max size: 10MB • Must contain required header columns
-                    </div>
-                  </label>
-                </div>
-
-                {/* Auto Recompute Checkbox */}
-                <div style={{ marginBottom: 20, display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <input
-                    type="checkbox"
-                    id="autoRecomputeCheck"
-                    checked={autoRecompute}
-                    onChange={(e) => setAutoRecompute(e.target.checked)}
-                    style={{ accentColor: '#6366f1' }}
-                  />
-                  <label htmlFor="autoRecomputeCheck" style={{ fontSize: '0.82rem', color: '#e2e8f0', cursor: 'pointer' }}>
-                    Automatically trigger batch feature engineering & ML re-scoring after import
-                  </label>
-                </div>
-
-                {/* Action Buttons */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <button
-                    type="button"
-                    onClick={handleSeed}
-                    disabled={uploading}
-                    className="btn btn-outline"
-                    style={{ fontSize: '0.78rem', padding: '8px 12px' }}
-                  >
-                    <Database size={14} color="#34d399" />
-                    Reset to Pilot Data
-                  </button>
-
-                  <button
-                    type="submit"
-                    disabled={!selectedFile || previewing}
-                    className="btn btn-primary"
-                    style={{ padding: '8px 18px', fontSize: '0.84rem' }}
-                  >
-                    {previewing ? 'Analyzing CSV...' : 'Validate & Preview Import'}
-                    <ArrowRight size={14} />
-                  </button>
-                </div>
-              </form>
-            </div>
-          )}
-
-          {/* STEP 2: PREVIEW & VALIDATION SUMMARY */}
-          {step === 'preview' && previewData && (
-            <div>
-              {/* Validation Summary Metrics */}
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))',
-                gap: 10,
-                marginBottom: 18
-              }}>
-                <div style={{ background: 'rgba(255,255,255,0.03)', padding: 10, borderRadius: 8, border: '1px solid var(--border-glass)' }}>
-                  <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>Total Rows</span>
-                  <div style={{ fontSize: '1.2rem', fontWeight: 700, color: '#fff' }}>{previewData.total_rows}</div>
-                </div>
-                <div style={{ background: 'rgba(16, 185, 129, 0.08)', padding: 10, borderRadius: 8, border: '1px solid rgba(16, 185, 129, 0.25)' }}>
-                  <span style={{ fontSize: '0.72rem', color: '#a7f3d0' }}>Valid Records</span>
-                  <div style={{ fontSize: '1.2rem', fontWeight: 700, color: '#34d399' }}>{previewData.valid_rows_count}</div>
-                </div>
-                <div style={{ background: previewData.invalid_rows_count > 0 ? 'rgba(239, 68, 68, 0.08)' : 'rgba(255,255,255,0.03)', padding: 10, borderRadius: 8, border: `1px solid ${previewData.invalid_rows_count > 0 ? 'rgba(239, 68, 68, 0.25)' : 'var(--border-glass)'}` }}>
-                  <span style={{ fontSize: '0.72rem', color: previewData.invalid_rows_count > 0 ? '#fca5a5' : 'var(--text-muted)' }}>Invalid Rows</span>
-                  <div style={{ fontSize: '1.2rem', fontWeight: 700, color: previewData.invalid_rows_count > 0 ? '#f87171' : '#fff' }}>{previewData.invalid_rows_count}</div>
-                </div>
-                <div style={{ background: 'rgba(245, 158, 11, 0.08)', padding: 10, borderRadius: 8, border: '1px solid rgba(245, 158, 11, 0.25)' }}>
-                  <span style={{ fontSize: '0.72rem', color: '#fde68a' }}>Duplicates</span>
-                  <div style={{ fontSize: '1.2rem', fontWeight: 700, color: '#fbbf24' }}>{previewData.duplicate_rows_count}</div>
-                </div>
-              </div>
-
-              {/* Validation Issues Table (if any) */}
-              {previewData.issues && previewData.issues.length > 0 && (
-                <div style={{
-                  background: 'rgba(239, 68, 68, 0.06)',
-                  border: '1px solid rgba(239, 68, 68, 0.25)',
-                  borderRadius: 8,
-                  padding: 14,
-                  marginBottom: 18,
-                  maxHeight: 160,
-                  overflowY: 'auto'
-                }}>
-                  <div style={{ fontSize: '0.8rem', fontWeight: 700, color: '#fca5a5', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <AlertTriangle size={14} /> Validation Flags & Issues ({previewData.issues.length})
-                  </div>
-                  <table style={{ width: '100%', fontSize: '0.74rem', borderCollapse: 'collapse' }}>
-                    <thead>
-                      <tr style={{ color: 'var(--text-muted)', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                        <th style={{ textAlign: 'left', padding: '4px 6px' }}>Row</th>
-                        <th style={{ textAlign: 'left', padding: '4px 6px' }}>Column</th>
-                        <th style={{ textAlign: 'left', padding: '4px 6px' }}>Issue</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {previewData.issues.map((iss, i) => (
-                        <tr key={i} style={{ borderBottom: '1px solid rgba(255,255,255,0.02)' }}>
-                          <td style={{ padding: '4px 6px', color: '#f87171' }}>{iss.row || 'Header'}</td>
-                          <td style={{ padding: '4px 6px', color: '#cbd5e1' }}>{iss.column || '—'}</td>
-                          <td style={{ padding: '4px 6px', color: '#fca5a5' }}>{iss.message}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              )}
-
-              {/* Sample Records Preview Table */}
-              <div style={{ marginBottom: 20 }}>
-                <div style={{ fontSize: '0.8rem', fontWeight: 600, color: '#fff', marginBottom: 6 }}>
-                  Sample Parsed Records (First {previewData.sample_records.length})
-                </div>
-                <div style={{ overflowX: 'auto', maxHeight: 150 }}>
-                  <table style={{ width: '100%', fontSize: '0.74rem', borderCollapse: 'collapse' }}>
-                    <thead>
-                      <tr style={{ background: 'rgba(255,255,255,0.04)', color: 'var(--text-muted)' }}>
-                        {previewData.headers.map((h) => (
-                          <th key={h} style={{ padding: '6px 8px', textAlign: 'left', whiteSpace: 'nowrap' }}>{h}</th>
-                        ))}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {previewData.sample_records.map((r, i) => (
-                        <tr key={i} style={{ borderBottom: '1px solid rgba(255,255,255,0.03)' }}>
-                          {previewData.headers.map((h) => (
-                            <td key={h} style={{ padding: '6px 8px', color: '#e2e8f0', whiteSpace: 'nowrap' }}>
-                              {r[h] !== null && r[h] !== undefined ? String(r[h]) : '—'}
-                            </td>
-                          ))}
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-
-              {/* Action Buttons */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <button
-                  type="button"
-                  onClick={() => setStep('upload')}
-                  className="btn btn-outline"
-                  style={{ padding: '6px 12px', fontSize: '0.78rem' }}
-                >
-                  <RotateCcw size={13} /> Back / Choose Another File
-                </button>
-
-                <button
-                  type="button"
-                  onClick={handleCommitIngest}
-                  disabled={!previewData.can_import || uploading}
-                  className="btn btn-primary"
-                  style={{ padding: '8px 18px', fontSize: '0.84rem' }}
-                >
-                  {uploading ? 'Importing & Re-Scoring...' : `Confirm & Import ${previewData.valid_rows_count} Records`}
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* STEP 3: RESULT */}
-          {step === 'result' && result && (
-            <div style={{ textAlign: 'center', padding: '16px 0' }}>
-              <div style={{
-                width: 48,
-                height: 48,
-                borderRadius: '50%',
-                background: 'rgba(16, 185, 129, 0.2)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                margin: '0 auto 16px',
-                border: '1px solid rgba(16, 185, 129, 0.4)'
-              }}>
-                <Check size={24} color="#34d399" />
-              </div>
-              <h4 style={{ fontSize: '1.1rem', color: '#fff', marginBottom: 8 }}>
-                Ingestion Completed Successfully
-              </h4>
-              <p style={{ fontSize: '0.84rem', color: 'var(--text-secondary)', marginBottom: 16 }}>
-                {result.message}
-              </p>
-
-              {/* Recomputation Metrics if triggered */}
-              {result.recompute_result && (
-                <div style={{
-                  background: 'rgba(255, 255, 255, 0.03)',
-                  border: '1px solid var(--border-glass)',
-                  borderRadius: 8,
-                  padding: '16px',
-                  marginBottom: 20,
-                  textAlign: 'left'
-                }}>
-                  <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#38bdf8', marginBottom: 10, display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <RefreshCw size={14} /> ML Batch Recomputation Summary
-                  </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(110px, 1fr))', gap: 10, marginBottom: 12 }}>
-                    <div style={{ background: 'rgba(255, 255, 255, 0.04)', padding: '8px 10px', borderRadius: 6 }}>
-                      <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>Students Scored</div>
-                      <div style={{ fontSize: '1.1rem', fontWeight: 700, color: '#fff' }}>{result.recompute_result.students_scored}</div>
-                    </div>
-                    <div style={{ background: 'rgba(239, 68, 68, 0.1)', padding: '8px 10px', borderRadius: 6, border: '1px solid rgba(239, 68, 68, 0.2)' }}>
-                      <div style={{ fontSize: '0.7rem', color: '#fca5a5' }}>High Risk</div>
-                      <div style={{ fontSize: '1.1rem', fontWeight: 700, color: '#ef4444' }}>{result.recompute_result.risk_distribution?.High ?? 0}</div>
-                    </div>
-                    <div style={{ background: 'rgba(245, 158, 11, 0.1)', padding: '8px 10px', borderRadius: 6, border: '1px solid rgba(245, 158, 11, 0.2)' }}>
-                      <div style={{ fontSize: '0.7rem', color: '#fde68a' }}>Medium Risk</div>
-                      <div style={{ fontSize: '1.1rem', fontWeight: 700, color: '#f59e0b' }}>{result.recompute_result.risk_distribution?.Medium ?? 0}</div>
-                    </div>
-                    <div style={{ background: 'rgba(16, 185, 129, 0.1)', padding: '8px 10px', borderRadius: 6, border: '1px solid rgba(16, 185, 129, 0.2)' }}>
-                      <div style={{ fontSize: '0.7rem', color: '#a7f3d0' }}>Low Risk</div>
-                      <div style={{ fontSize: '1.1rem', fontWeight: 700, color: '#10b981' }}>{result.recompute_result.risk_distribution?.Low ?? 0}</div>
-                    </div>
-                  </div>
-                  <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8 }}>
-                    <span>Pipeline Runtime: <strong style={{ color: '#e2e8f0' }}>{result.recompute_result.execution_time_seconds}s</strong></span>
-                    <span>Model: <strong style={{ color: '#e2e8f0' }}>{result.recompute_result.model_name || 'Logistic Regression (SHAP)'}</strong></span>
-                  </div>
-                </div>
-              )}
-
-              <button
-                onClick={() => {
-                  resetState();
-                  onClose();
-                }}
-                className="btn btn-primary"
-                style={{ padding: '8px 24px', fontSize: '0.84rem' }}
-              >
-                Close & Return to Dashboard
-              </button>
-            </div>
-          )}
+        <div style={{ maxHeight: 'calc(85vh - 65px)', overflowY: 'auto' }}>
+          <IngestionContent onClose={onClose} onIngestionComplete={onIngestionComplete} isModal={true} />
         </div>
       </div>
     </div>

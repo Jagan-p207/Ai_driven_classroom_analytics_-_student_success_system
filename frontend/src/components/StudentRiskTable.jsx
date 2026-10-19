@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {
   Search, TrendingDown, TrendingUp, AlertTriangle, ArrowUpDown,
-  ChevronRight, X, Clock, CheckCircle2, RotateCcw
+  ChevronRight, X, Clock, RotateCcw, ChevronLeft
 } from 'lucide-react';
 
 export default function StudentRiskTable({
@@ -15,8 +15,11 @@ export default function StudentRiskTable({
   const [interventionFilter, setInterventionFilter] = useState('ALL');
   const [sortBy, setSortBy] = useState('risk_score');
   const [sortAsc, setSortAsc] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 15;
 
   const handleRiskFilterChange = (lvl) => {
+    setCurrentPage(1);
     if (onRiskFilterChange) onRiskFilterChange(lvl);
     if (onFilterChange) onFilterChange(lvl);
   };
@@ -32,10 +35,11 @@ export default function StudentRiskTable({
 
   // Filter students
   const filtered = students.filter(s => {
+    const term = searchTerm.toLowerCase();
     const matchesSearch =
-      (s.name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (s.student_id || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (s.email || '').toLowerCase().includes(searchTerm.toLowerCase());
+      (s.name || '').toLowerCase().includes(term) ||
+      (s.student_id || '').toLowerCase().includes(term) ||
+      (s.email || '').toLowerCase().includes(term);
 
     const sRisk = (s.risk_level || '').toUpperCase();
     const matchesRisk = normalizedFilter === 'ALL' || sRisk === normalizedFilter;
@@ -64,101 +68,110 @@ export default function StudentRiskTable({
     return sortAsc ? ((valA ?? 0) - (valB ?? 0)) : ((valB ?? 0) - (valA ?? 0));
   });
 
+  // Pagination
+  const totalPages = Math.ceil(sorted.length / pageSize) || 1;
+  const paginatedStudents = sorted.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+
   const handleSort = (field) => {
     if (sortBy === field) {
       setSortAsc(!sortAsc);
     } else {
       setSortBy(field);
-      setSortAsc(false); // default descending for risk/scores
+      setSortAsc(false); // Default descending for scores/risk
     }
   };
 
-  const hasActiveFilters = searchTerm !== '' || riskFilter !== 'ALL' || interventionFilter !== 'ALL';
+  const hasActiveFilters = searchTerm !== '' || normalizedFilter !== 'ALL' || interventionFilter !== 'ALL';
 
   const clearAllFilters = () => {
     setSearchTerm('');
     setInterventionFilter('ALL');
+    setCurrentPage(1);
     if (onRiskFilterChange) onRiskFilterChange('ALL');
   };
 
   return (
-    <div className="glass-card" style={{ padding: 24, marginBottom: 24 }}>
-      {/* Table Header & Controls */}
+    <div className="editorial-card" style={{ padding: '20px 24px', marginBottom: 24 }}>
+      {/* Header & Controls */}
       <div style={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
         flexWrap: 'wrap',
         gap: 16,
-        marginBottom: 20
+        marginBottom: 18
       }}>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <h2 style={{ fontSize: '1.2rem', color: '#fff', margin: 0 }}>
-              Student Roster & Risk Registry
+            <h2 style={{ fontSize: '1.08rem', color: 'var(--text-primary)', margin: 0 }}>
+              Student Risk Registry & Roster
             </h2>
-            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+            <span style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>
               ({sorted.length} of {students.length} students)
             </span>
           </div>
-          <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: 2 }}>
-            Multi-factor assessment rankings, active interventions, and performance trends
+          <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: 2, margin: 0 }}>
+            Ranked student performance metrics, intervention assignments, and score trajectories
           </p>
         </div>
 
+        {/* Filter Controls */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
-          {/* Search Bar */}
+          {/* Search Box */}
           <div style={{
             display: 'flex',
             alignItems: 'center',
-            background: 'rgba(255, 255, 255, 0.05)',
-            border: '1px solid var(--border-glass)',
+            background: 'var(--bg-subtle)',
+            border: '1px solid var(--border-subtle)',
             borderRadius: 'var(--radius-sm)',
-            padding: '6px 12px',
-            gap: 8,
+            padding: '5px 10px',
+            gap: 6,
             minWidth: 200
           }}>
-            <Search size={15} color="var(--text-muted)" />
+            <Search size={14} color="var(--text-muted)" strokeWidth={2} />
             <input
               type="text"
-              placeholder="Search name, ID, email..."
+              placeholder="Search student or ID..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setCurrentPage(1);
+              }}
               style={{
                 background: 'transparent',
                 border: 'none',
                 outline: 'none',
-                color: '#fff',
-                fontSize: '0.84rem',
-                width: '100%'
+                color: 'var(--text-primary)',
+                fontSize: '0.82rem',
+                width: '100%',
+                fontFamily: 'var(--font-body)'
               }}
             />
             {searchTerm && (
               <button
-                onClick={() => setSearchTerm('')}
+                onClick={() => {
+                  setSearchTerm('');
+                  setCurrentPage(1);
+                }}
                 style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--text-muted)', padding: 0 }}
+                aria-label="Clear search"
               >
-                <X size={14} />
+                <X size={13} strokeWidth={2} />
               </button>
             )}
           </div>
 
-          {/* Intervention Filter Select */}
+          {/* Intervention Status Filter */}
           <select
             value={interventionFilter}
-            onChange={(e) => setInterventionFilter(e.target.value)}
-            style={{
-              background: '#0f172a',
-              border: '1px solid var(--border-glass)',
-              borderRadius: 'var(--radius-sm)',
-              padding: '6px 10px',
-              fontSize: '0.78rem',
-              color: '#fff',
-              outline: 'none',
-              cursor: 'pointer'
+            onChange={(e) => {
+              setInterventionFilter(e.target.value);
+              setCurrentPage(1);
             }}
+            className="form-select"
+            style={{ fontSize: '0.76rem', padding: '5px 8px' }}
           >
-            <option value="ALL">Interventions: All</option>
+            <option value="ALL">Intervention: All</option>
             <option value="NEEDS_ACTION">Needs Action / Unassigned</option>
             <option value="OVERDUE">Overdue Follow-Ups</option>
             <option value="ACTIVE">Active (Planned/In Progress)</option>
@@ -168,108 +181,98 @@ export default function StudentRiskTable({
           {/* Risk Level Filter Chips */}
           <div style={{
             display: 'inline-flex',
-            background: 'rgba(255, 255, 255, 0.05)',
+            background: 'var(--bg-subtle)',
             borderRadius: 'var(--radius-sm)',
-            padding: 3,
-            border: '1px solid var(--border-glass)'
+            padding: 2,
+            border: '1px solid var(--border-subtle)'
           }}>
-            {['ALL', 'HIGH', 'MEDIUM', 'LOW'].map((lvl) => (
-              <button
-                key={lvl}
-                onClick={() => handleRiskFilterChange(lvl)}
-                style={{
-                  padding: '5px 12px',
-                  fontSize: '0.76rem',
-                  fontWeight: 600,
-                  borderRadius: 6,
-                  border: 'none',
-                  cursor: 'pointer',
-                  background: normalizedFilter === lvl ? '#6366f1' : 'transparent',
-                  color: normalizedFilter === lvl ? '#fff' : 'var(--text-secondary)',
-                  transition: 'all 0.2s ease',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: 5
-                }}
-              >
-                <span>{lvl}</span>
-                <span style={{
-                  fontSize: '0.68rem',
-                  opacity: 0.85,
-                  background: normalizedFilter === lvl ? 'rgba(255,255,255,0.22)' : 'rgba(255,255,255,0.08)',
-                  padding: '1px 5px',
-                  borderRadius: 4
-                }}>
-                  {riskCounts[lvl] ?? 0}
-                </span>
-              </button>
-            ))}
+            {['ALL', 'HIGH', 'MEDIUM', 'LOW'].map((lvl) => {
+              const isSelected = normalizedFilter === lvl;
+              return (
+                <button
+                  key={lvl}
+                  onClick={() => handleRiskFilterChange(lvl)}
+                  style={{
+                    padding: '4px 9px',
+                    fontSize: '0.74rem',
+                    fontWeight: isSelected ? 600 : 500,
+                    borderRadius: 'var(--radius-xs)',
+                    border: 'none',
+                    cursor: 'pointer',
+                    background: isSelected ? '#ffffff' : 'transparent',
+                    color: isSelected ? 'var(--color-primary)' : 'var(--text-secondary)',
+                    boxShadow: isSelected ? 'var(--shadow-xs)' : 'none',
+                    transition: 'all 0.12s ease',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 4
+                  }}
+                >
+                  <span>{lvl}</span>
+                  <span style={{
+                    fontSize: '0.68rem',
+                    padding: '0 4px',
+                    borderRadius: 3,
+                    background: isSelected ? 'var(--color-primary-subtle)' : 'rgba(0,0,0,0.05)',
+                    color: isSelected ? 'var(--color-primary)' : 'var(--text-muted)'
+                  }}>
+                    {riskCounts[lvl] ?? 0}
+                  </span>
+                </button>
+              );
+            })}
           </div>
 
-          {/* Clear Filters Button */}
+          {/* Clear Filters Reset */}
           {hasActiveFilters && (
             <button
               onClick={clearAllFilters}
               className="btn btn-outline"
               style={{
-                padding: '6px 10px',
-                fontSize: '0.76rem',
-                borderColor: 'rgba(239, 68, 68, 0.3)',
-                color: '#fca5a5',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 4
+                padding: '4px 8px',
+                fontSize: '0.74rem',
+                color: 'var(--risk-high-text)',
+                borderColor: 'var(--risk-high-border)'
               }}
               title="Reset search and filters"
             >
-              <RotateCcw size={12} /> Clear Filters
+              <RotateCcw size={12} strokeWidth={2} /> Clear
             </button>
           )}
         </div>
       </div>
 
       {/* Roster Table */}
-      <div style={{ overflowX: 'auto' }}>
-        <table style={{
-          width: '100%',
-          borderCollapse: 'collapse',
-          textAlign: 'left',
-          fontSize: '0.86rem'
-        }}>
+      <div style={{ overflowX: 'auto', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-md)' }}>
+        <table className="editorial-table">
           <thead>
-            <tr style={{
-              borderBottom: '1px solid var(--border-glass)',
-              color: 'var(--text-muted)',
-              fontSize: '0.76rem',
-              textTransform: 'uppercase',
-              letterSpacing: '0.04em'
-            }}>
-              <th style={{ padding: '12px 14px', cursor: 'pointer' }} onClick={() => handleSort('name')}>
-                Student <ArrowUpDown size={12} style={{ verticalAlign: 'middle' }} />
+            <tr>
+              <th style={{ cursor: 'pointer', minWidth: 170 }} onClick={() => handleSort('name')}>
+                Student <ArrowUpDown size={11} style={{ verticalAlign: 'middle', marginLeft: 2 }} />
               </th>
-              <th style={{ padding: '12px 14px', cursor: 'pointer' }} onClick={() => handleSort('risk_score')}>
-                Risk Classification <ArrowUpDown size={12} style={{ verticalAlign: 'middle' }} />
+              <th style={{ cursor: 'pointer', minWidth: 140 }} onClick={() => handleSort('risk_score')}>
+                Risk Tier <ArrowUpDown size={11} style={{ verticalAlign: 'middle', marginLeft: 2 }} />
               </th>
-              <th style={{ padding: '12px 14px' }}>
+              <th style={{ minWidth: 150 }}>
                 Intervention
               </th>
-              <th style={{ padding: '12px 14px', cursor: 'pointer' }} onClick={() => handleSort('attendance_pct')}>
-                Attendance <ArrowUpDown size={12} style={{ verticalAlign: 'middle' }} />
+              <th style={{ cursor: 'pointer', minWidth: 110 }} onClick={() => handleSort('attendance_pct')}>
+                Attendance <ArrowUpDown size={11} style={{ verticalAlign: 'middle', marginLeft: 2 }} />
               </th>
-              <th style={{ padding: '12px 14px', cursor: 'pointer' }} onClick={() => handleSort('avg_score')}>
-                Assessment Avg <ArrowUpDown size={12} style={{ verticalAlign: 'middle' }} />
+              <th style={{ cursor: 'pointer', minWidth: 120 }} onClick={() => handleSort('avg_score')}>
+                Assessment Avg <ArrowUpDown size={11} style={{ verticalAlign: 'middle', marginLeft: 2 }} />
               </th>
-              <th style={{ padding: '12px 14px', cursor: 'pointer' }} onClick={() => handleSort('score_trend')}>
-                Score Trend <ArrowUpDown size={12} style={{ verticalAlign: 'middle' }} />
+              <th style={{ cursor: 'pointer', minWidth: 120 }} onClick={() => handleSort('score_trend')}>
+                Trajectory <ArrowUpDown size={11} style={{ verticalAlign: 'middle', marginLeft: 2 }} />
               </th>
-              <th style={{ padding: '12px 14px', cursor: 'pointer' }} onClick={() => handleSort('composite_engagement')}>
-                Engagement <ArrowUpDown size={12} style={{ verticalAlign: 'middle' }} />
+              <th style={{ cursor: 'pointer', minWidth: 110 }} onClick={() => handleSort('composite_engagement')}>
+                Engagement <ArrowUpDown size={11} style={{ verticalAlign: 'middle', marginLeft: 2 }} />
               </th>
-              <th style={{ padding: '12px 14px' }}>Action</th>
+              <th style={{ width: 80, textAlign: 'center' }}>Action</th>
             </tr>
           </thead>
           <tbody>
-            {sorted.length === 0 ? (
+            {paginatedStudents.length === 0 ? (
               <tr>
                 <td colSpan={8} style={{ textAlign: 'center', padding: '36px', color: 'var(--text-muted)' }}>
                   No students found matching current filters.
@@ -283,158 +286,155 @@ export default function StudentRiskTable({
                 </td>
               </tr>
             ) : (
-              sorted.map((s) => {
-                const isHigh = s.risk_level === 'High';
-                const isMed = s.risk_level === 'Medium';
-                const slopeColor = s.score_trend < 0 ? '#ef4444' : '#10b981';
+              paginatedStudents.map((s) => {
+                const sLevel = (s.risk_level || 'low').toLowerCase();
+                const isSlopeNegative = (s.score_trend || 0) < 0;
 
                 return (
                   <tr
                     key={s.student_id}
-                    style={{
-                      borderBottom: '1px solid rgba(255, 255, 255, 0.04)',
-                      transition: 'background 0.15s ease',
-                      cursor: 'pointer'
-                    }}
-                    onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.03)'}
-                    onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
                     onClick={() => onSelectStudent(s.student_id)}
+                    style={{ cursor: 'pointer' }}
                   >
-                    {/* Student Info */}
-                    <td style={{ padding: '14px' }}>
-                      <div style={{ fontWeight: 600, color: '#fff', fontSize: '0.9rem' }}>
+                    {/* Student Identity */}
+                    <td>
+                      <div style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.86rem' }}>
                         {s.name}
                       </div>
-                      <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>
-                        {s.student_id} • {s.department}
+                      <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
+                        {s.student_id} • {s.department || 'CS'}
                       </div>
                     </td>
 
-                    {/* Risk Level & Meter */}
-                    <td style={{ padding: '14px' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-                        <span className={`badge-risk ${s.risk_level.toLowerCase()}`}>
+                    {/* Risk Tier Badge & Probability Score */}
+                    <td>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                        <span className={`badge-risk ${sLevel}`}>
                           {s.risk_level}
                         </span>
                         {s.alert_flag && (
-                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, fontSize: '0.7rem', color: '#f87171' }}>
-                            <AlertTriangle size={12} /> Alert
+                          <span style={{ fontSize: '0.68rem', color: 'var(--risk-high-text)', fontWeight: 600 }} title="Urgent early warning alert flag">
+                            Alert
                           </span>
                         )}
                       </div>
-                      <div style={{
-                        width: 90,
-                        height: 5,
-                        background: 'rgba(255, 255, 255, 0.1)',
-                        borderRadius: 3,
-                        overflow: 'hidden'
-                      }}>
-                        <div style={{
-                          width: `${Math.min(100, (s.risk_score || 0) * 100)}%`,
-                          height: '100%',
-                          background: isHigh ? '#ef4444' : isMed ? '#f59e0b' : '#10b981'
-                        }} />
+                      <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: 2 }}>
+                        Score: {((s.risk_score || 0) * 100).toFixed(0)}%
                       </div>
                     </td>
 
-                    {/* Intervention Status Column */}
-                    <td style={{ padding: '14px' }}>
+                    {/* Intervention Status */}
+                    <td>
                       {s.latest_intervention_status ? (
                         <div>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
                             <span style={{
                               fontSize: '0.72rem',
-                              fontWeight: 700,
-                              padding: '2px 7px',
-                              borderRadius: 4,
+                              fontWeight: 500,
+                              padding: '1px 6px',
+                              borderRadius: 'var(--radius-xs)',
                               background: s.latest_intervention_status === 'Resolved' || s.latest_intervention_status === 'Completed'
-                                ? 'rgba(16, 185, 129, 0.15)'
+                                ? 'var(--risk-low-bg)'
                                 : s.latest_intervention_status === 'In Progress'
-                                ? 'rgba(56, 189, 248, 0.15)'
-                                : 'rgba(245, 158, 11, 0.15)',
+                                ? 'var(--color-primary-subtle)'
+                                : 'var(--risk-med-bg)',
                               color: s.latest_intervention_status === 'Resolved' || s.latest_intervention_status === 'Completed'
-                                ? '#34d399'
+                                ? 'var(--risk-low-text)'
                                 : s.latest_intervention_status === 'In Progress'
-                                ? '#38bdf8'
-                                : '#fbbf24'
+                                ? 'var(--color-primary)'
+                                : 'var(--risk-med-text)',
+                              border: '1px solid currentColor'
                             }}>
                               {s.latest_intervention_status}
                             </span>
                             {s.is_intervention_overdue && (
-                              <span style={{ color: '#f87171', fontSize: '0.68rem', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: 2 }} title="Follow-up date passed">
-                                <Clock size={11} /> Overdue
+                              <span style={{ color: 'var(--risk-high-text)', fontSize: '0.68rem', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: 2 }} title="Follow-up deadline exceeded">
+                                <Clock size={10} strokeWidth={2} /> Overdue
                               </span>
                             )}
                           </div>
                           {s.latest_intervention_staff && (
-                            <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', marginTop: 2, maxWidth: 130, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                            <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', marginTop: 2 }}>
                               {s.latest_intervention_staff.split(' (')[0]}
                             </div>
                           )}
                         </div>
                       ) : (
-                        <span style={{ fontSize: '0.74rem', color: (isHigh || isMed) ? '#f87171' : 'var(--text-muted)' }}>
-                          {(isHigh || isMed) ? 'Needs Assignment' : '—'}
+                        <span style={{
+                          fontSize: '0.72rem',
+                          color: (sLevel === 'high' || sLevel === 'medium') ? 'var(--risk-high-text)' : 'var(--text-muted)'
+                        }}>
+                          {(sLevel === 'high' || sLevel === 'medium') ? 'Needs Assignment' : '—'}
                         </span>
                       )}
                     </td>
 
                     {/* Attendance */}
-                    <td style={{ padding: '14px' }}>
-                      <div style={{ fontWeight: 600, color: s.attendance_pct < 75 ? '#f87171' : '#e2e8f0' }}>
+                    <td>
+                      <div style={{
+                        fontWeight: 600,
+                        color: s.attendance_pct < 75 ? 'var(--risk-high-text)' : 'var(--text-primary)',
+                        fontSize: '0.84rem'
+                      }}>
                         {s.attendance_pct}%
                       </div>
-                      <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
+                      <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>
                         45 sessions
                       </div>
                     </td>
 
-                    {/* Assessment Avg */}
-                    <td style={{ padding: '14px' }}>
-                      <div style={{ fontWeight: 600, color: s.avg_score < 60 ? '#f87171' : '#e2e8f0' }}>
+                    {/* Marks Average */}
+                    <td>
+                      <div style={{
+                        fontWeight: 600,
+                        color: s.avg_score < 60 ? 'var(--risk-high-text)' : 'var(--text-primary)',
+                        fontSize: '0.84rem'
+                      }}>
                         {s.avg_score}%
                       </div>
-                      <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
+                      <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>
                         5 assessments
                       </div>
                     </td>
 
-                    {/* Score Trend Slope */}
-                    <td style={{ padding: '14px' }}>
+                    {/* Score Trajectory (Slope) */}
+                    <td>
                       <div style={{
                         display: 'inline-flex',
                         alignItems: 'center',
-                        gap: 4,
-                        padding: '3px 8px',
-                        borderRadius: 6,
-                        fontSize: '0.78rem',
-                        fontWeight: 600,
-                        background: s.score_trend < 0 ? 'rgba(239, 68, 68, 0.12)' : 'rgba(16, 185, 129, 0.12)',
-                        color: slopeColor
+                        gap: 3,
+                        padding: '2px 6px',
+                        borderRadius: 'var(--radius-xs)',
+                        fontSize: '0.76rem',
+                        fontWeight: 500,
+                        background: isSlopeNegative ? 'var(--risk-high-bg)' : 'var(--risk-low-bg)',
+                        color: isSlopeNegative ? 'var(--risk-high-text)' : 'var(--risk-low-text)',
+                        border: `1px solid ${isSlopeNegative ? 'var(--risk-high-border)' : 'var(--risk-low-border)'}`
                       }}>
-                        {s.score_trend < 0 ? <TrendingDown size={14} /> : <TrendingUp size={14} />}
+                        {isSlopeNegative ? <TrendingDown size={12} strokeWidth={2} /> : <TrendingUp size={12} strokeWidth={2} />}
                         {s.score_trend > 0 ? '+' : ''}{s.score_trend} / exam
                       </div>
                     </td>
 
                     {/* Composite Engagement */}
-                    <td style={{ padding: '14px' }}>
-                      <div style={{ fontWeight: 600, color: '#e2e8f0' }}>
-                        {s.composite_engagement} / 100
+                    <td>
+                      <div style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.84rem' }}>
+                        {s.composite_engagement} <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>/ 100</span>
                       </div>
                     </td>
 
-                    {/* Action */}
-                    <td style={{ padding: '14px' }}>
+                    {/* Inspect Link */}
+                    <td style={{ textAlign: 'center' }}>
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
                           onSelectStudent(s.student_id);
                         }}
                         className="btn btn-outline"
-                        style={{ padding: '6px 12px', fontSize: '0.76rem' }}
+                        style={{ padding: '4px 8px', fontSize: '0.74rem' }}
+                        aria-label={`View dossier for ${s.name}`}
                       >
-                        Inspect <ChevronRight size={13} />
+                        Inspect <ChevronRight size={12} strokeWidth={2} />
                       </button>
                     </td>
                   </tr>
@@ -444,6 +444,45 @@ export default function StudentRiskTable({
           </tbody>
         </table>
       </div>
+
+      {/* Pagination Controls */}
+      {sorted.length > pageSize && (
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          marginTop: 14,
+          fontSize: '0.78rem',
+          color: 'var(--text-muted)'
+        }}>
+          <div>
+            Showing {(currentPage - 1) * pageSize + 1}–{Math.min(currentPage * pageSize, sorted.length)} of {sorted.length} students
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <button
+              onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+              className="btn btn-outline"
+              style={{ padding: '4px 8px', fontSize: '0.74rem' }}
+              aria-label="Previous page"
+            >
+              <ChevronLeft size={13} strokeWidth={2} /> Prev
+            </button>
+            <span style={{ padding: '0 6px', fontWeight: 600, color: 'var(--text-primary)' }}>
+              Page {currentPage} of {totalPages}
+            </span>
+            <button
+              onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+              disabled={currentPage === totalPages}
+              className="btn btn-outline"
+              style={{ padding: '4px 8px', fontSize: '0.74rem' }}
+              aria-label="Next page"
+            >
+              Next <ChevronRight size={13} strokeWidth={2} />
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

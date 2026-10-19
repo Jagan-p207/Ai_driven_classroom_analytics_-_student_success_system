@@ -1,4 +1,4 @@
-# Python
+# Python & Virtual Environments
 __pycache__/
 *.py[cod]
 *$py.class
@@ -7,26 +7,33 @@ __pycache__/
 env/
 venv/
 ENV/
+.venv/
+
+# Local Database Files
 *.db
 *.sqlite3
 
-# Node / Frontend
+# Node / Frontend Dependencies & Build Output
 node_modules/
 dist/
 dist-ssr/
 *.local
 
-# Testing & Coverage
+# Testing, Coverage & Cache
 .pytest_cache/
 .coverage
 htmlcov/
 
-# Logs & Environment
+# Logs, Diagnostics & Local Environment Secrets
 *.log
 .env
+.env.local
+.env.*.local
+.netlify/
 
-# IDE & OS
+# IDE & Operating System Artifacts
 .vscode/
 .idea/
 .DS_Store
 Thumbs.db
+Desktop.ini

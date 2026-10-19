@@ -127,7 +127,9 @@ def compute_contributions_for_student(
                     "label": HUMAN_FACTOR_NAMES.get(feat, feat),
                     "value": round(float(val), 2),
                     "impact": round(float(s_val), 4),
-                    "is_risk_driver": bool(s_val > 0)
+                    "is_risk_driver": bool(s_val > 0),
+                    "method": "SHAP",
+                    "is_shap": True
                 })
             shap_calculated = True
         except Exception:
@@ -159,7 +161,9 @@ def compute_contributions_for_student(
                     "label": HUMAN_FACTOR_NAMES.get(feat, feat),
                     "value": round(float(val), 2),
                     "impact": round(float(s_val), 4),
-                    "is_risk_driver": bool(s_val > 0)
+                    "is_risk_driver": bool(s_val > 0),
+                    "method": "SHAP",
+                    "is_shap": True
                 })
             shap_calculated = True
         except Exception:
@@ -183,7 +187,9 @@ def compute_contributions_for_student(
                 "label": HUMAN_FACTOR_NAMES.get(feat, feat),
                 "value": round(float(student_feats[feat]), 2),
                 "impact": round(float(impact), 4),
-                "is_risk_driver": bool(impact > 0)
+                "is_risk_driver": bool(impact > 0),
+                "method": "heuristic",
+                "is_shap": False
             })
 
     # Sort factors by impact magnitude (drivers of risk on top)

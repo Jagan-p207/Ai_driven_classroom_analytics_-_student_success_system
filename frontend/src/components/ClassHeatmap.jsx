@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Grid, Eye, AlertCircle, Clock, CheckCircle2, UserCheck } from 'lucide-react';
+import { LayoutGrid, AlertCircle, Info } from 'lucide-react';
 
 export default function ClassHeatmap({
   heatmapData = [],
@@ -18,7 +18,7 @@ export default function ClassHeatmap({
 
   const currentFilter = (riskFilter || 'ALL').toUpperCase();
 
-  // Category counts based on actual student risk levels
+  // Strict case-insensitive category counts matching student records exactly
   const counts = {
     ALL: heatmapData.length,
     HIGH: heatmapData.filter(s => (s.risk_level || '').toUpperCase() === 'HIGH').length,
@@ -28,125 +28,142 @@ export default function ClassHeatmap({
 
   const filtered = heatmapData.filter(s => {
     if (currentFilter === 'ALL') return true;
-    const sLevel = (s.risk_level || '').toUpperCase();
-    return sLevel === currentFilter;
+    return (s.risk_level || '').toUpperCase() === currentFilter;
   });
 
-  const getTileColor = (riskLevel, riskScore = 0.5) => {
+  const getTileStyles = (riskLevel) => {
     const level = (riskLevel || '').toUpperCase();
     if (level === 'HIGH') {
-      const alpha = 0.55 + Math.min(0.45, (riskScore || 0) * 0.45);
-      return `rgba(239, 68, 68, ${alpha})`;
+      return {
+        background: 'var(--risk-high-bg)',
+        color: 'var(--risk-high-text)',
+        borderColor: 'var(--risk-high-border)'
+      };
     }
     if (level === 'MEDIUM') {
-      const alpha = 0.55 + Math.min(0.35, (riskScore || 0) * 0.35);
-      return `rgba(245, 158, 11, ${alpha})`;
+      return {
+        background: 'var(--risk-med-bg)',
+        color: 'var(--risk-med-text)',
+        borderColor: 'var(--risk-med-border)'
+      };
     }
     if (level === 'LOW') {
-      return 'rgba(16, 185, 129, 0.7)';
+      return {
+        background: 'var(--risk-low-bg)',
+        color: 'var(--risk-low-text)',
+        borderColor: 'var(--risk-low-border)'
+      };
     }
-    return 'rgba(148, 163, 184, 0.5)';
+    return {
+      background: 'var(--bg-subtle)',
+      color: 'var(--text-muted)',
+      borderColor: 'var(--border-subtle)'
+    };
   };
 
   return (
-    <div className="glass-card" style={{ padding: '24px', marginBottom: 24 }}>
-      {/* Heatmap Header */}
+    <div className="editorial-card" style={{ padding: '20px 24px', marginBottom: 24 }}>
+      {/* Section Header */}
       <div style={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
         flexWrap: 'wrap',
         gap: 16,
-        marginBottom: 20
+        marginBottom: 18
       }}>
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <Grid size={20} color="#6366f1" />
-            <h2 style={{ fontSize: '1.2rem', color: '#fff', margin: 0 }}>
-              Class Cohort Risk Heat-Map
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <LayoutGrid size={18} color="var(--color-primary)" strokeWidth={2} />
+            <h2 style={{ fontSize: '1.08rem', color: 'var(--text-primary)', margin: 0 }}>
+              Class Cohort Risk Matrix
             </h2>
           </div>
-          <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: 2 }}>
-            Interactive matrix visualizing early risk signals across {heatmapData.length} students. Click any tile to inspect student profile.
+          <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: 2, margin: 0 }}>
+            Visual map of {heatmapData.length} students classified by early-warning model. Select any student to view detailed dossier.
           </p>
         </div>
 
-        {/* Legend & Filter Chips */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: '0.78rem', marginRight: 6 }}>
-            <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-              <span style={{ width: 10, height: 10, borderRadius: 2, background: 'var(--color-high-risk)' }} />
+        {/* Legend & Filter Controls */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: '0.74rem' }}>
+            <span style={{ display: 'flex', alignItems: 'center', gap: 4, color: 'var(--risk-high-text)' }}>
+              <span style={{ width: 8, height: 8, borderRadius: 2, background: 'var(--risk-high-solid)' }} />
               High
             </span>
-            <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-              <span style={{ width: 10, height: 10, borderRadius: 2, background: 'var(--color-med-risk)' }} />
+            <span style={{ display: 'flex', alignItems: 'center', gap: 4, color: 'var(--risk-med-text)' }}>
+              <span style={{ width: 8, height: 8, borderRadius: 2, background: 'var(--risk-med-solid)' }} />
               Medium
             </span>
-            <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-              <span style={{ width: 10, height: 10, borderRadius: 2, background: 'var(--color-low-risk)' }} />
+            <span style={{ display: 'flex', alignItems: 'center', gap: 4, color: 'var(--risk-low-text)' }}>
+              <span style={{ width: 8, height: 8, borderRadius: 2, background: 'var(--risk-low-solid)' }} />
               Low
             </span>
           </div>
 
           <div style={{
             display: 'inline-flex',
-            background: 'rgba(255, 255, 255, 0.05)',
+            background: 'var(--bg-subtle)',
             borderRadius: 'var(--radius-sm)',
-            padding: 3,
-            border: '1px solid var(--border-glass)'
+            padding: 2,
+            border: '1px solid var(--border-subtle)'
           }}>
-            {['ALL', 'HIGH', 'MEDIUM', 'LOW'].map((lvl) => (
-              <button
-                key={lvl}
-                onClick={() => handleFilterClick(lvl)}
-                style={{
-                  padding: '4px 10px',
-                  fontSize: '0.74rem',
-                  fontWeight: 600,
-                  borderRadius: 6,
-                  border: 'none',
-                  cursor: 'pointer',
-                  background: currentFilter === lvl ? '#6366f1' : 'transparent',
-                  color: currentFilter === lvl ? '#fff' : 'var(--text-secondary)',
-                  transition: 'all 0.2s ease',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: 5
-                }}
-              >
-                <span>{lvl}</span>
-                <span style={{
-                  fontSize: '0.68rem',
-                  opacity: 0.85,
-                  background: currentFilter === lvl ? 'rgba(255,255,255,0.22)' : 'rgba(255,255,255,0.08)',
-                  padding: '1px 5px',
-                  borderRadius: 4
-                }}>
-                  {counts[lvl] ?? 0}
-                </span>
-              </button>
-            ))}
+            {['ALL', 'HIGH', 'MEDIUM', 'LOW'].map((lvl) => {
+              const isSelected = currentFilter === lvl;
+              return (
+                <button
+                  key={lvl}
+                  onClick={() => handleFilterClick(lvl)}
+                  style={{
+                    padding: '4px 9px',
+                    fontSize: '0.74rem',
+                    fontWeight: isSelected ? 600 : 500,
+                    borderRadius: 'var(--radius-xs)',
+                    border: 'none',
+                    cursor: 'pointer',
+                    background: isSelected ? '#ffffff' : 'transparent',
+                    color: isSelected ? 'var(--color-primary)' : 'var(--text-secondary)',
+                    boxShadow: isSelected ? 'var(--shadow-xs)' : 'none',
+                    transition: 'all 0.12s ease',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 5
+                  }}
+                >
+                  <span>{lvl}</span>
+                  <span style={{
+                    fontSize: '0.68rem',
+                    padding: '0 4px',
+                    borderRadius: 3,
+                    background: isSelected ? 'var(--color-primary-subtle)' : 'rgba(0,0,0,0.05)',
+                    color: isSelected ? 'var(--color-primary)' : 'var(--text-muted)'
+                  }}>
+                    {counts[lvl] ?? 0}
+                  </span>
+                </button>
+              );
+            })}
           </div>
         </div>
       </div>
 
-      {/* Grid Container */}
+      {/* Grid Canvas */}
       <div style={{ position: 'relative' }}>
         {filtered.length === 0 ? (
           <div style={{
             textAlign: 'center',
             padding: '36px 16px',
-            background: 'rgba(255, 255, 255, 0.02)',
-            borderRadius: 'var(--radius-sm)',
-            border: '1px dashed var(--border-glass)',
+            background: 'var(--bg-subtle)',
+            borderRadius: 'var(--radius-md)',
+            border: '1px dashed var(--border-medium)',
             color: 'var(--text-muted)'
           }}>
-            <AlertCircle size={28} color="var(--text-muted)" style={{ margin: '0 auto 8px', opacity: 0.7 }} />
-            <div style={{ fontSize: '0.9rem', color: '#fff', fontWeight: 600 }}>
-              No students found in {currentFilter} Risk category
+            <AlertCircle size={24} color="var(--text-muted)" style={{ margin: '0 auto 8px', opacity: 0.8 }} strokeWidth={1.75} />
+            <div style={{ fontSize: '0.88rem', color: 'var(--text-primary)', fontWeight: 600 }}>
+              No students currently in the {currentFilter} Risk tier
             </div>
-            <p style={{ fontSize: '0.78rem', marginTop: 4 }}>
-              Switch to another filter or reset to ALL to view all {heatmapData.length} students.
+            <p style={{ fontSize: '0.76rem', marginTop: 4 }}>
+              Select another risk tier filter or switch to ALL to view the full cohort of {heatmapData.length} students.
             </p>
           </div>
         ) : (
@@ -154,34 +171,37 @@ export default function ClassHeatmap({
             {filtered.map((student) => {
               const isHovered = hoveredStudent?.student_id === student.student_id;
               const isSelected = selectedStudentId === student.student_id;
-              const bg = getTileColor(student.risk_level, student.risk_score);
+              const tileStyle = getTileStyles(student.risk_level);
 
               return (
                 <div
                   key={student.student_id}
                   className={`heatmap-tile ${isSelected ? 'selected-tile' : ''}`}
                   style={{
-                    background: bg,
-                    color: '#fff',
+                    background: tileStyle.background,
+                    color: tileStyle.color,
                     border: isSelected
-                      ? '2px solid #38bdf8'
+                      ? '2px solid var(--color-primary)'
                       : isHovered
-                      ? '2px solid #fff'
-                      : student.alert_flag
-                      ? '1px solid rgba(255, 255, 255, 0.4)'
-                      : '1px solid rgba(0,0,0,0.2)',
+                      ? '1px solid var(--text-primary)'
+                      : `1px solid ${tileStyle.borderColor}`,
                     boxShadow: isSelected
-                      ? '0 0 14px rgba(56, 189, 248, 0.9), inset 0 0 6px rgba(255,255,255,0.4)'
-                      : student.alert_flag && (student.risk_level || '').toUpperCase() === 'HIGH'
-                      ? '0 0 8px rgba(239, 68, 68, 0.6)'
-                      : 'none',
-                    transform: isSelected ? 'scale(1.12)' : 'none',
-                    zIndex: isSelected ? 5 : 1
+                      ? '0 0 0 2px var(--color-primary-border), var(--shadow-sm)'
+                      : 'var(--shadow-xs)'
                   }}
                   onMouseEnter={() => setHoveredStudent(student)}
                   onMouseLeave={() => setHoveredStudent(null)}
                   onClick={() => onSelectStudent(student.student_id)}
-                  title={`${student.name} (${student.student_id}) - ${student.risk_level} Risk`}
+                  title={`${student.name} (${student.student_id}) — ${student.risk_level} Risk`}
+                  tabIndex={0}
+                  role="button"
+                  aria-label={`${student.name}, ${student.student_id}, ${student.risk_level} Risk`}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      onSelectStudent(student.student_id);
+                    }
+                  }}
                 >
                   <span>{student.student_id.replace(/^STU-?/i, '') || student.student_id}</span>
                 </div>
@@ -190,39 +210,42 @@ export default function ClassHeatmap({
           </div>
         )}
 
-        {/* Floating Tooltip Card */}
+        {/* Hover Tooltip Card */}
         {hoveredStudent && (
           <div style={{
             position: 'absolute',
-            bottom: -10,
+            bottom: -6,
             right: 0,
-            background: 'rgba(15, 23, 42, 0.96)',
-            border: '1px solid var(--border-glass-bright)',
-            borderRadius: 'var(--radius-sm)',
-            padding: '12px 16px',
-            boxShadow: '0 12px 30px rgba(0,0,0,0.6)',
+            background: 'var(--bg-surface)',
+            border: '1px solid var(--border-medium)',
+            borderRadius: 'var(--radius-md)',
+            padding: '12px 14px',
+            boxShadow: 'var(--shadow-lg)',
             pointerEvents: 'none',
             zIndex: 50,
-            minWidth: 260,
-            backdropFilter: 'blur(10px)'
+            minWidth: 240
           }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-              <strong style={{ color: '#fff', fontSize: '0.88rem' }}>{hoveredStudent.name}</strong>
-              <span className={`badge-risk ${hoveredStudent.risk_level.toLowerCase()}`} style={{ fontSize: '0.72rem' }}>
+              <strong style={{ color: 'var(--text-primary)', fontSize: '0.86rem' }}>
+                {hoveredStudent.name}
+              </strong>
+              <span className={`badge-risk ${(hoveredStudent.risk_level || 'low').toLowerCase()}`}>
                 {hoveredStudent.risk_level}
               </span>
             </div>
-            <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: 8 }}>
-              ID: {hoveredStudent.student_id} • Score: {(hoveredStudent.risk_score * 100).toFixed(0)}%
+            <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginBottom: 8 }}>
+              {hoveredStudent.student_id} • Risk Score: {(hoveredStudent.risk_score * 100).toFixed(0)}%
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6, fontSize: '0.74rem' }}>
-              <div>Attendance: <strong style={{ color: '#e2e8f0' }}>{hoveredStudent.attendance_pct}%</strong></div>
-              <div>Avg Marks: <strong style={{ color: '#e2e8f0' }}>{hoveredStudent.avg_score}%</strong></div>
-              <div>Engagement: <strong style={{ color: '#38bdf8' }}>{hoveredStudent.composite_engagement}/100</strong></div>
-              <div>Trend: <strong style={{ color: hoveredStudent.score_trend < 0 ? '#ef4444' : '#10b981' }}>{hoveredStudent.score_trend > 0 ? '+' : ''}{hoveredStudent.score_trend}</strong></div>
+              <div>Attendance: <strong style={{ color: 'var(--text-primary)' }}>{hoveredStudent.attendance_pct}%</strong></div>
+              <div>Avg Marks: <strong style={{ color: 'var(--text-primary)' }}>{hoveredStudent.avg_score}%</strong></div>
+              <div>Engagement: <strong style={{ color: 'var(--color-primary)' }}>{hoveredStudent.composite_engagement}/100</strong></div>
+              <div>Trend: <strong style={{ color: hoveredStudent.score_trend < 0 ? 'var(--risk-high-text)' : 'var(--risk-low-text)' }}>
+                {hoveredStudent.score_trend > 0 ? '+' : ''}{hoveredStudent.score_trend}
+              </strong></div>
             </div>
             {hoveredStudent.intervention_status && (
-              <div style={{ marginTop: 8, paddingTop: 6, borderTop: '1px solid var(--border-glass)', fontSize: '0.72rem', color: '#a5b4fc' }}>
+              <div style={{ marginTop: 8, paddingTop: 6, borderTop: '1px solid var(--border-subtle)', fontSize: '0.72rem', color: 'var(--color-primary)' }}>
                 Intervention: <strong>{hoveredStudent.intervention_status}</strong>
               </div>
             )}

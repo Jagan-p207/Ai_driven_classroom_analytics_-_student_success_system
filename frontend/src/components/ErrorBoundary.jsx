@@ -1,5 +1,5 @@
 import React from 'react';
-import { AlertTriangle, RotateCcw } from 'lucide-react';
+import { AlertCircle, RotateCcw } from 'lucide-react';
 
 export default class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -28,46 +28,48 @@ export default class ErrorBoundary extends React.Component {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          background: 'var(--bg-dark, #070a12)',
-          color: '#fff',
+          background: 'var(--bg-canvas, #f8fafc)',
+          color: 'var(--text-primary, #0f172a)',
           padding: 24
         }}>
           <div style={{
-            background: 'rgba(255, 255, 255, 0.04)',
-            border: '1px solid var(--border-glass, rgba(255, 255, 255, 0.1))',
-            borderRadius: 12,
+            background: 'var(--bg-surface, #ffffff)',
+            border: '1px solid var(--border-subtle, #e2e8f0)',
+            borderRadius: 'var(--radius-lg, 12px)',
             padding: '36px 32px',
-            maxWidth: 520,
+            maxWidth: 500,
             textAlign: 'center',
-            boxShadow: '0 20px 40px rgba(0,0,0,0.5)'
+            boxShadow: 'var(--shadow-modal)'
           }}>
             <div style={{
-              width: 56,
-              height: 56,
+              width: 48,
+              height: 48,
               borderRadius: '50%',
-              background: 'rgba(239, 68, 68, 0.15)',
+              background: 'var(--risk-high-bg, #fef2f2)',
+              border: '1px solid var(--risk-high-border, #fecaca)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              margin: '0 auto 18px',
-              border: '1px solid rgba(239, 68, 68, 0.3)'
+              margin: '0 auto 16px',
+              color: 'var(--risk-high-solid, #dc2626)'
             }}>
-              <AlertTriangle size={28} color="#f87171" />
+              <AlertCircle size={24} strokeWidth={2} />
             </div>
-            <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#fff', marginBottom: 8 }}>
+            <h2 style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--text-primary, #0f172a)', marginBottom: 6 }}>
               Application Render Notice
             </h2>
-            <p style={{ fontSize: '0.86rem', color: 'var(--text-muted, #94a3b8)', marginBottom: 20, lineHeight: 1.5 }}>
-              EduPulseAI encountered an unexpected component issue:
+            <p style={{ fontSize: '0.84rem', color: 'var(--text-muted, #64748b)', marginBottom: 16, lineHeight: 1.5 }}>
+              EduPulse AI encountered an unexpected interface issue:
             </p>
             <div style={{
-              background: 'rgba(0,0,0,0.3)',
-              padding: '12px 16px',
-              borderRadius: 8,
+              background: 'var(--bg-subtle, #f1f5f9)',
+              border: '1px solid var(--border-subtle, #e2e8f0)',
+              padding: '10px 14px',
+              borderRadius: 'var(--radius-sm, 6px)',
               fontSize: '0.78rem',
-              color: '#fca5a5',
-              fontFamily: 'monospace',
-              marginBottom: 24,
+              color: 'var(--risk-high-text, #991b1b)',
+              fontFamily: 'var(--font-mono, monospace)',
+              marginBottom: 20,
               textAlign: 'left',
               wordBreak: 'break-word',
               maxHeight: 120,
@@ -81,12 +83,12 @@ export default class ErrorBoundary extends React.Component {
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: 8,
-                padding: '10px 24px',
-                fontSize: '0.88rem'
+                gap: 6,
+                padding: '8px 20px',
+                fontSize: '0.84rem'
               }}
             >
-              <RotateCcw size={15} /> Reload Dashboard
+              <RotateCcw size={14} strokeWidth={2} /> Reload Application
             </button>
           </div>
         </div>

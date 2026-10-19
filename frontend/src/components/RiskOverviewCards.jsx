@@ -1,5 +1,5 @@
 import React from 'react';
-import { Users, AlertOctagon, AlertTriangle, CheckCircle2, CalendarCheck, Award, Zap } from 'lucide-react';
+import { Users, AlertTriangle, AlertOctagon, CheckCircle2, CalendarCheck, Award } from 'lucide-react';
 
 export default function RiskOverviewCards({ summary }) {
   if (!summary) return null;
@@ -15,107 +15,151 @@ export default function RiskOverviewCards({ summary }) {
 
   const cards = [
     {
-      title: 'Class Roster',
+      title: 'Total Enrolled',
       value: summary.total_students,
-      subtitle: 'Computer Science CS101',
+      subtitle: 'Active Cohort Roster',
+      badge: 'CS101 Roster',
+      badgeClass: '',
       icon: Users,
-      color: '#6366f1',
-      glow: 'rgba(99, 102, 241, 0.2)'
+      iconColor: 'var(--color-primary)',
+      iconBg: 'var(--color-primary-subtle)',
+      borderColor: 'var(--border-subtle)'
     },
     {
-      title: 'High Risk (Critical)',
+      title: 'High Risk (Tier 3)',
       value: highCount,
       subtitle: `${highPct}% of cohort`,
       badge: 'Immediate Action',
+      badgeClass: 'badge-risk high',
       icon: AlertOctagon,
-      color: '#ef4444',
-      glow: 'rgba(239, 68, 68, 0.25)',
-      isCritical: highCount > 0
+      iconColor: 'var(--risk-high-solid)',
+      iconBg: 'var(--risk-high-bg)',
+      borderColor: highCount > 0 ? 'var(--risk-high-border)' : 'var(--border-subtle)'
     },
     {
-      title: 'Medium Risk (Warning)',
+      title: 'Medium Risk (Tier 2)',
       value: medCount,
       subtitle: `${medPct}% of cohort`,
-      badge: 'Needs Support',
+      badge: 'Support Queue',
+      badgeClass: 'badge-risk medium',
       icon: AlertTriangle,
-      color: '#f59e0b',
-      glow: 'rgba(245, 158, 11, 0.2)'
+      iconColor: 'var(--risk-med-solid)',
+      iconBg: 'var(--risk-med-bg)',
+      borderColor: 'var(--border-subtle)'
     },
     {
-      title: 'Low Risk (On Track)',
+      title: 'Low Risk (Tier 1)',
       value: lowCount,
       subtitle: `${lowPct}% of cohort`,
-      badge: 'Stable / High Achievers',
+      badge: 'On Track',
+      badgeClass: 'badge-risk low',
       icon: CheckCircle2,
-      color: '#10b981',
-      glow: 'rgba(16, 185, 129, 0.2)'
+      iconColor: 'var(--risk-low-solid)',
+      iconBg: 'var(--risk-low-bg)',
+      borderColor: 'var(--border-subtle)'
     },
     {
-      title: 'Avg Attendance',
+      title: 'Cohort Attendance',
       value: `${summary.avg_attendance || 0}%`,
-      subtitle: 'Across 45 sessions',
+      subtitle: 'Session aggregate',
+      badge: 'Across 45 sessions',
+      badgeClass: '',
       icon: CalendarCheck,
-      color: '#06b6d4',
-      glow: 'rgba(6, 182, 212, 0.2)'
+      iconColor: 'var(--color-accent)',
+      iconBg: 'var(--color-accent-subtle)',
+      borderColor: 'var(--border-subtle)'
     },
     {
-      title: 'Avg Assessment',
+      title: 'Average Marks',
       value: `${summary.avg_score || 0}%`,
-      subtitle: '5 Major Assessments',
+      subtitle: 'Course assessments',
+      badge: '5 milestones',
+      badgeClass: '',
       icon: Award,
-      color: '#ec4899',
-      glow: 'rgba(236, 72, 153, 0.2)'
+      iconColor: '#7c3aed',
+      iconBg: '#f5f3ff',
+      borderColor: 'var(--border-subtle)'
     }
   ];
 
   return (
-    <div style={{
-      display: 'grid',
-      gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-      gap: 16,
-      marginBottom: 24
-    }}>
-      {cards.map((c, i) => {
-        const IconComponent = c.icon;
-        return (
-          <div
-            key={i}
-            className="glass-card"
-            style={{
-              padding: '18px 20px',
-              position: 'relative',
-              overflow: 'hidden',
-              boxShadow: `0 4px 20px ${c.glow}`
-            }}
-          >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-              <div>
-                <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+    <section aria-label="Classroom Key Performance Indicators" style={{ marginBottom: 24 }}>
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(190px, 1fr))',
+        gap: 14
+      }}>
+        {cards.map((c, i) => {
+          const IconComponent = c.icon;
+          return (
+            <div
+              key={i}
+              className="editorial-card"
+              style={{
+                padding: '16px 18px',
+                background: 'var(--bg-surface)',
+                border: `1px solid ${c.borderColor}`,
+                borderRadius: 'var(--radius-lg)',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between'
+              }}
+            >
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10 }}>
+                <span style={{
+                  fontSize: '0.74rem',
+                  fontWeight: 600,
+                  color: 'var(--text-muted)',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.04em'
+                }}>
                   {c.title}
                 </span>
-                <div style={{ fontSize: '1.9rem', fontWeight: 800, color: '#fff', marginTop: 4, lineHeight: 1.1 }}>
+                <div style={{
+                  width: 32,
+                  height: 32,
+                  borderRadius: 'var(--radius-sm)',
+                  background: c.iconBg,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: c.iconColor
+                }}>
+                  <IconComponent size={17} strokeWidth={2} />
+                </div>
+              </div>
+
+              <div>
+                <div style={{
+                  fontSize: '1.75rem',
+                  fontWeight: 700,
+                  color: 'var(--text-primary)',
+                  lineHeight: 1.1,
+                  fontFamily: 'var(--font-heading)',
+                  letterSpacing: '-0.02em'
+                }}>
                   {c.value}
                 </div>
-                <div style={{ fontSize: '0.75rem', color: c.color, marginTop: 4, fontWeight: 500 }}>
-                  {c.subtitle}
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  marginTop: 6
+                }}>
+                  <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                    {c.subtitle}
+                  </span>
+                  {c.badgeClass ? (
+                    <span className={c.badgeClass} style={{ fontSize: '0.68rem', padding: '1px 6px' }}>
+                      {c.badge}
+                    </span>
+                  ) : null}
                 </div>
               </div>
-              <div style={{
-                width: 38,
-                height: 38,
-                borderRadius: 10,
-                background: `rgba(${c.color === '#ef4444' ? '239, 68, 68' : c.color === '#f59e0b' ? '245, 158, 11' : c.color === '#10b981' ? '16, 185, 129' : '99, 102, 241'}, 0.15)`,
-                border: `1px solid ${c.color}33`,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}>
-                <IconComponent size={20} color={c.color} />
-              </div>
             </div>
-          </div>
-        );
-      })}
-    </div>
+          );
+        })}
+      </div>
+    </section>
   );
 }
