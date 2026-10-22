@@ -2,7 +2,7 @@
 
 An institutional early-warning analytics platform and decision-support system that identifies at-risk students by synthesizing longitudinal attendance records, internal assessment scores, and LMS submission patterns into unified, explainable risk assessments.
 
-[![Backend Tests](https://img.shields.io/badge/pytest-20%20passed-emerald)](file:///d:/AI_DRIVEN_CLASSROOM_ANALYTICS_AND_STUDENT_SUCCESS_SYSTEM/tests/test_api_and_pipeline.py)
+[![Backend Tests](https://img.shields.io/badge/pytest-24%20passed-emerald)](file:///d:/AI_DRIVEN_CLASSROOM_ANALYTICS_AND_STUDENT_SUCCESS_SYSTEM/tests/test_api_and_pipeline.py)
 [![Frontend Tests](https://img.shields.io/badge/frontend%20tests-passed-emerald)](file:///d:/AI_DRIVEN_CLASSROOM_ANALYTICS_AND_STUDENT_SUCCESS_SYSTEM/frontend/tests/test_components.mjs)
 [![Vite Build](https://img.shields.io/badge/vite%20build-passing-emerald)](file:///d:/AI_DRIVEN_CLASSROOM_ANALYTICS_AND_STUDENT_SUCCESS_SYSTEM/frontend)
 [![Python](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/)
@@ -11,18 +11,19 @@ An institutional early-warning analytics platform and decision-support system th
 
 ---
 
-## 🏛️ Executive Summary & Product Redesign
+## 🏛️ Executive Summary & Product Architecture
 
-EduPulse AI has been redesigned from the ground up to eliminate AI-generated "crypto dashboard" aesthetics (excessive dark glassmorphism, fluorescent neon glows, emoji headers, and arbitrary gradient borders) in favor of a **calm, high-density, accessible institutional design system** designed for educators, academic advisors, and departmental committees.
+EduPulse AI is an institutional early-warning analytics platform and decision-support system that identifies at-risk students by synthesizing longitudinal attendance records, internal assessment scores, and LMS submission patterns into unified, explainable risk assessments.
 
-### Design System Highlights (`frontend/src/styles/design-tokens.css`)
-- **Restrained Academic Palette**: Off-white/slate canvas (`#f8fafc`), crisp white card panels (`#ffffff`), and subtle slate structural dividers (`#e2e8f0`).
-- **Semantic Risk Taxonomy**:
-  - 🔴 **High Risk**: Crimson text (`#991b1b`) on soft rose surface (`#fef2f2`) with solid indicator border (`#fca5a5`).
-  - 🟡 **Medium Risk**: Deep amber text (`#92400e`) on warm cream surface (`#fffbeb`) with amber indicator border (`#fcd34d`).
-  - 🟢 **Low Risk**: Deep forest emerald text (`#065f46`) on mint surface (`#ecfdf5`) with emerald indicator border (`#6ee7b7`).
-- **Explainability Transparency**: Explicitly distinguishes between **Real TreeSHAP Feature Attributions** (when ML TreeExplainer is active) and **Heuristic Baseline Fallbacks** (when baseline models are active).
-- **Accessible & High Density**: Full WCAG 2.1 AA compliant contrast ratios, compact tabular data density, clear visual hierarchy, and standardized Lucide React iconography.
+### Key Capabilities & New Dataset Integration (192 Students)
+- **Full Institutional Dataset Integration**: Powered by a 192-student, 14-column dataset (`data/student_dataset.csv`) spanning continuous assessment marks, LMS page views, and demographic attributes.
+- **Strict Data Leakage Prevention**: Mathematically audited $\text{FinalGrade} = \text{QuizTotal} + \text{Project} + \text{Midterm} + \text{Final} + \text{Attendance}$. The end-of-term `Final` exam mark is strictly excluded to prevent artificial $>0.99$ target leakage and guarantee genuine mid-semester early-warning utility.
+- **Dual Machine Learning Engine**:
+  - **Academic Risk Classification**: Random Forest Classifier achieving **87.2% test accuracy** and **0.854 weighted F1** across High, Medium, and At-Risk tiers.
+  - **Continuous Grade Prediction**: Linear Regression Regressor explaining **92.1% of grade variance** ($R^2 = 0.921$) with an average absolute error of just **$\pm 2.19$ percentage points** ($\text{MAE} = 2.19$).
+- **Explainable AI (TreeSHAP)**: Computes local Shapley game-theoretic attributions for every prediction, pinpointing the exact behavioral and academic factors influencing each student's trajectory.
+- **Demographic & Cohort Breakdown**: Multi-dimensional analytics tracking student progress across Degree Programs (1–4), Academic Year Standings (1–4), and Class Schedule Slots.
+- **Calm, High-Density Institutional UX**: Eliminates distracting crypto/neon aesthetics in favor of a calm, high-density editorial design system (`#f8fafc` canvas, semantic risk taxonomy, WCAG 2.1 AA accessibility).
 
 ---
 
@@ -34,15 +35,16 @@ The repository is organized into cleanly decoupled tiers:
 AI_DRIVEN_CLASSROOM_ANALYTICS_AND_STUDENT_SUCCESS_SYSTEM/
 ├── frontend/                     # React 19 + Vite presentation tier
 │   ├── src/
-│   │   ├── components/           # Redesigned academic UI components
+│   │   ├── components/           # Academic UI components
 │   │   │   ├── Navbar.jsx        # Institutional header with view navigation
 │   │   │   ├── RiskOverviewCards.jsx # Core cohort summary metric cards
 │   │   │   ├── AlertBanner.jsx   # Urgent intervention alert notification
-│   │   │   ├── ClassHeatmap.jsx  # Interactive cohort risk matrix with exact filters
-│   │   │   ├── StudentRiskTable.jsx  # Paginated roster with trajectory slopes
-│   │   │   ├── StudentDetailModal.jsx # Comprehensive student dossier & SHAP drivers
-│   │   │   ├── ModelInfoModal.jsx # ML benchmarks, confusion matrix & global importances
-│   │   │   ├── IngestionModal.jsx# CSV ingestion & validation workflow
+│   │   │   ├── ClassHeatmap.jsx  # Interactive cohort risk matrix with exact filters & tooltips
+│   │   │   ├── CohortAnalyticsSection.jsx # Degree program, standing & schedule cohort analytics
+│   │   │   ├── StudentRiskTable.jsx  # Paginated roster with cohort filters & predicted grades
+│   │   │   ├── StudentDetailModal.jsx # Student dossier, predicted vs observed grade & SHAP drivers
+│   │   │   ├── ModelInfoModal.jsx # Dual ML benchmarks, retrain button, confusion matrix & leakage audit
+│   │   │   ├── IngestionModal.jsx# CSV ingestion & validation workflow (supports 14-column dataset)
 │   │   │   ├── HistoricalAnalyticsSection.jsx # Longitudinal progression tracking
 │   │   │   └── ErrorBoundary.jsx # Graceful UI fallback boundary
 │   │   ├── styles/
@@ -58,59 +60,54 @@ AI_DRIVEN_CLASSROOM_ANALYTICS_AND_STUDENT_SUCCESS_SYSTEM/
 │
 ├── backend/                      # FastAPI asynchronous service tier
 │   ├── app/
-│   │   ├── api/
-│   │   │   ├── v1/
-│   │   │   │   └── endpoints/    # Modular route controllers
-│   │   │   │       ├── class_analytics.py # Class risk summary & cohort heatmap
-│   │   │   │       ├── students.py        # Student roster & drilldown dossiers
-│   │   │   │       ├── interventions.py   # Intervention logging & case tracking
-│   │   │   │       ├── ingest.py          # CSV preview & batch ingestion
-│   │   │   │       ├── reports.py         # Executive summary & CSV roster export
-│   │   │   │       ├── recompute.py       # Batch scoring trigger
-│   │   │   │       ├── ml_models.py       # ML benchmarks & feature importances
-│   │   │   │       └── historical_analytics.py # Milestone trend comparisons
-│   │   │   └── deps.py           # Dependency injection providers
+│   │   ├── api/                  # Modular route controllers
+│   │   │   ├── class_analytics.py # Class risk summary, heatmaps & cohort breakdowns
+│   │   │   ├── students.py        # Student roster, dossiers, predict/student & predict/batch
+│   │   │   ├── interventions.py   # Intervention logging & case tracking
+│   │   │   ├── ingest.py          # CSV preview & batch ingestion (14-column student dataset)
+│   │   │   ├── reports.py         # Executive summary & CSV roster export
+│   │   │   ├── recompute.py       # Batch scoring trigger
+│   │   │   └── model_info.py      # ML benchmarks, retrain endpoint & dataset seeder
 │   │   ├── core/
 │   │   │   ├── config.py         # Environment settings & fallback defaults
 │   │   │   └── database.py       # SQLAlchemy engine & session maker
-│   │   ├── database/
-│   │   │   └── __init__.py       # Standard database module exports
-│   │   ├── models/               # SQLAlchemy ORM database models
-│   │   ├── schemas/              # Pydantic validation schemas
-│   │   └── main.py               # FastAPI application factory & middleware
+│   │   ├── models/               # SQLAlchemy ORM database models (Student, RiskScore, Intervention, etc.)
+│   │   ├── schemas/              # Pydantic v2 validation schemas
+│   │   ├── services/
+│   │   │   └── pipeline_service.py # Feature extraction, DB seeding, migrations & scoring
+│   │   └── main.py               # FastAPI application factory & lifespan startup
 │   ├── requirements.txt          # Backend Python dependencies
 │   └── README.md                 # Backend API documentation
 │
 ├── ml/                           # Machine learning pipeline tier
-│   ├── data_generation/          # Synthetic student population generators
-│   │   ├── __init__.py           # Package exports
-│   │   └── synthetic_data_generator.py # Core cohort generator (130 students, 3 archetypes)
-│   ├── models/                   # Serialized model artifacts (.joblib, benchmarks.json)
-│   ├── synthetic_data_generator.py # Backward-compatible CLI entry point
-│   ├── feature_engineering.py    # 12-feature extraction pipeline (slopes, composite scores)
-│   ├── train_models.py           # Model training & 5-fold cross-validation suite
-│   ├── batch_scorer.py           # Inference engine with TreeSHAP attribution & fallback
-│   └── README.md                 # ML methodology & explainability documentation
+│   ├── models/                   # Serialized model artifacts (.joblib, model_metadata.json)
+│   │   ├── best_classifier.joblib # Random Forest Classifier (87.2% test accuracy)
+│   │   ├── best_regressor.joblib  # Linear Regression Regressor (R² = 0.921, MAE = 2.19)
+│   │   ├── best_model.joblib      # Production classifier alias
+│   │   ├── preprocessor.joblib    # StandardScaler fitted strictly on training data
+│   │   ├── shap_explainer.joblib  # TreeSHAP explainer artifact
+│   │   └── model_metadata.json    # Dual benchmarks, confusion matrix, and leakage audit
+│   ├── train_models.py           # 5-fold CV & benchmark training pipeline (regression + classification)
+│   ├── batch_scorer.py           # Dual inference engine (predicted grade, risk tier, SHAP attributions)
+│   ├── synthetic_data_generator.py # Synthetic data generation utility
+│   └── README.md                 # ML methodology, leakage audit & explainability documentation
 │
 ├── data/                         # Persistent data directory
-│   ├── raw/                      # CSV templates for attendance, marks, LMS & roster
-│   ├── processed/                # Computed feature datasets & student profiles
+│   ├── student_dataset.csv       # Full institutional dataset (192 records, 14 columns)
+│   ├── raw/                      # Fallback CSV templates for attendance, marks, LMS & roster
+│   ├── processed/                # Scored batch outputs
 │   └── README.md                 # Data schemas & ingestion format guides
 │
-├── tests/                        # Full-stack automated integration test suite
-│   └── test_api_and_pipeline.py  # 20 Pytest suites validating end-to-end functionality
+├── tests/                        # Automated integration & regression test suite
+│   ├── test_api_and_pipeline.py  # End-to-end API, prediction, cohort & retrain tests (14 tests)
+│   └── test_regression_bugs.py   # Database & pipeline regression tests (10 tests)
 │
-├── scripts/                      # Developer utility scripts
-│   └── start_local.py            # Local dual-server launcher
+├── scripts/                      # Utility scripts
+│   ├── inspect_dataset.py        # Dataset analysis & mathematical leakage audit script
+│   └── test_models.py            # Local model loading & inference validation script
 │
-├── docker-compose.yml            # Multi-container orchestration (Postgres, Backend, Frontend)
-├── Dockerfile.backend            # Container specification for FastAPI
-├── Dockerfile.frontend           # Container specification for React Nginx static build
-├── vercel.json                   # Cloud deployment configuration for Vercel
-├── netlify.toml                  # Cloud deployment configuration for Netlify
-├── render.yaml                   # 1-Click deployment blueprint for Render
-├── start_local.py                # Root launcher wrapper
-└── .env.example                  # Environment variable template
+├── start_local.py                # Dual-server launcher (FastAPI + Vite)
+└── README.md                     # Root project documentation
 ```
 
 ---
@@ -166,21 +163,24 @@ docker-compose up --build
 
 Both the backend and frontend include dedicated test suites to prevent regressions.
 
-### 1. Backend Integration & API Test Suite (20 Tests)
+### 1. Backend Integration & API Test Suite (24 Tests Passing)
 ```bash
-# Run pytest with root in PYTHONPATH
-python -m pytest tests/test_api_and_pipeline.py -v
+# Run pytest across all suites
+python -m pytest
 ```
 Validates:
-- SQLite schema & automatic migration
-- Batch scoring pipeline & SHAP local explainability
-- Model confidence & continuous multiclass probability calculation
-- Synthetic pilot data seeding
-- Class analytics & cohort heat-map matrix contracts
+- SQLite schema & dynamic column migration (`gender`, `program`, `year_level`, `class_time`, `predicted_grade`, `observed_grade`)
+- Batch scoring pipeline & TreeSHAP explainability
+- Continuous `FinalGrade` prediction and 3-tier risk classification
+- On-demand single student inference (`POST /api/predict/student`)
+- Batch inference (`POST /api/predict/batch`)
+- Academic cohort analytics aggregation (`GET /api/class/{class_id}/cohort-analytics`)
+- Dynamic model retraining pipeline (`POST /api/model/retrain`)
+- 192-student dataset seeding and scoring
 - Student risk profiles with historical trend trajectory
 - Counselor interventions CRUD & overdue status calculation
 - Historical analytics & milestone risk shifts
-- CSV ingestion schema validation & error preview
+- CSV ingestion schema validation & error preview (including 14-column student dataset)
 - Executive report metrics & institutional CSV roster download
 
 ### 2. Frontend Component Regression Suite
@@ -195,9 +195,9 @@ Validates:
 ### 3. Production Bundle Validation
 ```bash
 cd frontend
-npm run build
+cmd /c npm run build
 ```
-Builds the production distribution into `frontend/dist/` with zero linting or compilation errors.
+Builds the production distribution into `frontend/dist/` in <1s with zero linting or compilation errors.
 
 ---
 
@@ -205,20 +205,24 @@ Builds the production distribution into `frontend/dist/` with zero linting or co
 
 | HTTP Method | Endpoint | Description |
 | :--- | :--- | :--- |
+| `POST` | `/api/predict/student` | **New**: On-demand inference for an individual student (predicted grade, risk tier, confidence, probabilities, SHAP factors) |
+| `POST` | `/api/predict/batch` | **New**: Batch scoring for arbitrary lists of student feature dictionaries |
+| `GET` | `/api/class/{class_id}/cohort-analytics` | **New**: Cohort breakdown by Program (1–4), Year Level (1–4), and Class Schedule Slot |
+| `POST` | `/api/model/retrain` | **New**: Triggers full retraining of classification and regression models and regenerates metadata |
 | `GET` | `/class/{class_id}/risk-summary` | Class-level summary, cohort heat-map matrix, and early-warning alerts |
 | `GET` | `/class/{class_id}/historical-analytics` | Milestone progression, attendance trajectory, risk mobility & intervention statistics |
-| `GET` | `/students` | Student roster with risk tiers, multi-factor filters, and engagement metrics |
-| `GET` | `/students/{student_id}/risk` | Detailed student dossier, score trajectory, and TreeSHAP attribution factors |
+| `GET` | `/students` | Student roster with risk tiers, program/year cohort filters, and predicted grades |
+| `GET` | `/students/{student_id}/risk` | Detailed student dossier, predicted vs observed grade, and TreeSHAP attribution factors |
 | `POST` | `/students/{student_id}/interventions` | Log counselor intervention with follow-up dates & action notes |
 | `GET` | `/students/{student_id}/interventions` | Retrieve student intervention history |
-| `PUT` | `/interventions/{intervention_id}` | Update intervention status (`IN_PROGRESS`, `RESOLVED`, `ESCALATED`) |
-| `POST` | `/ingest/preview` | Dry-run schema validation of uploaded CSV |
-| `POST` | `/ingest` | Bulk CSV commit for attendance, marks, LMS logs, or students with automatic recomputation |
-| `GET` | `/reports/csv` | Download institutional risk & intervention roster as CSV |
-| `GET` | `/reports/summary` | Executive high-level risk overview metrics |
-| `POST` | `/recompute` | Triggers batch feature extraction and ML risk scoring across all students |
-| `GET` | `/api/model/info` | Returns model benchmark comparison table, 3x3 confusion matrix & global importances |
-| `POST` | `/api/seed` | Resets and reloads pilot demo dataset (130 students across 3 behavioral archetypes) |
+| `PUT` | `/interventions/{intervention_id}` | Update intervention status (`In Progress`, `Resolved`, `Completed`) |
+| `POST` | `/api/ingest/preview` | Dry-run schema validation of uploaded CSV (supports 14-column `student_dataset`) |
+| `POST` | `/api/ingest` | Bulk CSV commit for attendance, marks, LMS logs, or 14-column `student_dataset` with auto-recompute |
+| `GET` | `/api/reports/csv` | Download institutional risk & intervention roster as CSV |
+| `GET` | `/api/reports/summary` | Executive high-level risk overview metrics |
+| `POST` | `/api/recompute` | Triggers batch feature extraction and ML risk scoring across all students |
+| `GET` | `/api/model/info` | Returns model benchmark comparison table, regression metrics, 3x3 confusion matrix & global importances |
+| `POST` | `/api/seed` | Resets and reloads the full 192-student institutional dataset |
 | `GET` | `/health` | Service health status |
 
 ---

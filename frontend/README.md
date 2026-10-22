@@ -10,17 +10,18 @@ The **EduPulse AI** client is a responsive, educator-centric single-page web app
 frontend/
 ├── src/
 │   ├── assets/              # Static SVG & branding assets
-│   ├── components/          # Reusable presentation & container components
+│   ├── components/          # Presentation & container components
 │   │   ├── AlertBanner.jsx                # Early warning urgent student alert queue
-│   │   ├── ClassHeatmap.jsx               # Cohort risk matrix with strict tier filtering
+│   │   ├── ClassHeatmap.jsx               # Cohort risk matrix with strict tier filtering & tooltips
+│   │   ├── CohortAnalyticsSection.jsx     # Degree program, standing & schedule cohort analytics
 │   │   ├── ErrorBoundary.jsx              # React exception boundary & recovery UI
 │   │   ├── HistoricalAnalyticsSection.jsx # Milestone progression & mobility charts
 │   │   ├── IngestionModal.jsx             # Step-by-step CSV ingestion & validation pipeline
-│   │   ├── ModelInfoModal.jsx             # ML model evaluation benchmarks & confusion matrix
+│   │   ├── ModelInfoModal.jsx             # ML benchmarks, retrain button, confusion matrix & leakage audit
 │   │   ├── Navbar.jsx                     # Institutional header & view navigation
 │   │   ├── RiskOverviewCards.jsx          # KPI metric cards with accessible risk indicators
-│   │   ├── StudentDetailModal.jsx         # Full student dossier, SHAP attribution & interventions
-│   │   └── StudentRiskTable.jsx           # Roster table with search, sorting, filtering & pagination
+│   │   ├── StudentDetailModal.jsx         # Full student dossier, predicted vs observed grade & SHAP drivers
+│   │   └── StudentRiskTable.jsx           # Roster table with cohort filters, predicted grades & sorting
 │   ├── hooks/               # Custom React hooks
 │   ├── services/            # API client layer with live/demo fallback
 │   │   ├── api.js           # REST endpoint client for all backend resources
@@ -46,7 +47,7 @@ frontend/
 
 ## 🎨 Visual Identity & Design System
 
-The EduPulse AI interface was redesigned from the ground up to eliminate AI-generated visual patterns (neon glow cards, rainbow gradients, and floating decorative shadows). It follows a **calm, editorial academic-analytics aesthetic**:
+The EduPulse AI interface follows a **calm, editorial academic-analytics aesthetic**:
 
 - **Surfaces**: Crisp white panels (`#ffffff`) over a clean, warm off-white canvas (`#f8fafc`).
 - **Typography**: Primary slate-900 ink (`#0f172a`) paired with clean Inter and Outfit fonts.
@@ -59,7 +60,28 @@ The EduPulse AI interface was redesigned from the ground up to eliminate AI-gene
 
 ---
 
-## 🚀 Development & Build
+## 🚀 Key Interface Modules
+
+1. **Class Overview Dashboard**:
+   - High-risk alert banner with quick intervention assignments.
+   - 4 KPI cards tracking student count, high-risk flags, average attendance, and average predicted grade.
+   - Interactive 192-tile cohort risk matrix with hover tooltips displaying predicted grades and cohort data.
+   - Dedicated **Academic Cohort Breakdown** displaying risk distributions and average grades across Degree Programs (1–4), Year Standings (Freshman–Senior), and Schedule Sections.
+   - Longitudinal milestone progression chart tracking score stability across assessments.
+2. **Student Risk Registry**:
+   - Multi-factor search, risk level filters, and new **Program Cohort** and **Academic Standing** dropdowns.
+   - Dedicated **Predicted Final** grade column with actual final grade comparison and sorting.
+3. **Student Dossier Modal**:
+   - Comprehensive student view displaying continuous predicted grade vs observed grade, prediction confidence, multiclass probability distribution, and local SHAP feature attributions.
+4. **Machine Learning Intelligence Modal**:
+   - Dual-model production banner with one-click **Retrain Pipeline** button.
+   - Data Leakage Audit summary explaining the exclusion of end-of-term exams.
+   - Regression Benchmark table ($R^2$, MAE, RMSE) and Classification Benchmark table (Accuracy, Macro F1, Weighted F1).
+   - 3x3 holdout confusion matrix and global TreeSHAP feature importances.
+
+---
+
+## 🧪 Development & Build
 
 ### Running Locally
 ```bash
@@ -67,14 +89,8 @@ npm run dev
 ```
 Starts the Vite development server at [http://localhost:5173](http://localhost:5173).
 
-### Running Tests
-```bash
-npm test
-```
-Executes frontend component normalization and cohort heatmap filter regression tests.
-
 ### Production Build
 ```bash
-npm run build
+cmd /c npm run build
 ```
-Generates minified production assets in `dist/`.
+Generates minified production assets in `dist/` with zero linting or compilation errors.
