@@ -12,6 +12,10 @@ class Student(Base):
     class_id = Column(String(50), index=True, nullable=False, default="CS101")
     department = Column(String(100), nullable=False, default="Computer Science")
     enrollment_date = Column(String(50), nullable=False)
+    gender = Column(Integer, nullable=True, default=0)
+    program = Column(Integer, nullable=True, default=1)
+    year_level = Column(Integer, nullable=True, default=3)
+    class_time = Column(Integer, nullable=True, default=0)
 
     # Relationships
     attendance_records = relationship(
@@ -92,6 +96,8 @@ class RiskScore(Base):
     computed_at = Column(String(50), nullable=False, default=lambda: datetime.utcnow().isoformat())
     risk_level = Column(String(20), nullable=False) # 'Low', 'Medium', 'High'
     risk_score = Column(Float, nullable=False) # 0.0 to 1.0
+    predicted_grade = Column(Float, nullable=True) # Model predicted FinalGrade
+    observed_grade = Column(Float, nullable=True) # Actual institutional FinalGrade
     attendance_pct = Column(Float, nullable=False)
     avg_score = Column(Float, nullable=False)
     score_trend = Column(Float, nullable=False) # linear slope

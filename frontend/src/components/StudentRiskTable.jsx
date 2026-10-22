@@ -13,6 +13,8 @@ export default function StudentRiskTable({
 }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [interventionFilter, setInterventionFilter] = useState('ALL');
+  const [programFilter, setProgramFilter] = useState('ALL');
+  const [yearFilter, setYearFilter] = useState('ALL');
   const [sortBy, setSortBy] = useState('risk_score');
   const [sortAsc, setSortAsc] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -44,6 +46,9 @@ export default function StudentRiskTable({
     const sRisk = (s.risk_level || '').toUpperCase();
     const matchesRisk = normalizedFilter === 'ALL' || sRisk === normalizedFilter;
 
+    const matchesProgram = programFilter === 'ALL' || String(s.program) === String(programFilter);
+    const matchesYear = yearFilter === 'ALL' || String(s.year_level) === String(yearFilter);
+
     let matchesIntervention = true;
     if (interventionFilter === 'OVERDUE') {
       matchesIntervention = s.is_intervention_overdue === true;
@@ -55,7 +60,7 @@ export default function StudentRiskTable({
       matchesIntervention = s.latest_intervention_status === 'Resolved' || s.latest_intervention_status === 'Completed';
     }
 
-    return matchesSearch && matchesRisk && matchesIntervention;
+    return matchesSearch && matchesRisk && matchesIntervention && matchesProgram && matchesYear;
   });
 
   // Sort students
@@ -81,11 +86,13 @@ export default function StudentRiskTable({
     }
   };
 
-  const hasActiveFilters = searchTerm !== '' || normalizedFilter !== 'ALL' || interventionFilter !== 'ALL';
+  const hasActiveFilters = searchTerm !== '' || normalizedFilter !== 'ALL' || interventionFilter !== 'ALL' || programFilter !== 'ALL' || yearFilter !== 'ALL';
 
   const clearAllFilters = () => {
     setSearchTerm('');
     setInterventionFilter('ALL');
+    setProgramFilter('ALL');
+    setYearFilter('ALL');
     setCurrentPage(1);
     if (onRiskFilterChange) onRiskFilterChange('ALL');
   };
@@ -160,6 +167,40 @@ export default function StudentRiskTable({
               </button>
             )}
           </div>
+
+          {/* Program Cohort Filter */}
+          <select
+            value={programFilter}
+            onChange={(e) => {
+              setProgramFilter(e.target.value);
+              setCurrentPage(1);
+            }}
+            className="form-select"
+            style={{ fontSize: '0.76rem', padding: '5px 8px' }}
+          >
+            <option value="ALL">Program: All</option>
+            <option value="1">Program 1 (Major Stream)</option>
+            <option value="2">Program 2 (Specialized Track)</option>
+            <option value="3">Program 3 (Interdisciplinary)</option>
+            <option value="4">Program 4 (Dual Degree)</option>
+          </select>
+
+          {/* Year Standing Filter */}
+          <select
+            value={yearFilter}
+            onChange={(e) => {
+              setYearFilter(e.target.value);
+              setCurrentPage(1);
+            }}
+            className="form-select"
+            style={{ fontSize: '0.76rem', padding: '5px 8px' }}
+          >
+            <option value="ALL">Year: All</option>
+            <option value="1">Year 1 (Freshman)</option>
+            <option value="2">Year 2 (Sophomore)</option>
+            <option value="3">Year 3 (Junior)</option>
+            <option value="4">Year 4 (Senior)</option>
+          </select>
 
           {/* Intervention Status Filter */}
           <select
@@ -253,7 +294,10 @@ export default function StudentRiskTable({
               <th style={{ cursor: 'pointer', minWidth: 140 }} onClick={() => handleSort('risk_score')}>
                 Risk Tier <ArrowUpDown size={11} style={{ verticalAlign: 'middle', marginLeft: 2 }} />
               </th>
-              <th style={{ minWidth: 150 }}>
+              <th style={{ cursor: 'pointer', minWidth: 130 }} onClick={() => handleSort('predicted_grade')}>
+                Predicted Final <ArrowUpDown size={11} style={{ verticalAlign: 'middle', marginLeft: 2 }} />
+              </th>
+              <th style={{ minWidth: 140 }}>
                 Intervention
               </th>
               <th style={{ cursor: 'pointer', minWidth: 110 }} onClick={() => handleSort('attendance_pct')}>
@@ -302,7 +346,7 @@ export default function StudentRiskTable({
                         {s.name}
                       </div>
                       <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
-                        {s.student_id} • {s.department || 'CS'}
+                        {s.student_id} • Prog {s.program ?? 1} • Yr {s.year_level ?? 3}
                       </div>
                     </td>
 
@@ -320,6 +364,20 @@ export default function StudentRiskTable({
                       </div>
                       <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: 2 }}>
                         Score: {((s.risk_score || 0) * 100).toFixed(0)}%
+                      </div>
+                    </td>
+
+                    {/* Predicted Final Grade */}
+                    <td>
+                      <div style={{ fontWeight: 700, color: 'var(--color-primary)', fontSize: '0.86rem' }}>
+                        {s.predicted_grade !== null && s.predicted_grade !== undefined
+                          ? `${Number(s.predicted_grade).toFixed(1)}%`
+                          : `${s.avg_score}%`}
+                      </div>
+                      <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>
+                        {s.observed_grade !== null && s.observed_grade !== undefined
+                          ? `Actual: ${Number(s.observed_grade).toFixed(1)}%`
+                          : 'Regressor Est.'}
                       </div>
                     </td>
 

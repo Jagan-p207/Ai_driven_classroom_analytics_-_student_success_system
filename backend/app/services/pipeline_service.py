@@ -1,6 +1,6 @@
 """
-Pipeline Service: Coordinates Data Ingestion, Feature Computation, and Risk Recomputation.
-Connects SQLite/PostgreSQL tables with Feature Engineering and ML Batch Scorer.
+Pipeline Service: Coordinates Data Ingestion, Feature Computation, Model Training, and Risk Scoring.
+Connects SQLite/PostgreSQL tables with Machine Learning models and batch prediction services.
 """
 
 import os
@@ -16,24 +16,43 @@ from sqlalchemy import func, desc, text
 from backend.app.core.database import SessionLocal, engine, Base
 from backend.app.models.schema import Student, Attendance, Assessment, LMSActivity, RiskScore, Intervention
 from backend.app.core.config import settings
-from ml.feature_engineering import engineer_features, validate_raw_data
-from ml.batch_scorer import batch_score_students
+from ml.batch_scorer import batch_score_students, predict_single_student, FEATURE_COLUMNS
+from ml.train_models import train_and_benchmark_models, load_and_preprocess_dataset
 
 def init_db():
-    """Create all tables in the database and ensure column compatibility."""
+    """Create all tables in the database and ensure column compatibility via migrations."""
     Base.metadata.create_all(bind=engine)
     try:
         with engine.connect() as conn:
-            result = conn.execute(text("PRAGMA table_info(risk_scores)"))
-            cols = [row[1] for row in result.fetchall()]
-            if cols:
-                if "confidence" not in cols:
+            # 1. Ensure risk_scores has all required columns
+            res_rs = conn.execute(text("PRAGMA table_info(risk_scores)"))
+            cols_rs = [row[1] for row in res_rs.fetchall()]
+            if cols_rs:
+                if "confidence" not in cols_rs:
                     conn.execute(text("ALTER TABLE risk_scores ADD COLUMN confidence FLOAT DEFAULT 0.9"))
-                if "risk_probabilities" not in cols:
+                if "risk_probabilities" not in cols_rs:
                     conn.execute(text("ALTER TABLE risk_scores ADD COLUMN risk_probabilities TEXT"))
-                conn.commit()
-    except Exception:
-        pass
+                if "predicted_grade" not in cols_rs:
+                    conn.execute(text("ALTER TABLE risk_scores ADD COLUMN predicted_grade FLOAT"))
+                if "observed_grade" not in cols_rs:
+                    conn.execute(text("ALTER TABLE risk_scores ADD COLUMN observed_grade FLOAT"))
+
+            # 2. Ensure students table has cohort fields
+            res_st = conn.execute(text("PRAGMA table_info(students)"))
+            cols_st = [row[1] for row in res_st.fetchall()]
+            if cols_st:
+                if "gender" not in cols_st:
+                    conn.execute(text("ALTER TABLE students ADD COLUMN gender INTEGER DEFAULT 0"))
+                if "program" not in cols_st:
+                    conn.execute(text("ALTER TABLE students ADD COLUMN program INTEGER DEFAULT 1"))
+                if "year_level" not in cols_st:
+                    conn.execute(text("ALTER TABLE students ADD COLUMN year_level INTEGER DEFAULT 3"))
+                if "class_time" not in cols_st:
+                    conn.execute(text("ALTER TABLE students ADD COLUMN class_time INTEGER DEFAULT 0"))
+
+            conn.commit()
+    except Exception as e:
+        print(f"init_db column migration notice: {e}")
 
 def seed_initial_interventions_and_history(db: Session):
     """
@@ -47,18 +66,17 @@ def seed_initial_interventions_and_history(db: Session):
     # 1. Seed interventions if empty
     if db.query(Intervention).count() == 0:
         sample_interventions = [
-            ("STU1005", "Planned", "Dr. Elena Vance (Academic Counselor)", "2026-05-20", "Scheduled academic advising after sharp midterm score drop."),
-            ("STU1012", "In Progress", "Prof. Marcus Davis (Lead Instructor)", "2026-04-15", "Student missing weekly quizzes; follow-up needed on homework submissions."), # Overdue
-            ("STU1018", "In Progress", "Sarah Jenkins (Peer Tutoring)", "2026-05-18", "Enrolled in peer mentoring group for Algorithms."),
-            ("STU1024", "In Progress", "Dr. Elena Vance (Academic Counselor)", "2026-04-20", "Attendance dropped below 75%; parental contact advised."), # Overdue
-            ("STU1033", "Planned", "Academic Support Center", "2026-05-22", "Provided workshop registration for study skills and exam review."),
-            ("STU1041", "Completed", "Prof. Marcus Davis (Lead Instructor)", "2026-05-02", "Conducted 1-on-1 office hour review of exam 2 errors."),
-            ("STU1055", "Resolved", "Dr. Elena Vance (Academic Counselor)", "2026-05-05", "Attendance and scores restored to target range (>80%). Case resolved."),
-            ("STU1067", "In Progress", "Sarah Jenkins (Peer Tutoring)", "2026-05-25", "Ongoing bi-weekly practice assignments for coursework recovery.")
+            ("F23", "Planned", "Dr. Elena Vance (Academic Counselor)", "2026-05-20", "Scheduled academic advising after sharp midterm score drop (<50)."),
+            ("F25", "In Progress", "Prof. Marcus Davis (Lead Instructor)", "2026-04-15", "Student missing weekly quizzes; follow-up needed on homework submissions."),
+            ("F33", "In Progress", "Sarah Jenkins (Peer Tutoring)", "2026-05-18", "Enrolled in peer mentoring group for core coursework recovery."),
+            ("F66", "In Progress", "Dr. Elena Vance (Academic Counselor)", "2026-04-20", "Attendance dropped below 60%; parental contact and study advisor assigned."),
+            ("F74", "Planned", "Academic Support Center", "2026-05-22", "Provided workshop registration for study skills and exam review."),
+            ("F76", "Completed", "Prof. Marcus Davis (Lead Instructor)", "2026-05-02", "Conducted 1-on-1 office hour review of exam errors."),
+            ("F126", "Resolved", "Dr. Elena Vance (Academic Counselor)", "2026-05-05", "Attendance and scores restored to target range (>75%). Case resolved."),
+            ("F158", "In Progress", "Sarah Jenkins (Peer Tutoring)", "2026-05-25", "Ongoing bi-weekly practice assignments for coursework recovery.")
         ]
         now_iso = datetime.utcnow().isoformat()
         for sid, status, staff, f_date, notes in sample_interventions:
-            # Check student exists
             s = db.query(Student).filter(Student.student_id == sid).first()
             if s:
                 db.add(Intervention(
@@ -75,128 +93,257 @@ def seed_initial_interventions_and_history(db: Session):
     # 2. Seed milestone historical risk snapshots if students only have 1 risk record
     first_sid = students[0].student_id
     if db.query(RiskScore).filter(RiskScore.student_id == first_sid).count() <= 1:
-        # Create historical snapshots for Quiz 1 (Feb 2026) and Midterm (Apr 2026)
         milestone_dates = [
-            ("2026-02-25T14:00:00", 0.85, 0.90, "Quiz 1 Milestone"),
-            ("2026-04-05T14:00:00", 0.95, 1.05, "Midterm Exam Milestone")
+            ("2026-02-25T14:00:00", 0.88, "Quiz 1 Milestone"),
+            ("2026-04-05T14:00:00", 0.95, "Midterm Exam Milestone")
         ]
         new_hist_scores = []
         for s in students:
             latest_rs = db.query(RiskScore).filter(RiskScore.student_id == s.student_id).order_by(desc(RiskScore.id)).first()
             base_score = latest_rs.risk_score if latest_rs else 0.2
             base_eng = latest_rs.composite_engagement if latest_rs else 80.0
+            base_grade = latest_rs.predicted_grade if (latest_rs and latest_rs.predicted_grade) else 80.0
 
-            for m_date, factor_score, factor_eng, m_name in milestone_dates:
-                # Early semester risk is usually lower or slightly different
-                m_score = float(np.clip(base_score * factor_score + (0.05 if factor_score < 1.0 else -0.05), 0.05, 0.98))
+            for m_date, factor_score, m_name in milestone_dates:
+                m_score = float(np.clip(base_score * factor_score + (0.04 if factor_score < 1.0 else -0.04), 0.05, 0.98))
                 m_level = "High" if m_score >= 0.70 else ("Medium" if m_score >= 0.35 else "Low")
-                m_eng = float(np.clip(base_eng * factor_eng, 20.0, 98.0))
+                m_eng = float(np.clip(base_eng * (1.1 - factor_score * 0.1), 20.0, 98.0))
 
                 new_hist_scores.append(RiskScore(
                     student_id=s.student_id,
                     computed_at=m_date,
                     risk_level=m_level,
                     risk_score=round(m_score, 4),
+                    predicted_grade=round(base_grade * factor_score, 2),
+                    observed_grade=latest_rs.observed_grade if latest_rs else None,
                     attendance_pct=round(latest_rs.attendance_pct if latest_rs else 85.0, 2),
                     avg_score=round(latest_rs.avg_score if latest_rs else 80.0, 2),
                     score_trend=round(latest_rs.score_trend if latest_rs else 0.0, 4),
                     avg_submission_delay=round(latest_rs.avg_submission_delay if latest_rs else 0.5, 2),
                     composite_engagement=round(m_eng, 2),
-                    alert_flag=bool(m_level in ["Medium", "High"]),
+                    alert_flag=bool(m_level == "High"),
                     contributing_factors=latest_rs.contributing_factors if latest_rs else "[]",
                     recommendations=latest_rs.recommendations if latest_rs else "[]",
                     confidence=0.88,
-                    risk_probabilities=json.dumps({"Low": 0.2, "Medium": 0.3, "High": 0.5}) if m_level == "High" else json.dumps({"Low": 0.8, "Medium": 0.15, "High": 0.05})
+                    risk_probabilities=json.dumps({"Low": 0.8, "Medium": 0.15, "High": 0.05}) if m_level == "Low" else json.dumps({"Low": 0.1, "Medium": 0.3, "High": 0.6})
                 ))
         if new_hist_scores:
             db.bulk_save_objects(new_hist_scores)
             db.commit()
 
-def seed_database_from_csv(data_dir="data/raw"):
+def seed_database_from_csv(data_dir=None, force=False):
     """
-    Seeds database from generated raw CSV files if tables are empty.
+    Seeds database from full student dataset (data/student_dataset.csv) or fallback raw CSVs.
     """
     init_db()
     db: Session = SessionLocal()
     try:
         student_count = db.query(Student).count()
-        if student_count > 0:
-            print(f"Database already populated ({student_count} students). Ensuring interventions & history are initialized.")
+        # If already populated with 192 students and not forced, return
+        if student_count >= 192 and not force:
+            print(f"Database already populated ({student_count} students). Initializing history & interventions if needed.")
             seed_initial_interventions_and_history(db)
             return
 
-        students_csv = os.path.join(data_dir, "students.csv")
-        attendance_csv = os.path.join(data_dir, "attendance.csv")
-        assessments_csv = os.path.join(data_dir, "assessments.csv")
-        lms_csv = os.path.join(data_dir, "lms_activity.csv")
+        # Find full student dataset CSV
+        full_csv = "data/student_dataset.csv"
+        if not os.path.exists(full_csv):
+            alt = os.path.join(os.path.dirname(__file__), "..", "..", "..", "data", "student_dataset.csv")
+            if os.path.exists(alt):
+                full_csv = alt
 
-        if not os.path.exists(students_csv):
-            print(f"Seed files not found in {data_dir}. Run synthetic_data_generator first.")
+        if os.path.exists(full_csv):
+            print(f"Populating database from full institutional dataset: {full_csv}...")
+            df = pd.read_csv(full_csv)
+
+            # Clear existing data if re-seeding full dataset
+            if student_count > 0:
+                print(f"Replacing previous {student_count} records with full 192-student dataset...")
+                db.query(Intervention).delete()
+                db.query(RiskScore).delete()
+                db.query(LMSActivity).delete()
+                db.query(Assessment).delete()
+                db.query(Attendance).delete()
+                db.query(Student).delete()
+                db.commit()
+
+            # 1. Add Student records
+            student_objs = []
+            for _, r in df.iterrows():
+                sid = str(r["StudentID"])
+                prog = int(r.get("Program", 1))
+                yr = int(r.get("YearLevel", 3))
+                ctime = int(r.get("ClassTime", 0))
+                gen = int(r.get("Gender", 0))
+
+                student_objs.append(Student(
+                    student_id=sid,
+                    name=f"Student {sid}",
+                    email=f"{sid.lower()}@university.edu",
+                    class_id="CS101",
+                    department="Computer Science & Engineering",
+                    enrollment_date="2024-09-01",
+                    gender=gen,
+                    program=prog,
+                    year_level=yr,
+                    class_time=ctime
+                ))
+            db.bulk_save_objects(student_objs)
+            db.commit()
+
+            # 2. Add Assessment records matching actual Quiz, Project, Midterm, and Final
+            ass_objs = []
+            for _, r in df.iterrows():
+                sid = str(r["StudentID"])
+                # Quiz Total
+                ass_objs.append(Assessment(
+                    student_id=sid,
+                    assessment_name="Continuous Quizzes Total",
+                    date="2026-03-05",
+                    max_score=24.0,
+                    score_obtained=float(r["QuizTotal"]),
+                    course_id="CS101"
+                ))
+                # Project Coursework
+                ass_objs.append(Assessment(
+                    student_id=sid,
+                    assessment_name="Coursework Project",
+                    date="2026-03-22",
+                    max_score=15.5,
+                    score_obtained=float(r["Project"]),
+                    course_id="CS101"
+                ))
+                # Midterm Exam
+                ass_objs.append(Assessment(
+                    student_id=sid,
+                    assessment_name="Midterm Examination",
+                    date="2026-04-02",
+                    max_score=26.0,
+                    score_obtained=float(r["Midterm"]),
+                    course_id="CS101"
+                ))
+                # Final Exam
+                ass_objs.append(Assessment(
+                    student_id=sid,
+                    assessment_name="Final Examination",
+                    date="2026-05-10",
+                    max_score=28.0,
+                    score_obtained=float(r["Final"]),
+                    course_id="CS101"
+                ))
+            db.bulk_save_objects(ass_objs)
+            db.commit()
+
+            # 3. Add Attendance session records matching Attendance (out of 10)
+            att_objs = []
+            session_dates = [
+                "2026-01-20", "2026-01-27", "2026-02-03", "2026-02-10", "2026-02-17",
+                "2026-02-24", "2026-03-03", "2026-03-17", "2026-03-24", "2026-04-07"
+            ]
+            for _, r in df.iterrows():
+                sid = str(r["StudentID"])
+                att_score = float(r["Attendance"])
+                present_count = min(10, int(np.floor(att_score)))
+                has_late = bool((att_score - present_count) >= 0.4)
+
+                for idx, s_date in enumerate(session_dates):
+                    if idx < present_count:
+                        status = "Present"
+                    elif idx == present_count and has_late:
+                        status = "Late"
+                    else:
+                        status = "Absent"
+
+                    att_objs.append(Attendance(
+                        student_id=sid,
+                        date=s_date,
+                        status=status,
+                        course_id="CS101"
+                    ))
+            db.bulk_save_objects(att_objs)
+            db.commit()
+
+            # 4. Add LMS Activity records matching Page Views and on-time percent
+            lms_objs = []
+            for _, r in df.iterrows():
+                sid = str(r["StudentID"])
+                views = float(r["Page Views"])
+                on_time_pct = float(r["Assignment on time percent"])
+
+                # Page views record
+                lms_objs.append(LMSActivity(
+                    student_id=sid,
+                    activity_type="Course Content Page Views",
+                    timestamp="2026-04-10T12:00:00",
+                    delay_days=0.0,
+                    completion_status="Completed",
+                    score_or_views=views
+                ))
+
+                # Assignment submission punctuality
+                late_days = round(max(0.0, (100.0 - on_time_pct) * 0.05), 1)
+                comp_status = "Completed" if on_time_pct >= 90 else ("Late" if on_time_pct >= 50 else "Missing")
+                lms_objs.append(LMSActivity(
+                    student_id=sid,
+                    activity_type="Coursework Submissions",
+                    timestamp="2026-03-28T18:00:00",
+                    delay_days=late_days,
+                    completion_status=comp_status,
+                    score_or_views=on_time_pct
+                ))
+            db.bulk_save_objects(lms_objs)
+            db.commit()
+
+            # 5. Run Batch Scoring using fitted models
+            print("Database populated with 192 students! Now running batch scoring pipeline...")
+            df_scored = batch_score_students(df, model_dir=settings.MODEL_DIR)
+
+            risk_objs = []
+            for _, row in df_scored.iterrows():
+                risk_objs.append(RiskScore(
+                    student_id=row["student_id"],
+                    computed_at=row["computed_at"],
+                    risk_level=row["risk_level"],
+                    risk_score=float(row["risk_score"]),
+                    predicted_grade=float(row["predicted_grade"]),
+                    observed_grade=float(row["observed_grade"]) if row["observed_grade"] is not None else None,
+                    attendance_pct=float(row["attendance_pct"]),
+                    avg_score=float(row["avg_score"]),
+                    score_trend=float(row["score_trend"]),
+                    avg_submission_delay=float(row["avg_submission_delay"]),
+                    composite_engagement=float(row["composite_engagement"]),
+                    alert_flag=bool(row["alert_flag"]),
+                    contributing_factors=row["contributing_factors"],
+                    recommendations=row["recommendations"],
+                    confidence=float(row["confidence"]),
+                    risk_probabilities=row["risk_probabilities"]
+                ))
+            db.bulk_save_objects(risk_objs)
+            db.commit()
+
+            # 6. Seed interventions and milestone history
+            seed_initial_interventions_and_history(db)
+            print("Full dataset seeded and scored successfully!")
             return
 
-        print("Populating database from raw CSVs...")
-        df_students = pd.read_csv(students_csv)
-        df_attendance = pd.read_csv(attendance_csv)
-        df_assessments = pd.read_csv(assessments_csv)
-        df_lms = pd.read_csv(lms_csv)
-
-        # 1. Insert Students
-        for _, row in df_students.iterrows():
-            db.add(Student(
-                student_id=str(row["student_id"]),
-                name=str(row["name"]),
-                email=str(row["email"]),
-                class_id=str(row.get("class_id", "CS101")),
-                department=str(row.get("department", "Computer Science")),
-                enrollment_date=str(row.get("enrollment_date", "2026-01-15"))
-            ))
-        db.commit()
-
-        # 2. Insert Attendance
-        att_objs = [
-            Attendance(
-                student_id=str(r["student_id"]),
-                date=str(r["date"]),
-                status=str(r["status"]),
-                course_id=str(r.get("course_id", "CS101"))
-            )
-            for _, r in df_attendance.iterrows()
-        ]
-        db.bulk_save_objects(att_objs)
-        db.commit()
-
-        # 3. Insert Assessments
-        ass_objs = [
-            Assessment(
-                student_id=str(r["student_id"]),
-                assessment_name=str(r["assessment_name"]),
-                date=str(r["date"]),
-                max_score=float(r["max_score"]),
-                score_obtained=float(r["score_obtained"]),
-                course_id=str(r.get("course_id", "CS101"))
-            )
-            for _, r in df_assessments.iterrows()
-        ]
-        db.bulk_save_objects(ass_objs)
-        db.commit()
-
-        # 4. Insert LMS Activity
-        lms_objs = [
-            LMSActivity(
-                student_id=str(r["student_id"]),
-                activity_type=str(r["activity_type"]),
-                timestamp=str(r["timestamp"]),
-                delay_days=float(r.get("delay_days", 0.0)),
-                completion_status=str(r.get("completion_status", "Completed")),
-                score_or_views=float(r.get("score_or_views", 0.0))
-            )
-            for _, r in df_lms.iterrows()
-        ]
-        db.bulk_save_objects(lms_objs)
-        db.commit()
-
-        print("Database seeded successfully! Now computing features & initial risk scores...")
-        run_full_batch_pipeline(db)
+        # Fallback to data_dir/students.csv if full dataset not found
+        fallback_dir = data_dir or settings.DATA_RAW_DIR
+        students_csv = os.path.join(fallback_dir, "students.csv")
+        if os.path.exists(students_csv):
+            print(f"Fallback: Populating database from synthetic CSVs in {fallback_dir}...")
+            # Load synthetic data
+            df_students = pd.read_csv(students_csv)
+            for _, row in df_students.iterrows():
+                db.add(Student(
+                    student_id=str(row["student_id"]),
+                    name=str(row["name"]),
+                    email=str(row["email"]),
+                    class_id=str(row.get("class_id", "CS101")),
+                    department=str(row.get("department", "Computer Science")),
+                    enrollment_date=str(row.get("enrollment_date", "2026-01-15"))
+                ))
+            db.commit()
+            run_full_batch_pipeline(db)
 
     except Exception as e:
         db.rollback()
@@ -207,84 +354,83 @@ def seed_database_from_csv(data_dir="data/raw"):
 
 def run_full_batch_pipeline(db: Session) -> Dict[str, Any]:
     """
-    1. Reads normalized tables from DB into Pandas DataFrames.
-    2. Runs feature engineering.
-    3. Runs batch scoring model.
-    4. Updates/Inserts Risk_Score table.
+    1. Reads students from DB and joins their assessment marks, attendance, and LMS metrics.
+    2. Runs batch scoring model.
+    3. Updates or inserts latest Risk_Score records.
     """
     t0 = time.time()
-    
-    # Extract from DB
     students = db.query(Student).all()
-    attendance = db.query(Attendance).all()
-    assessments = db.query(Assessment).all()
-    lms = db.query(LMSActivity).all()
-
     if not students:
-        return {"status": "no_students", "students_scored": 0, "elapsed": 0.0}
+        return {"status": "no_students", "students_scored": 0, "execution_time_seconds": 0.0, "timestamp": datetime.utcnow().isoformat(), "risk_distribution": {"Low": 0, "Medium": 0, "High": 0}}
 
-    df_students = pd.DataFrame([{
-        "student_id": s.student_id,
-        "name": s.name,
-        "email": s.email,
-        "class_id": s.class_id,
-        "department": s.department
-    } for s in students])
+    student_records = []
+    for s in students:
+        # Get assessments
+        quizzes = db.query(Assessment).filter(Assessment.student_id == s.student_id, Assessment.assessment_name.ilike("%quiz%")).all()
+        quiz_total = sum(q.score_obtained for q in quizzes) if quizzes else 20.0
 
-    df_attendance = pd.DataFrame([{
-        "student_id": a.student_id,
-        "date": a.date,
-        "status": a.status,
-        "course_id": a.course_id
-    } for a in attendance])
+        project = db.query(Assessment).filter(Assessment.student_id == s.student_id, Assessment.assessment_name.ilike("%project%")).first()
+        proj_score = project.score_obtained if project else 14.0
 
-    df_assessments = pd.DataFrame([{
-        "student_id": m.student_id,
-        "assessment_name": m.assessment_name,
-        "date": m.date,
-        "max_score": m.max_score,
-        "score_obtained": m.score_obtained,
-        "course_id": m.course_id
-    } for m in assessments])
+        midterm = db.query(Assessment).filter(Assessment.student_id == s.student_id, Assessment.assessment_name.ilike("%midterm%")).first()
+        mid_score = midterm.score_obtained if midterm else 18.0
 
-    df_lms = pd.DataFrame([{
-        "student_id": l.student_id,
-        "activity_type": l.activity_type,
-        "timestamp": l.timestamp,
-        "delay_days": l.delay_days,
-        "completion_status": l.completion_status,
-        "score_or_views": l.score_or_views
-    } for l in lms])
+        # Attendance out of 10
+        att_all = db.query(Attendance).filter(Attendance.student_id == s.student_id).all()
+        if att_all:
+            present_val = sum(1.0 if a.status == "Present" else (0.5 if a.status == "Late" else 0.0) for a in att_all)
+            att_rate = (present_val / len(att_all)) * 10.0
+        else:
+            att_rate = 9.0
 
-    # Feature Engineering
-    df_features = engineer_features(df_students, df_attendance, df_assessments, df_lms)
+        # LMS
+        lms_views = db.query(LMSActivity).filter(LMSActivity.student_id == s.student_id, LMSActivity.activity_type.ilike("%view%")).first()
+        views = lms_views.score_or_views if lms_views else 800.0
 
-    # Save to processed CSV
-    os.makedirs(settings.DATA_PROCESSED_DIR, exist_ok=True)
-    df_features.to_csv(os.path.join(settings.DATA_PROCESSED_DIR, "features.csv"), index=False)
+        lms_subs = db.query(LMSActivity).filter(LMSActivity.student_id == s.student_id, LMSActivity.activity_type.ilike("%submission%")).first()
+        on_time = lms_subs.score_or_views if lms_subs else 88.0
 
-    # Batch Scoring
-    df_scored = batch_score_students(df_features, model_dir=settings.MODEL_DIR)
+        # Observed grade if exists in current risk record
+        prev_rs = db.query(RiskScore).filter(RiskScore.student_id == s.student_id).order_by(desc(RiskScore.id)).first()
+        obs_grade = prev_rs.observed_grade if prev_rs else None
 
-    # Clear old risk scores or record new snapshot
-    # For a clean dashboard, we update or add latest risk score per student
+        student_records.append({
+            "StudentID": s.student_id,
+            "Gender": s.gender if s.gender is not None else 0,
+            "Program": s.program if s.program is not None else 1,
+            "YearLevel": s.year_level if s.year_level is not None else 3,
+            "ClassTime": s.class_time if s.class_time is not None else 0,
+            "QuizTotal": quiz_total,
+            "Project": proj_score,
+            "Midterm": mid_score,
+            "Attendance": att_rate,
+            "Participation": 0.35,
+            "Assignment on time percent": int(on_time),
+            "Page Views": int(views),
+            "FinalGrade": obs_grade
+        })
+
+    df_input = pd.DataFrame(student_records)
+    df_scored = batch_score_students(df_input, model_dir=settings.MODEL_DIR)
+
     risk_dist = {"Low": 0, "Medium": 0, "High": 0}
+    today_iso = datetime.utcnow().strftime("%Y-%m-%d")
 
     for _, row in df_scored.iterrows():
         sid = row["student_id"]
         r_level = row["risk_level"]
         risk_dist[r_level] = risk_dist.get(r_level, 0) + 1
 
-        # Check existing latest score
         existing = db.query(RiskScore).filter(RiskScore.student_id == sid).order_by(desc(RiskScore.id)).first()
-        conf_val = float(row.get("confidence", 0.90))
-        prob_val = str(row.get("risk_probabilities", "{}"))
 
-        # If computed today, update existing; otherwise insert a new snapshot to preserve history
-        if existing and existing.computed_at and existing.computed_at[:10] == row["computed_at"][:10]:
+        # Update if scored today to maintain clean daily snapshot
+        if existing and existing.computed_at and existing.computed_at[:10] == today_iso:
             existing.computed_at = row["computed_at"]
             existing.risk_level = r_level
             existing.risk_score = float(row["risk_score"])
+            existing.predicted_grade = float(row["predicted_grade"])
+            if row["observed_grade"] is not None:
+                existing.observed_grade = float(row["observed_grade"])
             existing.attendance_pct = float(row["attendance_pct"])
             existing.avg_score = float(row["avg_score"])
             existing.score_trend = float(row["score_trend"])
@@ -293,14 +439,16 @@ def run_full_batch_pipeline(db: Session) -> Dict[str, Any]:
             existing.alert_flag = bool(row["alert_flag"])
             existing.contributing_factors = row["contributing_factors"]
             existing.recommendations = row["recommendations"]
-            existing.confidence = conf_val
-            existing.risk_probabilities = prob_val
+            existing.confidence = float(row["confidence"])
+            existing.risk_probabilities = row["risk_probabilities"]
         else:
-            new_score = RiskScore(
+            db.add(RiskScore(
                 student_id=sid,
                 computed_at=row["computed_at"],
                 risk_level=r_level,
                 risk_score=float(row["risk_score"]),
+                predicted_grade=float(row["predicted_grade"]),
+                observed_grade=float(row["observed_grade"]) if row["observed_grade"] is not None else None,
                 attendance_pct=float(row["attendance_pct"]),
                 avg_score=float(row["avg_score"]),
                 score_trend=float(row["score_trend"]),
@@ -309,10 +457,9 @@ def run_full_batch_pipeline(db: Session) -> Dict[str, Any]:
                 alert_flag=bool(row["alert_flag"]),
                 contributing_factors=row["contributing_factors"],
                 recommendations=row["recommendations"],
-                confidence=conf_val,
-                risk_probabilities=prob_val
-            )
-            db.add(new_score)
+                confidence=float(row["confidence"]),
+                risk_probabilities=row["risk_probabilities"]
+            ))
 
     db.commit()
     elapsed = round(time.time() - t0, 3)
@@ -323,6 +470,34 @@ def run_full_batch_pipeline(db: Session) -> Dict[str, Any]:
         "execution_time_seconds": elapsed,
         "timestamp": datetime.utcnow().isoformat(),
         "risk_distribution": risk_dist
+    }
+
+def retrain_model_pipeline(db: Session, csv_path="data/student_dataset.csv") -> Dict[str, Any]:
+    """
+    Retrains ML pipeline using the dataset and recomputes all student risk predictions.
+    """
+    df, X, y_reg, y_clf = load_and_preprocess_dataset(csv_path)
+    metadata = train_and_benchmark_models(X, y_reg, y_clf, output_dir=settings.MODEL_DIR)
+
+    # Re-score all students with updated model
+    run_full_batch_pipeline(db)
+
+    best_clf = metadata["best_model_name"]
+    best_reg = metadata["best_regressor_name"]
+    clf_m = metadata["classification_metrics"].get(best_clf, {})
+    reg_m = metadata["regression_metrics"].get(best_reg, {})
+
+    return {
+        "status": "success",
+        "message": f"Successfully retrained models on {len(df)} records. Best classifier: {best_clf}, Best regressor: {best_reg}.",
+        "record_count": len(df),
+        "best_classifier": best_clf,
+        "best_regressor": best_reg,
+        "test_accuracy": round(clf_m.get("test_accuracy", 0.0), 4),
+        "test_weighted_f1": round(clf_m.get("test_f1_weighted", 0.0), 4),
+        "test_r2": round(reg_m.get("test_r2", 0.0), 4),
+        "test_mae": round(reg_m.get("test_mae", 0.0), 4),
+        "timestamp": datetime.utcnow().isoformat()
     }
 
 def get_class_risk_summary(db: Session, class_id: str = "CS101") -> Dict[str, Any]:
@@ -358,11 +533,12 @@ def get_class_risk_summary(db: Session, class_id: str = "CS101") -> Dict[str, An
     today_str = datetime.utcnow().strftime("%Y-%m-%d")
 
     for s in students:
-        # Latest risk score
         rs = db.query(RiskScore).filter(RiskScore.student_id == s.student_id).order_by(desc(RiskScore.id)).first()
         if rs:
             r_level = rs.risk_level
             r_score = rs.risk_score
+            pred_grade = rs.predicted_grade
+            obs_grade = rs.observed_grade
             att = rs.attendance_pct
             score = rs.avg_score
             trend = rs.score_trend
@@ -373,10 +549,10 @@ def get_class_risk_summary(db: Session, class_id: str = "CS101") -> Dict[str, An
         else:
             r_level = "Low"
             r_score = 0.1
+            pred_grade, obs_grade = 82.0, None
             att, score, trend, eng, is_alert = 90.0, 80.0, 0.0, 85.0, False
             factors, recs = [], []
 
-        # Latest intervention
         latest_inv = db.query(Intervention).filter(Intervention.student_id == s.student_id).order_by(desc(Intervention.id)).first()
         inv_status = latest_inv.status if latest_inv else None
         is_overdue = bool(latest_inv and latest_inv.status in ["Planned", "In Progress"] and latest_inv.follow_up_date and latest_inv.follow_up_date < today_str)
@@ -393,12 +569,17 @@ def get_class_risk_summary(db: Session, class_id: str = "CS101") -> Dict[str, An
             "name": s.name,
             "risk_level": r_level,
             "risk_score": r_score,
+            "predicted_grade": pred_grade,
+            "observed_grade": obs_grade,
             "attendance_pct": att,
             "avg_score": score,
             "score_trend": trend,
             "composite_engagement": eng,
             "alert_flag": is_alert,
-            "intervention_status": inv_status
+            "intervention_status": inv_status,
+            "program": s.program,
+            "year_level": s.year_level,
+            "class_time": s.class_time
         }
         heatmap_data.append(item)
 
@@ -409,8 +590,10 @@ def get_class_risk_summary(db: Session, class_id: str = "CS101") -> Dict[str, An
                 "email": s.email,
                 "risk_level": r_level,
                 "risk_score": r_score,
-                "primary_driver": factors[0]["label"] if factors else "General Decline",
-                "recommendation": recs[0] if recs else "Monitor progress",
+                "predicted_grade": pred_grade,
+                "observed_grade": obs_grade,
+                "primary_driver": factors[0]["label"] if factors else "Coursework Score Volatility",
+                "recommendation": recs[0] if recs else "Monitor academic progress",
                 "attendance_pct": att,
                 "avg_score": score,
                 "intervention_status": inv_status,
@@ -418,7 +601,6 @@ def get_class_risk_summary(db: Session, class_id: str = "CS101") -> Dict[str, An
                 "assigned_staff": latest_inv.assigned_staff if latest_inv else None
             })
 
-    # Sort heatmap by risk_score descending so high-risk are prominent
     heatmap_data.sort(key=lambda x: x["risk_score"], reverse=True)
     high_risk_alerts.sort(key=lambda x: x["risk_score"], reverse=True)
 
@@ -434,6 +616,98 @@ def get_class_risk_summary(db: Session, class_id: str = "CS101") -> Dict[str, An
         "high_risk_alerts": high_risk_alerts
     }
 
+def get_cohort_analytics(db: Session, class_id: str = "CS101") -> Dict[str, Any]:
+    """
+    Computes cohort aggregation by Program, YearLevel, and ClassTime.
+    Compares observed and predicted outcomes, average attendance, and risk groups.
+    """
+    students = db.query(Student).all()
+    if not students:
+        return {
+            "total_students": 0,
+            "by_program": [],
+            "by_year_level": [],
+            "by_class_time": [],
+            "overall_avg_predicted": 0.0,
+            "overall_avg_observed": None
+        }
+
+    cohort_records = []
+    for s in students:
+        rs = db.query(RiskScore).filter(RiskScore.student_id == s.student_id).order_by(desc(RiskScore.id)).first()
+        pred_g = rs.predicted_grade if rs else 80.0
+        obs_g = rs.observed_grade if rs else None
+        r_level = rs.risk_level if rs else "Low"
+        att = rs.attendance_pct if rs else 90.0
+
+        # Get assessments
+        quiz = db.query(Assessment).filter(Assessment.student_id == s.student_id, Assessment.assessment_name.ilike("%quiz%")).first()
+        mid = db.query(Assessment).filter(Assessment.student_id == s.student_id, Assessment.assessment_name.ilike("%midterm%")).first()
+        lms = db.query(LMSActivity).filter(LMSActivity.student_id == s.student_id, LMSActivity.activity_type.ilike("%view%")).first()
+
+        cohort_records.append({
+            "student_id": s.student_id,
+            "program": s.program if s.program is not None else 1,
+            "year_level": s.year_level if s.year_level is not None else 3,
+            "class_time": s.class_time if s.class_time is not None else 0,
+            "risk_level": r_level,
+            "predicted_grade": pred_g,
+            "observed_grade": obs_g,
+            "attendance": att,
+            "quiz": quiz.score_obtained if quiz else 20.0,
+            "midterm": mid.score_obtained if mid else 18.0,
+            "page_views": lms.score_or_views if lms else 800.0
+        })
+
+    df_c = pd.DataFrame(cohort_records)
+
+    def aggregate_by(col_name: str, label_map: Dict[Any, str]) -> List[Dict[str, Any]]:
+        items = []
+        for val, group in df_c.groupby(col_name):
+            cnt = len(group)
+            r_counts = {
+                "Low": int((group["risk_level"] == "Low").sum()),
+                "Medium": int((group["risk_level"] == "Medium").sum()),
+                "High": int((group["risk_level"] == "High").sum())
+            }
+            obs_valid = group["observed_grade"].dropna()
+            avg_obs = round(float(obs_valid.mean()), 2) if len(obs_valid) > 0 else None
+
+            items.append({
+                "group_name": label_map.get(val, f"Group {val}"),
+                "group_value": int(val),
+                "student_count": cnt,
+                "risk_counts": r_counts,
+                "avg_predicted_grade": round(float(group["predicted_grade"].mean()), 2),
+                "avg_observed_grade": avg_obs,
+                "avg_attendance": round(float(group["attendance"].mean()), 1),
+                "avg_quiz": round(float(group["quiz"].mean()), 2),
+                "avg_midterm": round(float(group["midterm"].mean()), 2),
+                "avg_page_views": round(float(group["page_views"].mean()), 0)
+            })
+        return sorted(items, key=lambda x: x["student_count"], reverse=True)
+
+    program_map = {1: "Program 1 (Major Stream)", 2: "Program 2 (Specialized Track)", 3: "Program 3 (Interdisciplinary)", 4: "Program 4 (Dual Degree)"}
+    year_map = {1: "Year 1 (Freshman)", 2: "Year 2 (Sophomore)", 3: "Year 3 (Junior)", 4: "Year 4 (Senior)"}
+    time_map = {0: "Section 0 (Morning / Day Slot)", 1: "Section 1 (Afternoon / Evening Slot)"}
+
+    obs_all = df_c["observed_grade"].dropna()
+    avg_obs_overall = round(float(obs_all.mean()), 2) if len(obs_all) > 0 else None
+
+    return {
+        "class_id": class_id,
+        "total_students": len(df_c),
+        "by_program": aggregate_by("program", program_map),
+        "by_year_level": aggregate_by("year_level", year_map),
+        "by_class_time": aggregate_by("class_time", time_map),
+        "overall_avg_predicted": round(float(df_c["predicted_grade"].mean()), 2),
+        "overall_avg_observed": avg_obs_overall,
+        "leakage_audit": {
+            "leakage_warning": "Final exam mark ('Final') is strictly excluded from predictive features to prevent target leakage.",
+            "mathematical_relationship": "FinalGrade = QuizTotal + Project + Midterm + Final + Attendance"
+        }
+    }
+
 def get_student_risk_profile(db: Session, student_id: str) -> Optional[Dict[str, Any]]:
     """
     Returns student details, current risk assessment, contributing factors,
@@ -443,7 +717,6 @@ def get_student_risk_profile(db: Session, student_id: str) -> Optional[Dict[str,
     if not student:
         return None
 
-    # Latest risk score
     rs = db.query(RiskScore).filter(RiskScore.student_id == student_id).order_by(desc(RiskScore.id)).first()
     if not rs:
         rs_dict = {
@@ -452,6 +725,8 @@ def get_student_risk_profile(db: Session, student_id: str) -> Optional[Dict[str,
             "computed_at": datetime.utcnow().isoformat(),
             "risk_level": "Low",
             "risk_score": 0.1,
+            "predicted_grade": 85.0,
+            "observed_grade": None,
             "attendance_pct": 90.0,
             "avg_score": 85.0,
             "score_trend": 0.0,
@@ -464,7 +739,6 @@ def get_student_risk_profile(db: Session, student_id: str) -> Optional[Dict[str,
             "risk_probabilities": {"Low": 0.85, "Medium": 0.12, "High": 0.03}
         }
     else:
-        # Parse probabilities
         probs = None
         if hasattr(rs, "risk_probabilities") and rs.risk_probabilities:
             try:
@@ -489,6 +763,8 @@ def get_student_risk_profile(db: Session, student_id: str) -> Optional[Dict[str,
             "computed_at": rs.computed_at,
             "risk_level": rs.risk_level,
             "risk_score": rs.risk_score,
+            "predicted_grade": rs.predicted_grade,
+            "observed_grade": rs.observed_grade,
             "attendance_pct": rs.attendance_pct,
             "avg_score": rs.avg_score,
             "score_trend": rs.score_trend,
@@ -561,7 +837,11 @@ def get_student_risk_profile(db: Session, student_id: str) -> Optional[Dict[str,
             "email": student.email,
             "class_id": student.class_id,
             "department": student.department,
-            "enrollment_date": student.enrollment_date
+            "enrollment_date": student.enrollment_date,
+            "gender": student.gender,
+            "program": student.program,
+            "year_level": student.year_level,
+            "class_time": student.class_time
         },
         "current_risk": rs_dict,
         "assessment_history": ass_history,
@@ -590,7 +870,6 @@ def get_historical_analytics(db: Session, class_id: str = "CS101") -> Dict[str, 
             "intervention_metrics": {"total": 0, "planned": 0, "in_progress": 0, "completed": 0, "resolved": 0, "overdue": 0}
         }
 
-    # 1. Chronological assessment milestones
     distinct_assessments = (
         db.query(Assessment.assessment_name, Assessment.date)
         .filter(Assessment.student_id.in_(student_ids))
@@ -625,7 +904,6 @@ def get_historical_analytics(db: Session, class_id: str = "CS101") -> Dict[str, 
             "low_risk_count": low_cnt
         })
 
-    # 2. Overall attendance trend by weekly / session points
     attendance_records = (
         db.query(Attendance)
         .filter(Attendance.student_id.in_(student_ids))
@@ -639,8 +917,7 @@ def get_historical_analytics(db: Session, class_id: str = "CS101") -> Dict[str, 
 
     attendance_trend_overall = []
     sorted_dates = sorted(att_by_date.keys())
-    # Subsample ~12 evenly-spaced points for clean visualization
-    step = max(1, len(sorted_dates) // 12)
+    step = max(1, len(sorted_dates) // 10)
     for i in range(0, len(sorted_dates), step):
         d = sorted_dates[i]
         vals = att_by_date[d]
@@ -650,7 +927,7 @@ def get_historical_analytics(db: Session, class_id: str = "CS101") -> Dict[str, 
             "attendance_rate": rate
         })
 
-    # 3. Risk tier shifts
+    # Risk tier shifts
     improved_cnt = 0
     stable_cnt = 0
     declined_cnt = 0
@@ -669,9 +946,9 @@ def get_historical_analytics(db: Session, class_id: str = "CS101") -> Dict[str, 
                 stable_cnt += 1
         elif len(all_rs) == 1:
             trend = all_rs[0].score_trend
-            if trend > 0.5:
+            if trend > 0.05:
                 improved_cnt += 1
-            elif trend < -0.5:
+            elif trend < -0.05:
                 declined_cnt += 1
             else:
                 stable_cnt += 1
@@ -682,7 +959,6 @@ def get_historical_analytics(db: Session, class_id: str = "CS101") -> Dict[str, 
         "declined": declined_cnt
     }
 
-    # 4. Intervention metrics
     today_str = datetime.utcnow().strftime("%Y-%m-%d")
     all_invs = db.query(Intervention).filter(Intervention.student_id.in_(student_ids)).all()
     planned_cnt = sum(1 for inv in all_invs if inv.status == "Planned")

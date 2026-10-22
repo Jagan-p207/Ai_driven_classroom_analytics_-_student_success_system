@@ -234,15 +234,23 @@ export default function ClassHeatmap({
               </span>
             </div>
             <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginBottom: 8 }}>
-              {hoveredStudent.student_id} • Risk Score: {(hoveredStudent.risk_score * 100).toFixed(0)}%
+              {hoveredStudent.student_id} • Prog {hoveredStudent.program ?? 1} • Yr {hoveredStudent.year_level ?? 3} • Risk Score: {(hoveredStudent.risk_score * 100).toFixed(0)}%
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6, fontSize: '0.74rem' }}>
+              <div>Pred Grade: <strong style={{ color: 'var(--color-primary)' }}>
+                {hoveredStudent.predicted_grade !== null && hoveredStudent.predicted_grade !== undefined
+                  ? `${Number(hoveredStudent.predicted_grade).toFixed(1)}%`
+                  : `${hoveredStudent.avg_score}%`}
+              </strong></div>
               <div>Attendance: <strong style={{ color: 'var(--text-primary)' }}>{hoveredStudent.attendance_pct}%</strong></div>
               <div>Avg Marks: <strong style={{ color: 'var(--text-primary)' }}>{hoveredStudent.avg_score}%</strong></div>
               <div>Engagement: <strong style={{ color: 'var(--color-primary)' }}>{hoveredStudent.composite_engagement}/100</strong></div>
               <div>Trend: <strong style={{ color: hoveredStudent.score_trend < 0 ? 'var(--risk-high-text)' : 'var(--risk-low-text)' }}>
                 {hoveredStudent.score_trend > 0 ? '+' : ''}{hoveredStudent.score_trend}
               </strong></div>
+              {hoveredStudent.observed_grade !== null && hoveredStudent.observed_grade !== undefined && (
+                <div>Actual Grade: <strong style={{ color: 'var(--text-secondary)' }}>{Number(hoveredStudent.observed_grade).toFixed(1)}%</strong></div>
+              )}
             </div>
             {hoveredStudent.intervention_status && (
               <div style={{ marginTop: 8, paddingTop: 6, borderTop: '1px solid var(--border-subtle)', fontSize: '0.72rem', color: 'var(--color-primary)' }}>

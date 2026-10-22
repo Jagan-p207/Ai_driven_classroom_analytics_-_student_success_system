@@ -181,3 +181,51 @@ export async function fetchReportSummary(classId = 'CS101') {
   if (!res.ok) throw new Error(`Failed to fetch report summary: ${res.statusText}`);
   return res.json();
 }
+
+export async function retrainModel() {
+  const res = await fetch(`${BASE_URL}/api/model/retrain`, {
+    method: 'POST'
+  });
+  if (!res.ok) {
+    const errData = await res.json().catch(() => ({}));
+    throw new Error(errData.detail || `Model retraining failed (${res.status}: ${res.statusText})`);
+  }
+  return res.json();
+}
+
+export async function fetchCohortAnalytics(classId = 'CS101') {
+  try {
+    const res = await fetch(`${BASE_URL}/api/class/${classId}/cohort-analytics`);
+    if (res.ok) return await res.json();
+  } catch (err) {
+    console.warn("Backend API unavailable for cohort analytics. Falling back.", err);
+  }
+  return null;
+}
+
+export async function predictStudent(studentPayload) {
+  const res = await fetch(`${BASE_URL}/api/predict/student`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(studentPayload)
+  });
+  if (!res.ok) {
+    const errData = await res.json().catch(() => ({}));
+    throw new Error(errData.detail || `Prediction failed: ${res.statusText}`);
+  }
+  return res.json();
+}
+
+export async function predictBatch(studentsList) {
+  const res = await fetch(`${BASE_URL}/api/predict/batch`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ students: studentsList })
+  });
+  if (!res.ok) {
+    const errData = await res.json().catch(() => ({}));
+    throw new Error(errData.detail || `Batch prediction failed: ${res.statusText}`);
+  }
+  return res.json();
+}
+

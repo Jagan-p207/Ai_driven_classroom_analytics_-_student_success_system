@@ -185,9 +185,26 @@ export default function StudentDetailModal({ studentId, onClose, onInterventionU
                   <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>{profile.student.email}</div>
                 </div>
                 <div style={{ background: 'var(--bg-subtle)', padding: '12px 14px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-subtle)' }}>
-                  <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontWeight: 600 }}>DEPARTMENT & COHORT</span>
-                  <div style={{ fontWeight: 600, color: 'var(--text-primary)', marginTop: 2 }}>{profile.student.class_id} • {profile.student.department}</div>
-                  <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>Enrolled: {profile.student.enrollment_date || 'Fall 2026'}</div>
+                  <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontWeight: 600 }}>ACADEMIC COHORT</span>
+                  <div style={{ fontWeight: 600, color: 'var(--text-primary)', marginTop: 2 }}>
+                    Program {profile.student.program ?? 1} • Year {profile.student.year_level ?? 3}
+                  </div>
+                  <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
+                    {profile.student.class_id} • Section {profile.student.class_time ?? 0}
+                  </div>
+                </div>
+                <div style={{ background: 'var(--bg-subtle)', padding: '12px 14px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-subtle)' }}>
+                  <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontWeight: 600 }}>PREDICTED FINAL GRADE</span>
+                  <div style={{ fontWeight: 700, color: 'var(--color-primary)', marginTop: 2, fontSize: '1.15rem' }}>
+                    {profile.current_risk.predicted_grade !== null && profile.current_risk.predicted_grade !== undefined
+                      ? `${Number(profile.current_risk.predicted_grade).toFixed(1)}%`
+                      : '—'}
+                  </div>
+                  <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
+                    {profile.current_risk.observed_grade !== null && profile.current_risk.observed_grade !== undefined
+                      ? `Actual Final: ${Number(profile.current_risk.observed_grade).toFixed(1)}%`
+                      : 'Linear Regression model'}
+                  </div>
                 </div>
                 <div style={{ background: 'var(--bg-subtle)', padding: '12px 14px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-subtle)' }}>
                   <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontWeight: 600 }}>RISK CLASSIFICATION</span>

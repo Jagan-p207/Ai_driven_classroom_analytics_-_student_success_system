@@ -8,6 +8,7 @@ import StudentDetailModal from './components/StudentDetailModal';
 import IngestionModal, { IngestionContent } from './components/IngestionModal';
 import ModelInfoModal, { ModelInfoContent } from './components/ModelInfoModal';
 import HistoricalAnalyticsSection from './components/HistoricalAnalyticsSection';
+import CohortAnalyticsSection from './components/CohortAnalyticsSection';
 import { fetchClassRiskSummary, fetchStudents, triggerRecompute, seedSampleData } from './services/api';
 
 export default function App() {
@@ -148,6 +149,9 @@ export default function App() {
                   onRiskFilterChange={(f) => setRiskFilter(f)}
                   onFilterChange={(f) => setRiskFilter(f)}
                 />
+
+                {/* Academic Cohort Breakdown & Demographic Trends */}
+                <CohortAnalyticsSection classId="CS101" refreshTrigger={lastRecomputeTime} />
 
                 {/* Historical Milestone Progression Section */}
                 <HistoricalAnalyticsSection classId="CS101" refreshTrigger={lastRecomputeTime} />

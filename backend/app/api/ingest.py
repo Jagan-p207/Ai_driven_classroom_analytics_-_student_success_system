@@ -1,4 +1,5 @@
 import io
+import os
 import re
 import pandas as pd
 from fastapi import APIRouter, Depends, UploadFile, File, Form, HTTPException
@@ -14,18 +15,19 @@ from backend.app.schemas.pydantic_models import (
     CSVValidationIssue,
     RecomputeResponse
 )
-from backend.app.services.pipeline_service import run_full_batch_pipeline
+from backend.app.services.pipeline_service import run_full_batch_pipeline, seed_database_from_csv
 
 router = APIRouter()
 
 MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024 # 10MB limit
-VALID_SOURCES = ["students", "attendance", "assessments", "lms_activity"]
+VALID_SOURCES = ["students", "attendance", "assessments", "lms_activity", "student_dataset"]
 
 REQUIRED_COLUMNS = {
     "students": ["student_id", "name", "email"],
     "attendance": ["student_id", "date", "status"],
     "assessments": ["student_id", "assessment_name", "date", "max_score", "score_obtained"],
-    "lms_activity": ["student_id", "activity_type", "delay_days", "completion_status"]
+    "lms_activity": ["student_id", "activity_type", "delay_days", "completion_status"],
+    "student_dataset": ["StudentID", "QuizTotal", "Project", "Midterm", "Attendance"]
 }
 
 VALID_ATTENDANCE_STATUSES = {"present", "late", "absent"}
@@ -61,6 +63,13 @@ def validate_csv_dataframe(source_type: str, df: pd.DataFrame, db: Session):
                 df["completion_status"] = df["delays"].apply(lambda d: "Late" if float(d or 0) > 0 else "Completed")
             else:
                 df["completion_status"] = "Completed"
+    elif source_type == "student_dataset":
+        if "StudentID" not in df.columns and "student_id" in df.columns:
+            df["StudentID"] = df["student_id"]
+        if "Assignment on time percent" not in df.columns and "on_time_percent" in df.columns:
+            df["Assignment on time percent"] = df["on_time_percent"]
+        if "Page Views" not in df.columns and "page_views" in df.columns:
+            df["Page Views"] = df["page_views"]
 
     issues: List[CSVValidationIssue] = []
     req_cols = REQUIRED_COLUMNS.get(source_type, [])
@@ -85,10 +94,15 @@ def validate_csv_dataframe(source_type: str, df: pd.DataFrame, db: Session):
         id_lookup[eid] = eid
         id_lookup[eid.upper()] = eid
         id_lookup[eid.lower()] = eid
-        # Handle numeric IDs (e.g., STU1001 -> 1001)
-        clean_num = re.sub(r"^STU-?", "", eid, flags=re.IGNORECASE)
+        # Handle numeric and prefixed IDs (e.g., STU1001 -> 1001, F01 -> 01 -> 1)
+        clean_num = re.sub(r"^(STU-?|F)", "", eid, flags=re.IGNORECASE)
         id_lookup[clean_num] = eid
-        id_lookup[clean_num.lstrip("0")] = eid
+        clean_num_lstrip = clean_num.lstrip("0")
+        if clean_num_lstrip:
+            id_lookup[clean_num_lstrip] = eid
+            id_lookup[f"STU10{clean_num.zfill(2)}"] = eid
+            id_lookup[f"STU{clean_num_lstrip}"] = eid
+            id_lookup[f"STU{clean_num.zfill(2)}"] = eid
 
     def resolve_sid(raw_val: Any) -> Optional[str]:
         if raw_val is None or pd.isna(raw_val):
@@ -96,11 +110,16 @@ def validate_csv_dataframe(source_type: str, df: pd.DataFrame, db: Session):
         raw_str = str(raw_val).strip()
         if raw_str in id_lookup:
             return id_lookup[raw_str]
-        clean = re.sub(r"^STU-?", "", raw_str, flags=re.IGNORECASE)
+        clean = re.sub(r"^(STU-?|F)", "", raw_str, flags=re.IGNORECASE)
         if clean in id_lookup:
             return id_lookup[clean]
         if clean.lstrip("0") in id_lookup:
             return id_lookup[clean.lstrip("0")]
+        # Fallback check for 1001 -> 1 -> F01
+        if clean.startswith("100"):
+            tail = clean[3:].lstrip("0")
+            if tail in id_lookup:
+                return id_lookup[tail]
         return None
 
     valid_indices = []
@@ -127,7 +146,7 @@ def validate_csv_dataframe(source_type: str, df: pd.DataFrame, db: Session):
             invalid_indices.append(idx)
             continue
 
-        raw_sid = row.get("student_id")
+        raw_sid = row.get("student_id") if "student_id" in row else row.get("StudentID")
         resolved_sid = resolve_sid(raw_sid)
         if resolved_sid:
             sid = resolved_sid
@@ -136,7 +155,7 @@ def validate_csv_dataframe(source_type: str, df: pd.DataFrame, db: Session):
             sid = str(raw_sid).strip() if raw_sid is not None else ""
 
         # Foreign key check for non-students imports
-        if source_type != "students" and sid not in existing_student_ids:
+        if source_type not in ("students", "student_dataset") and sid not in existing_student_ids:
             issues.append(CSVValidationIssue(
                 row=row_num,
                 column="student_id",
@@ -247,6 +266,37 @@ def validate_csv_dataframe(source_type: str, df: pd.DataFrame, db: Session):
                 ))
                 continue
             seen_file_keys.add(sid)
+
+        elif source_type == "student_dataset":
+            stu_id_val = str(row.get("StudentID", sid)).strip()
+            if stu_id_val in seen_file_keys:
+                duplicate_indices.append(idx)
+                issues.append(CSVValidationIssue(
+                    row=row_num,
+                    column="StudentID",
+                    message=f"Duplicate StudentID '{stu_id_val}' in dataset."
+                ))
+                continue
+            seen_file_keys.add(stu_id_val)
+
+            for col_name in ["QuizTotal", "Project", "Midterm", "Attendance"]:
+                if col_name in row:
+                    try:
+                        v = float(row[col_name])
+                        if v < 0:
+                            issues.append(CSVValidationIssue(
+                                row=row_num,
+                                column=col_name,
+                                message=f"{col_name} cannot be negative."
+                            ))
+                            row_has_error = True
+                    except (ValueError, TypeError):
+                        issues.append(CSVValidationIssue(
+                            row=row_num,
+                            column=col_name,
+                            message=f"{col_name} must be numeric."
+                        ))
+                        row_has_error = True
 
         if row_has_error:
             invalid_indices.append(idx)
@@ -537,6 +587,17 @@ async def ingest_csv_data(
                     ))
                     records_added += 1
             db.commit()
+
+        elif source_type == "student_dataset":
+            # Save uploaded CSV to data/student_dataset.csv
+            data_dir = os.path.join(os.path.dirname(__file__), "..", "..", "..", "data")
+            os.makedirs(data_dir, exist_ok=True)
+            target_csv_path = os.path.join(data_dir, "student_dataset.csv")
+            df.to_csv(target_csv_path, index=False)
+
+            # Re-seed database from this complete dataset
+            seed_database_from_csv(force=True)
+            records_added = len(df)
 
     except Exception as e:
         db.rollback()

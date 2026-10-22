@@ -202,6 +202,7 @@ export function IngestionContent({ onClose, onIngestionComplete, isModal = true 
               className="form-select"
               style={{ width: '100%', padding: '7px 10px' }}
             >
+              <option value="student_dataset">Full Institutional Dataset (14 Columns: StudentID, Demographics, Assessments, LMS)</option>
               <option value="attendance">Daily Attendance Log (student_id, date, status)</option>
               <option value="assessments">Examination Marks (student_id, assessment_name, date, max_score, score_obtained)</option>
               <option value="lms_activity">LMS Coursework Submissions (student_id, activity_type, delay_days, completion_status)</option>

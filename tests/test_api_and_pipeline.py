@@ -191,3 +191,104 @@ def test_csv_reports_export(client):
     assert "total_students" in s_data
     assert "risk_distribution" in s_data
 
+def test_predict_single_student_endpoint(client):
+    payload = {
+        "StudentID": "TEST_STUDENT_01",
+        "Gender": 0,
+        "Program": 1,
+        "YearLevel": 2,
+        "ClassTime": 1,
+        "QuizTotal": 24.5,
+        "Project": 17.0,
+        "Midterm": 28.0,
+        "Attendance": 8.5,
+        "Participation": 1.0,
+        "Assignment on time percent": 95,
+        "Page Views": 650
+    }
+    res = client.post("/api/predict/student", json=payload)
+    assert res.status_code == 200
+    data = res.json()
+    assert data["student_id"] == "TEST_STUDENT_01"
+    assert "predicted_grade" in data
+    assert 0 <= data["predicted_grade"] <= 100
+    assert data["risk_level"] in ["Low", "Medium", "High"]
+    assert "risk_probabilities" in data
+    assert "contributing_factors" in data
+    assert len(data["contributing_factors"]) > 0
+    assert "recommendations" in data
+
+def test_predict_batch_endpoint(client):
+    payload = {
+        "students": [
+            {
+                "StudentID": "BATCH_01",
+                "Gender": 0,
+                "Program": 1,
+                "YearLevel": 3,
+                "ClassTime": 0,
+                "QuizTotal": 20.0,
+                "Project": 15.0,
+                "Midterm": 22.0,
+                "Attendance": 7.0,
+                "Participation": 0.0,
+                "Assignment on time percent": 85,
+                "Page Views": 400
+            },
+            {
+                "StudentID": "BATCH_02",
+                "Gender": 1,
+                "Program": 2,
+                "YearLevel": 1,
+                "ClassTime": 1,
+                "QuizTotal": 28.0,
+                "Project": 19.0,
+                "Midterm": 32.0,
+                "Attendance": 9.5,
+                "Participation": 1.0,
+                "Assignment on time percent": 100,
+                "Page Views": 900
+            }
+        ]
+    }
+    res = client.post("/api/predict/batch", json=payload)
+    assert res.status_code == 200
+    data = res.json()
+    assert data["count"] == 2
+    assert len(data["predictions"]) == 2
+    assert data["predictions"][0]["student_id"] == "BATCH_01"
+    assert "predicted_grade" in data["predictions"][0]
+
+def test_cohort_analytics_endpoint(client):
+    res = client.get("/api/class/CS101/cohort-analytics")
+    assert res.status_code == 200
+    data = res.json()
+    assert data["class_id"] == "CS101"
+    assert "by_program" in data
+    assert len(data["by_program"]) > 0
+    assert "by_year_level" in data
+    assert len(data["by_year_level"]) > 0
+    assert "by_class_time" in data
+    assert "leakage_audit" in data
+    assert "leakage_warning" in data["leakage_audit"]
+
+def test_model_info_and_retrain(client):
+    info_res = client.get("/api/model/info")
+    assert info_res.status_code == 200
+    info_data = info_res.json()
+    m_data = info_data.get("data", info_data)
+    assert "best_model_name" in m_data
+    assert "regression_metrics" in m_data
+    assert "comparison_metrics" in m_data
+    assert "data_leakage_safeguards" in m_data
+
+    # Test retraining pipeline
+    retrain_res = client.post("/api/model/retrain")
+    assert retrain_res.status_code == 200
+    retrain_data = retrain_res.json()
+    assert retrain_data["status"] == "success"
+    assert retrain_data["record_count"] > 0
+    assert "best_classifier" in retrain_data
+    assert "best_regressor" in retrain_data
+
+

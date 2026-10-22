@@ -1,3 +1,5 @@
+import json
+import pandas as pd
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
 from sqlalchemy import desc
@@ -11,9 +13,15 @@ from backend.app.schemas.pydantic_models import (
     StudentRiskFullProfile,
     InterventionCreate,
     InterventionUpdate,
-    InterventionResponse
+    InterventionResponse,
+    StudentPredictionRequest,
+    StudentPredictionResponse,
+    BatchPredictionRequest,
+    BatchPredictionResponse
 )
 from backend.app.services.pipeline_service import get_student_risk_profile
+from ml.batch_scorer import predict_single_student, batch_score_students
+import pandas as pd
 
 router = APIRouter()
 
@@ -22,6 +30,9 @@ def list_students(
     risk_level: Optional[str] = Query(None, description="Filter by: Low, Medium, High"),
     search: Optional[str] = Query(None, description="Search by name or student ID"),
     class_id: Optional[str] = Query(None, description="Filter by class ID"),
+    program: Optional[int] = Query(None, description="Filter by academic program (1, 2, 3, 4)"),
+    year_level: Optional[int] = Query(None, description="Filter by year level (1, 2, 3, 4)"),
+    class_time: Optional[int] = Query(None, description="Filter by class time section (0, 1)"),
     intervention_status: Optional[str] = Query(None, description="Filter by: all, overdue, needs_action, planned, in_progress, completed, resolved"),
     db: Session = Depends(get_db)
 ):
@@ -33,6 +44,12 @@ def list_students(
 
     if class_id:
         query = query.filter(Student.class_id == class_id)
+    if program is not None:
+        query = query.filter(Student.program == program)
+    if year_level is not None:
+        query = query.filter(Student.year_level == year_level)
+    if class_time is not None:
+        query = query.filter(Student.class_time == class_time)
 
     students = query.all()
     summaries = []
@@ -44,6 +61,8 @@ def list_students(
 
         item_level = rs.risk_level if rs else "Low"
         item_score = rs.risk_score if rs else 0.1
+        item_pred = rs.predicted_grade if rs else None
+        item_obs = rs.observed_grade if rs else None
         item_att = rs.attendance_pct if rs else 90.0
         item_avg = rs.avg_score if rs else 80.0
         item_trend = rs.score_trend if rs else 0.0
@@ -74,7 +93,6 @@ def list_students(
                 if not is_overdue:
                     continue
             elif inv_filter == "needs_action":
-                # High or Medium risk without active intervention or with overdue
                 if not (item_level in ["Medium", "High"] and (inv_status is None or is_overdue or inv_status == "Planned")):
                     continue
             elif inv_filter == "none":
@@ -92,6 +110,8 @@ def list_students(
             department=s.department,
             risk_level=item_level,
             risk_score=item_score,
+            predicted_grade=item_pred,
+            observed_grade=item_obs,
             attendance_pct=item_att,
             avg_score=item_avg,
             score_trend=item_trend,
@@ -100,7 +120,11 @@ def list_students(
             latest_intervention_status=inv_status,
             latest_intervention_staff=inv_staff,
             latest_follow_up_date=inv_follow_up,
-            is_intervention_overdue=is_overdue
+            is_intervention_overdue=is_overdue,
+            gender=s.gender,
+            program=s.program,
+            year_level=s.year_level,
+            class_time=s.class_time
         ))
 
     # Sort descending by risk_score
@@ -280,3 +304,46 @@ def get_interventions_overview(class_id: Optional[str] = None, db: Session = Dep
         "resolved": resolved,
         "overdue": overdue
     }
+
+@router.post("/predict/student", response_model=StudentPredictionResponse)
+def predict_student(payload: StudentPredictionRequest):
+    """
+    On-demand inference for an individual student record.
+    Predicts continuous final academic grade, academic risk classification,
+    model confidence, risk probabilities, and top SHAP feature drivers.
+    """
+    data = payload.model_dump(by_alias=True)
+    res = predict_single_student(data)
+    return StudentPredictionResponse(
+        student_id=res["student_id"],
+        predicted_grade=res["predicted_grade"],
+        risk_level=res["risk_level"],
+        risk_score=res["risk_score"],
+        confidence=res["confidence"],
+        risk_probabilities=res["risk_probabilities"],
+        contributing_factors=res["contributing_factors"],
+        recommendations=res["recommendations"]
+    )
+
+@router.post("/predict/batch", response_model=BatchPredictionResponse)
+def predict_batch(payload: BatchPredictionRequest):
+    """
+    Batch inference endpoint for arbitrary list of student feature dictionaries.
+    """
+    if not payload.students:
+        return BatchPredictionResponse(count=0, predictions=[])
+    df_raw = pd.DataFrame(payload.students)
+    df_scored = batch_score_students(df_raw)
+    predictions = []
+    for _, row in df_scored.iterrows():
+        predictions.append({
+            "student_id": row["student_id"],
+            "predicted_grade": row["predicted_grade"],
+            "risk_level": row["risk_level"],
+            "risk_score": row["risk_score"],
+            "confidence": row["confidence"],
+            "risk_probabilities": json.loads(row["risk_probabilities"]),
+            "contributing_factors": json.loads(row["contributing_factors"]),
+            "recommendations": json.loads(row["recommendations"])
+        })
+    return BatchPredictionResponse(count=len(predictions), predictions=predictions)
